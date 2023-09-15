@@ -8,7 +8,6 @@
 - Transistor-Level Layout of Integrated Circuits[[2]](https://www.pearsonhighered.com/assets/samplechapter/0/1/3/9/0139896902.pdf)
 
 # TODO：
-- Framework construction
 - File parser and writer implementation
 - Database construction
 - Problem modeling
