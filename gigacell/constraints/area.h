@@ -1,0 +1,12 @@
+//
+// Created by eric on 23-9-15.
+//
+
+#ifndef GIGACELL_GIGACELL_CONSTRAINTS_AREA_H_
+#define GIGACELL_GIGACELL_CONSTRAINTS_AREA_H_
+
+class area {
+
+};
+
+#endif //GIGACELL_GIGACELL_CONSTRAINTS_AREA_H_

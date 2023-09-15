@@ -1,0 +1,7 @@
+add_subdirectory(constraints)
+add_subdirectory(database)
+add_subdirectory(placement)
+add_subdirectory(parser)
+add_subdirectory(utils)
+add_subdirectory(writer)
+add_subdirectory(main)

@@ -1,0 +1,12 @@
+//
+// Created by eric on 23-9-15.
+//
+
+#ifndef GIGACELL_GIGACELL_PLACEMENT_PLACE_DB_H_
+#define GIGACELL_GIGACELL_PLACEMENT_PLACE_DB_H_
+
+class place_db {
+
+};
+
+#endif //GIGACELL_GIGACELL_PLACEMENT_PLACE_DB_H_

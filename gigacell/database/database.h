@@ -1,0 +1,12 @@
+//
+// Created by eric on 23-9-15.
+//
+
+#ifndef GIGACELL_GIGACELL_DATABASE_DATABASE_H_
+#define GIGACELL_GIGACELL_DATABASE_DATABASE_H_
+
+class database {
+
+};
+
+#endif //GIGACELL_GIGACELL_DATABASE_DATABASE_H_
