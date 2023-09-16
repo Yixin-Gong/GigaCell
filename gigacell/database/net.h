@@ -15,8 +15,8 @@ class Net {
   std::unordered_map<std::string, Mos> &net() { return net_; }
   const std::unordered_map<std::string, Mos> &net() const { return net_; }
 
-  void add_mos(const std::string &name, Mos &mos);
-  static int32_t netLength_(std::unordered_map<std::string, Mos> &net_);
+  void addMos(const std::string &name, Mos &mos);
+  int32_t netLength();
 
  private:
   std::unordered_map<std::string, Mos> net_;

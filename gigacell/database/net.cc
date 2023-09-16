@@ -3,11 +3,11 @@
 //
 #include <limits>
 #include "net.h"
-void Net::add_mos(const std::string &name, Mos &mos) {
+void Net::addMos(const std::string &name, Mos &mos) {
   net_.emplace(name, mos);
 }
 
-int32_t Net::netLength_(std::unordered_map<std::string, Mos> &net_) {
+int32_t Net::netLength() {
   int32_t minLoc_ = -std::numeric_limits<int32_t>::max();
   int32_t maxLoc_ = std::numeric_limits<int32_t>::max();
   for (auto &kMos : net_) {
