@@ -6,9 +6,9 @@
 class Mos {
  public:
   Mos() = default;
-  float &getGLoc() { return gLoc_; }
-  float &getSLoc() {return sLoc_;}
-  float &getDLoc() {return dLoc_;}
+  float &getGateLoc() { return gate_loc_; }
+  float &getSourceLoc() {return source_loc_;}
+  float &getDrainLoc() {return drain_loc_;}
   int32_t &getType() { return type_; }
   std::string &getSource() { return source_; }
   std::string &getGate() { return gate_; }
@@ -17,9 +17,9 @@ class Mos {
   float &getWidth() { return width_; }
 
  private:
-  float gLoc_{};        //gate location
-  float sLoc_{};        //source location
-  float dLoc_{};        //drown location
+  float gate_loc_{};        //gate location
+  float source_loc_{};        //source location
+  float drain_loc_{};        //drown location
   int32_t type_{};       //0-NMOS 1-PMOS
   std::string source_; //left net
   std::string gate_;   //
