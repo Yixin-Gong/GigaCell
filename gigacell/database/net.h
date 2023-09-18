@@ -12,15 +12,14 @@ class Net {
  public:
   Net() = default;
 
-  std::unordered_map<std::string, Mos> &net() { return net_; }
-  const std::unordered_map<std::string, Mos> &net() const { return net_; }
+  std::unordered_map<std::string, std::pair<std::string,Mos>> &net2mos() { return net2mos_; }
+  const std::unordered_map<std::string,std::pair<std::string,Mos>> &net2mos() const { return net2mos_; }
 
-  void addMos(const std::string &name, Mos &mos);
+  void addMos(const std::string &mos_name,const std::string &electrode_name, Mos &mos);
 
 
  private:
-  std::unordered_map<std::string, Mos> net_;
-
+  std::unordered_map<std::string, std::pair<std::string,Mos>> net2mos_;
 };
 
 #endif //GIGACELL_NET_H
