@@ -11,12 +11,11 @@
 
 class DataBase {
   DataBase() = default;
-
+ public:
   //getter&&setter
   std::unordered_map<std::string, Net> &nets() { return nets_; }
   const std::unordered_map<std::string, Net> &nets() const { return nets_; }
-
-  void addNet(const std::string &name,Net &net);
+  void addNet(const std::string &name,Net &net2mos);
  private:
   std::unordered_map<std::string, Net> nets_{};
 };
