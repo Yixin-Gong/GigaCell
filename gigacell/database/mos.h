@@ -21,12 +21,16 @@ class Mos {
   float source_loc_{};        //source location
   float drain_loc_{};        //drown location
   int32_t type_{};       //0-NMOS 1-PMOS
-  std::string source_; //left net
+
+  std::string source_; //right net
   std::string gate_;   //
-  std::string drain_;  //right net
+  std::string drain_;  //light net
+
   float width_{};        //width >= 0 nm
   std::string mosName_;  //mosName
 
+
+  //d,g,s
 };
 
 #endif //GIGACELL_MOS_H
