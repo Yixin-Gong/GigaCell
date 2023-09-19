@@ -7,8 +7,8 @@
 void PlaceDB::init() {
     Net2Mos net2mos{};
     std::vector<Net2Mos> net{};
+    index idx = 0;
     for (auto &nmos: db_.nmos_list()) {
-        index idx = 0;
         net2mos.idx = idx;
         net2mos.type = 0;
         if (nets_.find(nmos.getDrain()) == nets_.end()) {
@@ -37,10 +37,10 @@ void PlaceDB::init() {
         }
         idx++;
     }
+    idx = 0;
     for (auto &pmos: db_.pmos_list()) {
-        index idx = 0;
         net2mos.idx = idx;
-        net2mos.type = 0;
+        net2mos.type = 1;
         if (nets_.find(pmos.getDrain()) == nets_.end()) {
             nets_.emplace(pmos.getDrain(), net);
             net2mos.electrode_name = "drain";
