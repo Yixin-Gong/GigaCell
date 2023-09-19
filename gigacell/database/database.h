@@ -6,18 +6,22 @@
 #define GIGACELL_GIGACELL_DATABASE_DATABASE_H_
 
 #include <iostream>
-#include <unordered_map>
-#include "net.h"
-
+#include <vector>
+#include "mos.h"
+typedef uint16_t index;
 class DataBase {
   DataBase() = default;
  public:
   //getter&&setter
-  std::unordered_map<std::string, Net> &nets() { return nets_; }
-  const std::unordered_map<std::string, Net> &nets() const { return nets_; }
-  void addNet(const std::string &name,Net &net2mos);
+  std::vector<index> &nmos_ids() { return nmos_ids_; }
+  std::vector<index> &pmos_ids() { return pmos_ids_; }
+  std::vector<Mos> &nmos_list() { return nmos_list_; }
+  std::vector<Mos> &pmos_list() { return pmos_list_; }
  private:
-  std::unordered_map<std::string, Net> nets_{};
+  std::vector<index> nmos_ids_{};
+  std::vector<Mos> nmos_list_{};
+  std::vector<index> pmos_ids_{};
+  std::vector<Mos> pmos_list_{};
 };
 
 #endif //GIGACELL_GIGACELL_DATABASE_DATABASE_H_
