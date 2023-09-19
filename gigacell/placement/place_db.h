@@ -9,7 +9,7 @@
 
 typedef uint16_t index;
 
-struct Net {
+struct Net2Mos {
   std::string electrode_name;
   uint16_t type;
   index idx;
@@ -25,10 +25,10 @@ class PlaceDB {
   void init();
   //getter
 
+
  private:
   DataBase &db_;
-  std::vector<index> v_nmos_ids_{};
-  std::unordered_map<std::string, Net> nets_{};
+  std::unordered_map<std::string, std::vector<Net2Mos>> nets_{};                                                               ts_{};
 };
 
 #endif //GIGACELL_GIGACELL_PLACEMENT_PLACE_DB_H_
