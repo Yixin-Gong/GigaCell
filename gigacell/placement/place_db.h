@@ -28,7 +28,7 @@ class PlaceDB {
 
  private:
   DataBase &db_;
-  std::unordered_map<std::string, std::vector<Net2Mos>> nets_{};                                                               ts_{};
+  std::unordered_map<std::string, std::vector<Net2Mos>> nets_{};
 };
 
 #endif //GIGACELL_GIGACELL_PLACEMENT_PLACE_DB_H_
