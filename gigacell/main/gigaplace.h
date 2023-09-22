@@ -5,7 +5,7 @@
 #ifndef GIGACELL_GIGACELL_MAIN_GIGAPLACE_H_
 #define GIGACELL_GIGACELL_MAIN_GIGAPLACE_H_
 
-class gigaplace {
+class Gigaplace {
 
 };
 
