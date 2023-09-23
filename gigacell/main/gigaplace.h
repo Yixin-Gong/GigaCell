@@ -4,6 +4,9 @@
 
 #ifndef GIGACELL_GIGACELL_MAIN_GIGAPLACE_H_
 #define GIGACELL_GIGACELL_MAIN_GIGAPLACE_H_
+#include "placement/ops/mos_swap.h"
+#include "placement/ops/mos_flip.h"
+#include "placement/ops/mos_diffusion_sharing.h"
 
 class Gigaplace {
 

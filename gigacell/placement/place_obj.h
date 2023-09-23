@@ -4,7 +4,7 @@
 
 #ifndef GIGACELL_GIGACELL_PLACEMENT_PLACE_OBJ_H_
 #define GIGACELL_GIGACELL_PLACEMENT_PLACE_OBJ_H_
-#include "ops/mos_swap.h"
+
 
 class PlaceObj {
  public:
