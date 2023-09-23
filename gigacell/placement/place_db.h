@@ -17,7 +17,7 @@ namespace gigaplace {
         index idx;
     };
 
-    class PlaceDB {
+    class PlaceDB:DataBase {
     public:
         //constructor
         explicit PlaceDB(DataBase &db) : db_(db) {

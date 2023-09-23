@@ -20,7 +20,7 @@ namespace gigaplace {
         std::vector<Mos> &pmos_list() { return pmos_list_; }
 
 
-    private:
+    protected:
         std::vector<index> nmos_ids_{};
         std::vector<Mos> nmos_list_{};
         std::vector<index> pmos_ids_{};
