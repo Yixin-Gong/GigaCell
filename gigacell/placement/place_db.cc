@@ -9,6 +9,7 @@ namespace gigaplace {
         Net2Mos net2mos{};
         std::vector<Net2Mos> net{};
         index idx = 0;
+
         for (auto &nmos: db_.nmos_list()) {
             net2mos.idx = idx;
             net2mos.type = 0;
@@ -68,6 +69,20 @@ namespace gigaplace {
             }
             idx++;
         }
+        idx=0;
+        for(Mos &nmos : db_.nmos_list()) {
+            nmos_list().push_back(nmos);
+            nmos_ids().push_back(idx);
+            idx++;
+        }
+        idx=0;
+        for(Mos &pmos : db_.pmos_list()) {
+            pmos_list().push_back(pmos);
+            pmos_ids().push_back(idx);
+            idx++;
+        }
+
+
     }
 }
 
