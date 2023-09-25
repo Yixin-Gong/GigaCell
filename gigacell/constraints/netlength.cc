@@ -1,0 +1,45 @@
+//
+// Created by zy on 23-9-25.
+//
+
+#include "netlength.h"
+#include <limits>
+
+float gigaplace::NetLength::netLength() {
+
+  float x_max = -std::numeric_limits<float>::max();
+  float x_min = std::numeric_limits<float>::max();
+  float total_length = 0;
+
+  for (auto &kNet : pl_db_.nets()) {
+    for (auto &kMos : kNet.second) {
+      float x = 0;
+      if (kMos.type == 0) {
+        //if( ==pl_db_.nmos_list().at(kMos.idx).getSource())
+        if (kMos.electrode_name == "source") {
+          x = pl_db_.nmos_list().at(kMos.idx).getSourceLoc();
+        } else if (kMos.electrode_name == "gate") {
+          x = pl_db_.nmos_list().at(kMos.idx).getGateLoc();
+        } else {
+          x = pl_db_.nmos_list().at(kMos.idx).getDrainLoc();
+        }
+      } else {
+        if (kMos.electrode_name == "source") {
+          x = pl_db_.pmos_list().at(kMos.idx).getSourceLoc();
+        } else if (kMos.electrode_name == "gate") {
+          x = pl_db_.pmos_list().at(kMos.idx).getGateLoc();
+        } else {
+          x = pl_db_.pmos_list().at(kMos.idx).getDrainLoc();
+        }
+      }
+
+      x_max = std::max(x_max, x);
+      x_min = std::min(x_min, x);
+
+    }
+    length_ = x_max - x_min;
+    total_length += length_;
+  }
+
+  return total_length;
+}
