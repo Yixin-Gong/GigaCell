@@ -4,9 +4,17 @@
 
 #ifndef GIGACELL_GIGACELL_CONSTRAINTS_AREA_H_
 #define GIGACELL_GIGACELL_CONSTRAINTS_AREA_H_
+#include "placement/place_db.h"
+namespace gigaplace {
+    class area {
+    public:
+        area(PlaceDB &place_db):place_db_(place_db){}
+   float computeArea();
 
-class area {
+    private:
+        PlaceDB &place_db_;
 
-};
 
+    };
+}
 #endif //GIGACELL_GIGACELL_CONSTRAINTS_AREA_H_
