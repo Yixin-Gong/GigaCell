@@ -11,12 +11,11 @@ namespace gigaplace {
 
 class NetLength {
  public:
-  NetLength(PlaceDB &pl_db, float length) : pl_db_(pl_db), length_(length) {}
+ explicit NetLength(PlaceDB &pl_db) : pl_db_(pl_db){}
 
   float netLength();
  private:
   PlaceDB &pl_db_;
-  float length_;
 
 };
 }
