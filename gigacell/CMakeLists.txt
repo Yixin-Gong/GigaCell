@@ -1,4 +1,5 @@
 add_subdirectory(constraints)
+add_subdirectory(partition)
 add_subdirectory(database)
 add_subdirectory(placement)
 add_subdirectory(parser)
