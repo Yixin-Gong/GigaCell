@@ -16,7 +16,8 @@ set(LINK_LIBS
         placement_cxx
         utils_cxx
         parser_cxx
-#        writer_cxx
+        writer_cxx
+        constraints_cxx
 )
 include_directories(utils)
 add_executable(GigaPlace ${BIN_SOURCES} ${CPP_SOURCES})
