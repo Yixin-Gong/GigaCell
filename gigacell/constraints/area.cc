@@ -13,5 +13,5 @@ float gigaplace::Area::computeArea() {
   for (Mos &pmos : place_db_.pmos_list()) {
     x_max = std::max(x_max, pmos.getGateLoc());
   }
-  return x_max;
+  return x_max + 1;
 }
