@@ -10,18 +10,18 @@
 #include <fstream>
 
 namespace gigaplace {
-    class Parser {
-    public:
-        Parser(DataBase &db, std::string filename) : db_(db), filename_(std::move(filename)), file_() {}
+class Parser {
+ public:
+  Parser(DataBase &db, std::string filename) : db_(db), filename_(std::move(filename)), file_() {}
 
-        void parse();
+  void parse();
 
-    private:
-        std::string filename_;
-        DataBase &db_;
-        std::ifstream file_;
+ private:
+  std::string filename_;
+  DataBase &db_;
+  std::ifstream file_;
 
-        static std::vector<std::string> split_(const std::string &str, char delimiter);
-    };
+  static std::vector<std::string> split_(const std::string &str, char delimiter);
+};
 }
 #endif //GIGACELL_GIGACELL_PARSER_PARSER_H_
