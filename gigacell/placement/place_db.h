@@ -7,6 +7,9 @@
 #include <vector>
 #include <unordered_map>
 #include "database/database.h"
+#include <cmath>
+#include <iomanip>
+#include <sstream>
 
 namespace gigaplace {
 typedef uint16_t index;
@@ -26,6 +29,7 @@ class PlaceDB {
 
   //setter
   void init();
+  void fold();
 
   //getter
   std::unordered_map<std::string, std::vector<Net2Mos>> &nets() { return nets_; }
