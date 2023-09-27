@@ -18,6 +18,7 @@ set(LINK_LIBS
         parser_cxx
         writer_cxx
         constraints_cxx
+        ops_cxx
 )
 include_directories(utils)
 add_executable(GigaPlace ${BIN_SOURCES} ${CPP_SOURCES})

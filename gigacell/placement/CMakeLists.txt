@@ -5,7 +5,6 @@ file(GLOB CPP_SOURCES
 
 set(INCLUDE_DIRS
         ${CMAKE_CURRENT_SOURCE_DIR}/..
-        ${PROJECT_SOURCE_DIR}/placement/ops
 )
 
 set(LINK_LIBS
