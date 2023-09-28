@@ -24,12 +24,12 @@ class PlaceDB {
  public:
   //constructor
   explicit PlaceDB(DataBase &db) : db_(db) {
+    
     init();
   }
 
   //setter
   void init();
-  void fold();
 
   //getter
   std::unordered_map<std::string, std::vector<Net2Mos>> &nets() { return nets_; }

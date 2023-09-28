@@ -17,6 +17,7 @@ namespace gigaplace {
 
         static void swap(Mos &mos1, Mos &mos2, index &index1, index &index2);
 
+        static void fold(PlaceDB &pl_db);
     };
 }
 #endif //GIGACELL_GIGACELL_OPS_OPERATOR_H_
