@@ -31,7 +31,7 @@ void gigaplace::Parser::parse() {
       float width;
       std::istringstream iss(numStr);
       iss >> width;
-      mos.getWidth() = width;
+      mos.getWidth() = width*1000;
       subStr = tokens[0].substr(1);
       mos.getMosName() = subStr;
       mos.getDrain() = tokens[1];
@@ -52,7 +52,7 @@ void gigaplace::Parser::parse() {
       float width;
       std::istringstream iss(numStr);
       iss >> width;
-      mos.getWidth() = width;
+      mos.getWidth() = width*1000;
       subStr = tokens[0].substr(1);
       mos.getMosName() = subStr;
       mos.getDrain() = tokens[1];
