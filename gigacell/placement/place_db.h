@@ -7,9 +7,10 @@
 #include <vector>
 #include <unordered_map>
 #include "database/database.h"
+#include "ops/operator.h"
 #include <cmath>
 #include <iomanip>
-#include <sstream>
+
 
 namespace gigaplace {
 typedef uint16_t index;

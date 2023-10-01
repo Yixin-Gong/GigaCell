@@ -65,25 +65,30 @@ void gigaplace::Operator::swap(Mos &mos1, Mos &mos2, index &index1, index &index
 }
 
 void gigaplace::Operator::fold(gigaplace::DataBase &db) {
-//    std::string &a=db.nmos_list().at(0).getMosName();
-//std::cout<<a<<std::endl;
-//std::cout<<db.nmos_list().at(0).getMosName()<<std::endl;
-    int32_t a=-1;
-    for (auto nmos: db.nmos_list()) {
-        a++;
+
+    int32_t idx = -1;
+    DataBase db1 = db;
+    for (auto &nmos: db1.nmos_list()) {
+        idx++;
         if (nmos.getWidth() < 220) {
             continue;
         }
         index n;
         n = std::ceil(nmos.getWidth() / 220);
         nmos.getWidth() = (float) std::round((nmos.getWidth() / (float) n) * 100) / 100;
-        db.nmos_list().at(a).getWidth()=nmos.getWidth();
+        db.nmos_list().at(idx).getWidth() = nmos.getWidth();
+
+
         for (index i = 1; i < n; i++) {
             Mos new_mos;
             new_mos.getType() = 0;
-            std::string mos_name;
-            mos_name.append( nmos.getMosName() + "_finger_" + std::to_string(i));
-            new_mos.getMosName() = mos_name;
+
+            std::string name;
+            std::string mos_name = nmos.getMosName();
+
+            name.append(mos_name + "_finger_" + std::to_string(i));
+
+            new_mos.getMosName() = name;
             new_mos.getSource() = nmos.getSource();
             new_mos.getGate() = nmos.getGate();
             new_mos.getDrain() = nmos.getDrain();
@@ -95,22 +100,22 @@ void gigaplace::Operator::fold(gigaplace::DataBase &db) {
         }
 
     }
-    a=-1;
-    for (auto pmos: db.pmos_list()) {
-        a++;
+    idx = -1;
+    for (auto &pmos: db1.pmos_list()) {
+        idx++;
         if (pmos.getWidth() < 220) {
             continue;
         }
         index n;
         n = std::ceil(pmos.getWidth() / 220);
         pmos.getWidth() = (float) std::round((pmos.getWidth() / (float) n) * 100) / 100;
-        db.pmos_list().at(a).getWidth()=pmos.getWidth();
+        db.pmos_list().at(idx).getWidth() = pmos.getWidth();
         for (index i = 1; i < n; i++) {
             Mos new_mos;
             new_mos.getType() = 1;
             std::string mos_name;
-            mos_name.append( pmos.getMosName() + "_finger_" + std::to_string(i));
-            new_mos.getMosName()=mos_name;
+            mos_name.append(pmos.getMosName() + "_finger_" + std::to_string(i));
+            new_mos.getMosName() = mos_name;
             new_mos.getSource() = pmos.getSource();
             new_mos.getGate() = pmos.getGate();
             new_mos.getDrain() = pmos.getDrain();
@@ -122,21 +127,27 @@ void gigaplace::Operator::fold(gigaplace::DataBase &db) {
         }
     }
 }
+
 bool gigaplace::Operator::isFold() {
-  return false;
+    return false;
 }
+
 bool gigaplace::Operator::shouldFold() {
-  return false;
+    return false;
 }
+
 void gigaplace::Operator::sharing_by_pair() {
 
 }
+
 void gigaplace::Operator::pairing() {
 
 }
+
 Mos gigaplace::Operator::createDummy() {
-  return {};
+    return {};
 }
+
 bool gigaplace::Operator::isSingle() {
-  return false;
+    return false;
 }

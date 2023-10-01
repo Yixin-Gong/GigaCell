@@ -12,7 +12,7 @@ void gigaplace::PlaceDB::init() {
   Net2Mos net2mos{};
   std::vector<Net2Mos> net{};
   index idx = 0;
-
+  gigaplace::Operator::fold(db_);
   for (auto &nmos : db_.nmos_list()) {
     net2mos.idx = idx;
     net2mos.type = 0;
