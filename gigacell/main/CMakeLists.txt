@@ -19,6 +19,8 @@ set(LINK_LIBS
         writer_cxx
         constraints_cxx
         ops_cxx
+        partition_cxx
+        /usr/local/lib/libkahypar.so
 )
 include_directories(utils)
 add_executable(GigaPlace ${BIN_SOURCES} ${CPP_SOURCES})

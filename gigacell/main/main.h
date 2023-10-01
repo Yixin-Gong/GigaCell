@@ -5,6 +5,7 @@
 #include "constraints/netlength.h"
 #include "constraints/area.h"
 #include "ops/operator.h"
+#include "partition/kahypar.h"
 
 
 

@@ -13,30 +13,29 @@
 namespace gigaplace {
 class KaHyPar {
  public:
-  KaHyPar()
+  explicit KaHyPar(PlaceDB &pl_db)
       : context_(kahypar_context_new()),
-        ini_file_name_(),
-        hyperedge_weights_(std::make_unique<kahypar_hyperedge_weight_t[]>(4)),
-        hyperedge_indices_(std::make_unique<size_t[]>(5)),
-        hyperedges_(std::make_unique<kahypar_hyperedge_id_t[]>(12)),
+        ini_file_name_("../../../config/config.ini"),
         imbalance_(0.03),
-        num_vertices_(),
-        num_hyperedges_(),
+        num_vertices_(pl_db.mos_list().size()),
         partition_(num_vertices_, -1),
-        k_() {}
+        k_((int32_t)pl_db.mos_list().size()/2),
+        objective_(0),
+        pl_db_(pl_db) {}
   void partition();
  private:
   kahypar_context_t *context_{};
-  const std::string ini_file_name_{};
+  const char *const ini_file_name_{};
   std::unique_ptr<kahypar_hyperedge_weight_t[]> hyperedge_weights_{};
   std::unique_ptr<size_t[]> hyperedge_indices_{};
   std::unique_ptr<kahypar_hyperedge_id_t[]> hyperedges_{};
   const double imbalance_{};
   const kahypar_hypernode_id_t num_vertices_{};
-  const kahypar_hyperedge_id_t num_hyperedges_{};
+  kahypar_hyperedge_id_t num_hyperedges_{};
   std::vector<kahypar_partition_id_t> partition_{};
   const kahypar_partition_id_t k_{};
   kahypar_hyperedge_weight_t objective_{};
+  PlaceDB &pl_db_;
 };
 }
 #endif //GIGACELL_GIGACELL_PARTITION_KAHYPAR_H_
