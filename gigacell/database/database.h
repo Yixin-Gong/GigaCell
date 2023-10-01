@@ -8,6 +8,10 @@
 #include <iostream>
 #include <vector>
 #include "mos.h"
+#include <cmath>
+#include <iomanip>
+#include <sstream>
+
 namespace gigaplace {
 typedef uint16_t index;
 class DataBase {
