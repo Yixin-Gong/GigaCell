@@ -8,8 +8,7 @@
 #include <unordered_map>
 #include "database/database.h"
 #include "ops/operator.h"
-#include <cmath>
-#include <iomanip>
+
 
 
 namespace gigaplace {
