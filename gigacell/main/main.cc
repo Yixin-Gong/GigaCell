@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
     gigaplace::Parser parser(db, filename);
     parser.parse();
     gigaplace::PlaceDB pl_db(db);
+//    std::cout << pl_db.nmos_list().at(0).getMosName()<<std::endl;
 
     float loc = 0;
     for (auto &nmos: pl_db.nmos_list()) {
@@ -29,19 +30,20 @@ int main(int argc, char *argv[]) {
         pmos.getDrainLoc() = pmos.getGateLoc() + 0.5;
         loc += 2;
     }
-    gigaplace::Operator::flip(pl_db.nmos_list().at(0));
-    gigaplace::Operator::flip(pl_db.nmos_list().at(1));
-    gigaplace::Operator::swap(pl_db.nmos_list().at(0), pl_db.pmos_list().at(1), pl_db.nmos_ids().at(0),
-                              pl_db.nmos_ids().at(1));
+
+    //gigaplace::Operator::flip(pl_db.nmos_list().at(0));
+    //gigaplace::Operator::flip(pl_db.nmos_list().at(1));
+    //gigaplace::Operator::swap(pl_db.nmos_list().at(0), pl_db.nmos_list().at(1), pl_db.nmos_ids().at(0),
+                            // pl_db.nmos_ids().at(1));
 
     for (auto &nmos: pl_db.nmos_list()) {
         std::cout << nmos.getMosName() << ' ' << nmos.getSourceLoc() << ' ' << nmos.getGateLoc() << ' '
-                  << nmos.getDrainLoc() << std::endl;
+                  << nmos.getDrainLoc() << ' '<<nmos.getWidth()<<std::endl;
     }
 
     for (auto &pmos: pl_db.pmos_list()) {
         std::cout << pmos.getMosName() << ' ' << pmos.getSourceLoc() << ' ' << pmos.getGateLoc() << ' '
-                  << pmos.getDrainLoc() << std::endl;
+                  << pmos.getDrainLoc() <<' '<<pmos.getWidth()<< std::endl;
     }
 
     gigaplace::NetLength length(pl_db);
