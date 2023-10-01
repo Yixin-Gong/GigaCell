@@ -6,7 +6,6 @@
 
 #include <cmath>
 
-
 //TODO:Add mos_list initialize method
 void gigaplace::PlaceDB::init() {
   Net2Mos net2mos{};
@@ -76,12 +75,18 @@ void gigaplace::PlaceDB::init() {
   for (Mos &nmos : db_.nmos_list()) {
     nmos_list().push_back(nmos);
     nmos_ids().push_back(idx);
+
+    mos_list().push_back(nmos);
+    mos_ids().push_back(idx);
     idx++;
   }
   idx = 0;
   for (Mos &pmos : db_.pmos_list()) {
     pmos_list().push_back(pmos);
     pmos_ids().push_back(idx);
+
+    mos_list().push_back(pmos);
+    mos_ids().push_back(idx + nmos_list().size());
     idx++;
   }
 
