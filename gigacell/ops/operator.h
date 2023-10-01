@@ -18,6 +18,20 @@ namespace gigaplace {
         static void swap(Mos &mos1, Mos &mos2, index &index1, index &index2);
 
         static void fold(PlaceDB &pl_db);
+
+        //TODO:Implement pairing and sharing.@zy and lky
+
+        static bool isFold();
+
+        static bool shouldFold();
+
+        static void sharing_by_pair();
+
+        static void pairing();
+
+        static Mos createDummy();
+
+        static bool isSingle();
     };
 }
 #endif //GIGACELL_GIGACELL_OPS_OPERATOR_H_
