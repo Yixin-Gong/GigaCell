@@ -122,3 +122,21 @@ void gigaplace::Operator::fold(gigaplace::DataBase &db) {
         }
     }
 }
+bool gigaplace::Operator::isFold() {
+  return false;
+}
+bool gigaplace::Operator::shouldFold() {
+  return false;
+}
+void gigaplace::Operator::sharing_by_pair() {
+
+}
+void gigaplace::Operator::pairing() {
+
+}
+Mos gigaplace::Operator::createDummy() {
+  return {};
+}
+bool gigaplace::Operator::isSingle() {
+  return false;
+}

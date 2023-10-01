@@ -30,6 +30,27 @@
 - Set gate nets' weights
 
 ## Framework
+### Partition
+1. Calculate #Mos and set #block
+2. Partition by min-cut
+3. Get blocks and indices in it
+
+### Pairing
+1. Find the mos connected by same gate net
+2. Pairing
+3. If exist single mos,create dummy and pairing them.
+
+
+### Sharing
+1. Sharing(shouldFlip? canSharing?).
+2. Sharing if they can,Change Mos to pairing if they can't.
+3. Sharing and reserve the configuration.
+
+
+
+
+
+### SA
 Partitioning --> Pairing -->
 
 Random Swap --> Check Flip Flag -->

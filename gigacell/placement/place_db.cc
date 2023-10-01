@@ -6,6 +6,8 @@
 
 #include <cmath>
 
+
+//TODO:Add mos_list initialize method
 void gigaplace::PlaceDB::init() {
   Net2Mos net2mos{};
   std::vector<Net2Mos> net{};
