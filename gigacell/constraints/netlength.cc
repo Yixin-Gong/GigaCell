@@ -19,24 +19,12 @@ float gigaplace::NetLength::netLength() {
 
     for (auto &kMos : kNet.second) {
       float x = 0;
-
-      if (kMos.type == 0) {
-        //if( ==pl_db_.nmos_list().at(kMos.idx).getLeft())
-        if (kMos.electrode_name == "source") {
-          x = pl_db_.nmos_list().at(kMos.idx).getLeftLoc();
-        } else if (kMos.electrode_name == "gate") {
-          x = pl_db_.nmos_list().at(kMos.idx).getGateLoc();
-        } else {
-          x = pl_db_.nmos_list().at(kMos.idx).getRightLoc();
-        }
+      if (kMos.electrode_name == "left") {
+        x = pl_db_.mos_list().at(kMos.idx).getLeftLoc();
+      } else if (kMos.electrode_name == "gate") {
+        x = pl_db_.mos_list().at(kMos.idx).getGateLoc();
       } else {
-        if (kMos.electrode_name == "source") {
-          x = pl_db_.pmos_list().at(kMos.idx).getLeftLoc();
-        } else if (kMos.electrode_name == "gate") {
-          x = pl_db_.pmos_list().at(kMos.idx).getGateLoc();
-        } else {
-          x = pl_db_.pmos_list().at(kMos.idx).getRightLoc();
-        }
+        x = pl_db_.mos_list().at(kMos.idx).getRightLoc();
       }
 
       x_max = std::max(x_max, x);
@@ -47,5 +35,6 @@ float gigaplace::NetLength::netLength() {
     total_length += length;
   }
 
-  return total_length;
+  return
+      total_length;
 }

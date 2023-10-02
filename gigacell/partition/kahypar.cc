@@ -30,10 +30,7 @@ void gigaplace::KaHyPar::partition() {
     hyperedge_indices_[idx2] = num;
 //    std::cout << idx2 << ' ' << hyperedge_indices_[idx2] << std::endl;
     for (auto &kMos : kNet.second) {
-      if (kMos.type == 0)
-        hyperedges_[idx1] = kMos.idx;
-      else
-        hyperedges_[idx1] = kMos.idx + pl_db_.nmos_list().size();
+      hyperedges_[idx1] = kMos.idx;
       //set high weight to those have gate net
       if (kMos.electrode_name == "gate")
         hyperedge_weights_[idx2 - 1] = 1000;
@@ -55,10 +52,10 @@ void gigaplace::KaHyPar::partition() {
     if (pl_db_.blocks().find(partition_[i]) == pl_db_.blocks().end()) {
       pl_db_.blocks().emplace(partition_[i], ids);
       pl_db_.blocks().find(partition_[i])->second.emplace_back(i);
-    } else{
+    } else {
       pl_db_.blocks().find(partition_[i])->second.emplace_back(i);
     }
-//    std::cout << i << ":" << partition_[i] << std::endl;
+    std::cout << i << ":" << partition_[i] << std::endl;
   }
 
   kahypar_context_free(context_);

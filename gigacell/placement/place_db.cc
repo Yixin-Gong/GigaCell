@@ -11,7 +11,6 @@ void gigaplace::PlaceDB::init() {
   gigaplace::Operator::fold(db_);
   for (auto &kNMOS : db_.nmos_list()) {
     net2mos.idx = idx;
-  //  net2mos.type = 0;
 
     if (nets_.find(kNMOS.getRight()) == nets_.end() && kNMOS.getRight() != "VSS" && kNMOS.getRight() != "VDD") {
       nets_.emplace(kNMOS.getRight(), net);
@@ -40,10 +39,8 @@ void gigaplace::PlaceDB::init() {
     }
     idx++;
   }
-  idx = nmos_list().size();
   for (auto &kPMOS : db_.pmos_list()) {
-    net2mos.idx = idx;
-   // net2mos.type = 1;
+     net2mos.idx = idx;
     if (nets_.find(kPMOS.getRight()) == nets_.end() && kPMOS.getRight() != "VSS" && kPMOS.getRight() != "VDD") {
       nets_.emplace(kPMOS.getRight(), net);
       net2mos.electrode_name = "right";
@@ -71,6 +68,7 @@ void gigaplace::PlaceDB::init() {
     }
     idx++;
   }
+
   idx = 0;
   for (Mos &kNMOS : db_.nmos_list()) {
     nmos_list().push_back(kNMOS);

@@ -29,13 +29,13 @@ int main(int argc, char *argv[]) {
 //    loc += 2;
 //  }
 //
-//  loc = 0;
-//  for (auto &mos : pl_db.mos_list()) {
-//    mos.getGateLoc() = loc;
-//    mos.getLeftLoc() = mos.getGateLoc() - 0.5;
-//    mos.getRightLoc() = mos.getGateLoc() + 0.5;
-//    loc += 2;
-//  }
+  auto loc = 0;
+  for (auto &mos : pl_db.mos_list()) {
+    mos.getGateLoc() = loc;
+    mos.getLeftLoc() = mos.getGateLoc() - 0.5;
+    mos.getRightLoc() = mos.getGateLoc() + 0.5;
+    loc += 2;
+  }
 
 //  gigaplace::Operator::swap(pl_db.mos_list()[0], pl_db.mos_list()[9], pl_db.mos_ids()[0],
 //                            pl_db.mos_ids()[9]);
@@ -59,9 +59,9 @@ int main(int argc, char *argv[]) {
 //              << pmos.getRightLoc() << ' ' << pmos.getWidth() << std::endl;
 //  }
 //
-//  gigaplace::NetLength length(pl_db);
-//  loc = length.netLength();
-//  std::cout << loc << std::endl;
+  gigaplace::NetLength length(pl_db);
+  loc = length.netLength();
+  std::cout << loc << std::endl;
 //  gigaplace::Area area0(pl_db);
 //  loc = area0.computeArea();
 //  std::cout << loc << std::endl;
