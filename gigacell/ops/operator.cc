@@ -2,29 +2,40 @@
 // Created by eric on 23-9-21.
 //
 
+
 #include "operator.h"
 
-void gigaplace::Operator::flip(Mos &mos) {
-  if (mos.getRightLoc() - mos.getLeftLoc() > 0) {
-    mos.getRightLoc() = mos.getRightLoc() - 1;
-    mos.getLeftLoc() = mos.getLeftLoc() + 1;
-  } else {
-    mos.getRightLoc() = mos.getRightLoc() + 1;
-    mos.getLeftLoc() = mos.getLeftLoc() - 1;
 
-  }
+void gigaplace::Operator::flip(index &mos_idx,PlaceDB &pl_db) {
+    for(auto &kMOS : pl_db.nets().find(pl_db.mos_list().at(mos_idx).getLeft())->second){
+        if(kMOS.idx == mos_idx)
+            kMOS.electrode_name="right";
+    }
+    for(auto &kMOS : pl_db.nets().find(pl_db.mos_list().at(mos_idx).getRight())->second){
+        if(kMOS.idx == mos_idx)
+            kMOS.electrode_name="left";
+    }
+    std::string temp;
+    temp=pl_db.mos_list().at(mos_idx).getLeft();
+    pl_db.mos_list().at(mos_idx).getLeft()=pl_db.mos_list().at(mos_idx).getRight();
+    pl_db.mos_list().at(mos_idx).getRight()=temp;
+
+
 }
 
-void gigaplace::Operator::swap(Mos &mos1, Mos &mos2, index &index1, index &index2) {
+void gigaplace::Operator::swap(PlaceDB &pl_db, index &index1, index &index2) {
+    Mos mos1,mos2;
+    mos1 = pl_db.mos_list().at(index1);
+    mos2 = pl_db.mos_list().at(index2);
   if (mos1.getType() != mos2.getType()) {
     std::cerr << "Error" << std::endl;
     return;
   }
 
-  index idx;
-  idx = index2;
-  index2 = index1;
-  index1 = idx;
+//  index idx;
+//  idx = index2;
+//  index2 = index1;
+//  index1 = idx;
 
   float loc;
 
@@ -32,25 +43,25 @@ void gigaplace::Operator::swap(Mos &mos1, Mos &mos2, index &index1, index &index
   mos2.getGateLoc() = mos1.getGateLoc();
   mos1.getGateLoc() = loc;
 
-  float temp1;
-  float temp2;
-  temp1 = std::max(mos1.getLeftLoc(), mos1.getRightLoc());
-  temp2 = std::min(mos1.getLeftLoc(), mos1.getRightLoc());
-  if (mos1.getRightLoc() > mos1.getLeftLoc()) {
-    mos1.getRightLoc() = std::max(mos2.getRightLoc(), mos2.getLeftLoc());
-    mos1.getLeftLoc() = std::min(mos2.getRightLoc(), mos2.getLeftLoc());
-  } else {
-    mos1.getRightLoc() = std::min(mos2.getRightLoc(), mos2.getLeftLoc());
-    mos1.getLeftLoc() = std::max(mos2.getRightLoc(), mos2.getLeftLoc());
-  }
-  if (mos2.getRightLoc() > mos2.getLeftLoc()) {
-    mos2.getRightLoc() = temp1;
-    mos2.getLeftLoc() = temp2;
-
-  } else {
-    mos2.getRightLoc() = temp2;
-    mos2.getLeftLoc() = temp1;
-  }
+//  float temp1;
+//  float temp2;
+//  temp1 = std::max(mos1.getLeftLoc(), mos1.getRightLoc());
+//  temp2 = std::min(mos1.getLeftLoc(), mos1.getRightLoc());
+//  if (mos1.getRightLoc() > mos1.getLeftLoc()) {
+//    mos1.getRightLoc() = std::max(mos2.getRightLoc(), mos2.getLeftLoc());
+//    mos1.getLeftLoc() = std::min(mos2.getRightLoc(), mos2.getLeftLoc());
+//  } else {
+//    mos1.getRightLoc() = std::min(mos2.getRightLoc(), mos2.getLeftLoc());
+//    mos1.getLeftLoc() = std::max(mos2.getRightLoc(), mos2.getLeftLoc());
+//  }
+//  if (mos2.getRightLoc() > mos2.getLeftLoc()) {
+//    mos2.getRightLoc() = temp1;
+//    mos2.getLeftLoc() = temp2;
+//
+//  } else {
+//    mos2.getRightLoc() = temp2;
+//    mos2.getLeftLoc() = temp1;
+//  }
 
 //    loc = mos2.getRightLoc();
 //    mos2.getDrainLoc() = mos1.getRightLoc();

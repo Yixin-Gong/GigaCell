@@ -4,8 +4,9 @@
 
 #ifndef GIGACELL_GIGACELL_OPS_OPERATOR_H_
 #define GIGACELL_GIGACELL_OPS_OPERATOR_H_
-
+//
 #include "database/database.h"
+#include "placement/place_db.h"
 
 namespace gigaplace {
     class Operator {
@@ -13,9 +14,9 @@ namespace gigaplace {
     public:
         Operator() = default;
 
-        static void flip(Mos &mos);
+        static void flip(index &mos_idx,PlaceDB &pl_db);
 
-        static void swap(Mos &mos1, Mos &mos2, index &index1, index &index2);
+        static void swap(PlaceDB &pl_db, index &index1, index &index2);
 
         static void fold(DataBase &db);
 
