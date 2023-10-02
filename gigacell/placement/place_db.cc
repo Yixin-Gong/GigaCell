@@ -1,14 +1,13 @@
 //
 // Created by eric on 23-9-15.
 //
-
 #include "place_db.h"
 
 void gigaplace::PlaceDB::init() {
   Net2Mos net2mos{};
   std::vector<Net2Mos> net{};
   index idx = 0;
-  gigaplace::Operator::fold(db_);
+  gigaplace::Fold::fold(db_);
   for (auto &kNMOS : db_.nmos_list()) {
     net2mos.idx = idx;
 
@@ -88,6 +87,68 @@ void gigaplace::PlaceDB::init() {
     idx++;
   }
 }
+void gigaplace::Fold::fold(gigaplace::DataBase &db) {
+  int32_t idx = -1;
+  DataBase db1 = db;
+  for (auto &nmos : db1.nmos_list()) {
+    idx++;
+    if (nmos.getWidth() < 220) {
+      continue;
+    }
+    index n;
+    n = std::ceil(nmos.getWidth() / 220);
+    nmos.getWidth() = (float) std::round((nmos.getWidth() / (float) n) * 100) / 100;
+    db.nmos_list().at(idx).getWidth() = nmos.getWidth();
 
+    for (index i = 1; i < n; i++) {
+      Mos new_mos;
+      new_mos.getType() = 0;
+
+      std::string name;
+      std::string mos_name = nmos.getMosName();
+
+      name.append(mos_name + "_finger_" + std::to_string(i));
+
+      new_mos.getMosName() = name;
+      new_mos.getLeft() = nmos.getLeft();
+      new_mos.getGate() = nmos.getGate();
+      new_mos.getRight() = nmos.getRight();
+      new_mos.getWidth() = nmos.getWidth();
+      db.nmos_list().push_back(new_mos);
+
+      index new_index = i + db.nmos_ids().size();
+      db.nmos_ids().push_back(new_index);
+    }
+
+  }
+  idx = -1;
+  for (auto &pmos : db1.pmos_list()) {
+    idx++;
+    if (pmos.getWidth() < 220) {
+      continue;
+    }
+    index n;
+    n = std::ceil(pmos.getWidth() / 220);
+    pmos.getWidth() = (float) std::round((pmos.getWidth() / (float) n) * 100) / 100;
+    db.pmos_list().at(idx).getWidth() = pmos.getWidth();
+    for (index i = 1; i < n; i++) {
+      Mos new_mos;
+      new_mos.getType() = 1;
+      std::string mos_name;
+      mos_name.append(pmos.getMosName() + "_finger_" + std::to_string(i));
+      new_mos.getMosName() = mos_name;
+      new_mos.getLeft() = pmos.getLeft();
+      new_mos.getGate() = pmos.getGate();
+      new_mos.getRight() = pmos.getRight();
+      new_mos.getWidth() = pmos.getWidth();
+      db.pmos_list().push_back(new_mos);
+
+      index new_index = i + db.pmos_ids().size();
+      db.pmos_ids().push_back(new_index);
+    }
+  }
+
+
+}
 
 
