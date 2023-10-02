@@ -15,6 +15,7 @@ class Mos {
   std::string &getRight() { return right_; }
   std::string &getMosName() { return mosName_; }
   float &getWidth() { return width_; }
+  bool &getFlag(){return flag_; }
 
  private:
   float gate_loc_{};        //gate location
@@ -29,6 +30,7 @@ class Mos {
   float width_{};        //width >= 0 nm
   std::string mosName_;  //mosName
 
+  bool flag_ = false;
 };
 
 #endif //GIGACELL_MOS_H
