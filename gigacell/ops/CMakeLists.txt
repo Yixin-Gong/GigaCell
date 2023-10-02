@@ -9,6 +9,8 @@ set(INCLUDE_DIRS
 set(LINK_LIBS
         placement_cxx)
 
-add_library(${TARGET_NAME}_cxx STATIC ${CPP_SOURCES})
+add_library(${TARGET_NAME}_cxx STATIC ${CPP_SOURCES}
+        cluster.cc
+        cluster.h)
 target_include_directories(${TARGET_NAME}_cxx PUBLIC ${INCLUDE_DIRS})
 target_link_directories(${TARGET_NAME}_cxx PUBLIC ${LINK_LIBS})
