@@ -5,7 +5,7 @@
 #ifndef GIGACELL_GIGACELL_OPS_OPERATOR_H_
 #define GIGACELL_GIGACELL_OPS_OPERATOR_H_
 //
-#include "database/database.h"
+//#include "database/database.h"
 #include "placement/place_db.h"
 
 namespace gigaplace {
@@ -18,17 +18,17 @@ namespace gigaplace {
 
         static void swap(PlaceDB &pl_db, index &index1, index &index2);
 
-        static void fold(DataBase &db);
+//        static void fold(DataBase &db);
 
         //TODO:Implement pairing and sharing.@zy and lky
 
         static bool isFold();
 
-        static bool shouldFold();
+        static bool shouldShare(PlaceDB &pl_db, Configuration &c1, Configuration &c2);
 
-        static void sharing_by_pair();
+        static void share();
 
-        static void pairing();
+        static void creatConfig(index &mos1_idx, index &mos2_idx, std::vector<Configuration> &config_list, PlaceDB &pl_db);
 
         static Mos createDummy();
 
