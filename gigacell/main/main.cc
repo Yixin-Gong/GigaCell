@@ -16,24 +16,24 @@ int main(int argc, char *argv[]) {
 //  float loc = 0;
 //  for (auto &nmos : pl_db.nmos_list()) {
 //    nmos.getGateLoc() = loc;
-//    nmos.getSourceLoc() = nmos.getGateLoc() - 0.5;
-//    nmos.getDrainLoc() = nmos.getGateLoc() + 0.5;
+//    nmos.getLeftLoc() = nmos.getGateLoc() - 0.5;
+//    nmos.getRightLoc() = nmos.getGateLoc() + 0.5;
 //    loc += 2;
 //  }
 //
 //  loc = 0;
 //  for (auto &pmos : pl_db.pmos_list()) {
 //    pmos.getGateLoc() = loc;
-//    pmos.getSourceLoc() = pmos.getGateLoc() - 0.5;
-//    pmos.getDrainLoc() = pmos.getGateLoc() + 0.5;
+//    pmos.getLeftLoc() = pmos.getGateLoc() - 0.5;
+//    pmos.getRightLoc() = pmos.getGateLoc() + 0.5;
 //    loc += 2;
 //  }
 //
 //  loc = 0;
 //  for (auto &mos : pl_db.mos_list()) {
 //    mos.getGateLoc() = loc;
-//    mos.getSourceLoc() = mos.getGateLoc() - 0.5;
-//    mos.getDrainLoc() = mos.getGateLoc() + 0.5;
+//    mos.getLeftLoc() = mos.getGateLoc() - 0.5;
+//    mos.getRightLoc() = mos.getGateLoc() + 0.5;
 //    loc += 2;
 //  }
 
@@ -43,20 +43,20 @@ int main(int argc, char *argv[]) {
 //  gigaplace::Operator::flip(pl_db.mos_list().at(1));
 
 //  for (auto &mos : pl_db.mos_list()) {
-//    std::cout << mos.getMosName() << ' ' << mos.getType() << ' ' << mos.getSource() << ' ' << mos.getGate() << ' '
-//              << mos.getDrain() << ' ' << mos.getSourceLoc() << ' ' << mos.getGateLoc() << ' '
-//              << mos.getDrainLoc() << ' ' << mos.getWidth() << ' ' << std::endl;
+//    std::cout << mos.getMosName() << ' ' << mos.getType() << ' ' << mos.getLeft() << ' ' << mos.getGate() << ' '
+//              << mos.getRight() << ' ' << mos.getLeftLoc() << ' ' << mos.getGateLoc() << ' '
+//              << mos.getRightLoc() << ' ' << mos.getWidth() << ' ' << std::endl;
 //  }
 //
 
 //  for (auto &nmos : pl_db.nmos_list()) {
-//    std::cout << nmos.getMosName() << ' ' << nmos.getSourceLoc() << ' ' << nmos.getGateLoc() << ' '
-//              << nmos.getDrainLoc() << ' ' << nmos.getWidth() << std::endl;
+//    std::cout << nmos.getMosName() << ' ' << nmos.getLeftLoc() << ' ' << nmos.getGateLoc() << ' '
+//              << nmos.getRightLoc() << ' ' << nmos.getWidth() << std::endl;
 //  }
 //
 //  for (auto &pmos : pl_db.pmos_list()) {
-//    std::cout << pmos.getMosName() << ' ' << pmos.getSourceLoc() << ' ' << pmos.getGateLoc() << ' '
-//              << pmos.getDrainLoc() << ' ' << pmos.getWidth() << std::endl;
+//    std::cout << pmos.getMosName() << ' ' << pmos.getLeftLoc() << ' ' << pmos.getGateLoc() << ' '
+//              << pmos.getRightLoc() << ' ' << pmos.getWidth() << std::endl;
 //  }
 //
 //  gigaplace::NetLength length(pl_db);

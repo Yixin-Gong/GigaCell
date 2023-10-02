@@ -13,10 +13,10 @@ namespace gigaplace {
 typedef uint16_t index;
 
 struct Net2Mos {
-  std::string electrode_name;
-  uint16_t type;
-  index idx;
+  std::string electrode_name;//left gate right
+  index idx;//in mos_list
 };
+
 //TODO:Implement Pair and Configuration structure@zy and lky
 struct Pair {
 

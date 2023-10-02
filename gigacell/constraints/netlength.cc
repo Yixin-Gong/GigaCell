@@ -21,21 +21,21 @@ float gigaplace::NetLength::netLength() {
       float x = 0;
 
       if (kMos.type == 0) {
-        //if( ==pl_db_.nmos_list().at(kMos.idx).getSource())
+        //if( ==pl_db_.nmos_list().at(kMos.idx).getLeft())
         if (kMos.electrode_name == "source") {
-          x = pl_db_.nmos_list().at(kMos.idx).getSourceLoc();
+          x = pl_db_.nmos_list().at(kMos.idx).getLeftLoc();
         } else if (kMos.electrode_name == "gate") {
           x = pl_db_.nmos_list().at(kMos.idx).getGateLoc();
         } else {
-          x = pl_db_.nmos_list().at(kMos.idx).getDrainLoc();
+          x = pl_db_.nmos_list().at(kMos.idx).getRightLoc();
         }
       } else {
         if (kMos.electrode_name == "source") {
-          x = pl_db_.pmos_list().at(kMos.idx).getSourceLoc();
+          x = pl_db_.pmos_list().at(kMos.idx).getLeftLoc();
         } else if (kMos.electrode_name == "gate") {
           x = pl_db_.pmos_list().at(kMos.idx).getGateLoc();
         } else {
-          x = pl_db_.pmos_list().at(kMos.idx).getDrainLoc();
+          x = pl_db_.pmos_list().at(kMos.idx).getRightLoc();
         }
       }
 

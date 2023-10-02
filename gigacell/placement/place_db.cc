@@ -11,15 +11,15 @@ void gigaplace::PlaceDB::init() {
   gigaplace::Operator::fold(db_);
   for (auto &kNMOS : db_.nmos_list()) {
     net2mos.idx = idx;
-    net2mos.type = 0;
+  //  net2mos.type = 0;
 
-    if (nets_.find(kNMOS.getDrain()) == nets_.end() && kNMOS.getDrain() != "VSS" && kNMOS.getDrain() != "VDD") {
-      nets_.emplace(kNMOS.getDrain(), net);
-      net2mos.electrode_name = "drain";
-      nets_.find(kNMOS.getDrain())->second.emplace_back(net2mos);
-    } else if (nets_.find(kNMOS.getDrain()) != nets_.end() && kNMOS.getDrain() != "VSS" && kNMOS.getDrain() != "VDD") {
-      net2mos.electrode_name = "drain";
-      nets_.find(kNMOS.getDrain())->second.emplace_back(net2mos);
+    if (nets_.find(kNMOS.getRight()) == nets_.end() && kNMOS.getRight() != "VSS" && kNMOS.getRight() != "VDD") {
+      nets_.emplace(kNMOS.getRight(), net);
+      net2mos.electrode_name = "right";
+      nets_.find(kNMOS.getRight())->second.emplace_back(net2mos);
+    } else if (nets_.find(kNMOS.getRight()) != nets_.end() && kNMOS.getRight() != "VSS" && kNMOS.getRight() != "VDD") {
+      net2mos.electrode_name = "right";
+      nets_.find(kNMOS.getRight())->second.emplace_back(net2mos);
     }
     if (nets_.find(kNMOS.getGate()) == nets_.end() && kNMOS.getGate() != "VSS" && kNMOS.getGate() != "VDD") {
       nets_.emplace(kNMOS.getGate(), net);
@@ -29,28 +29,28 @@ void gigaplace::PlaceDB::init() {
       net2mos.electrode_name = "gate";
       nets_.find(kNMOS.getGate())->second.emplace_back(net2mos);
     }
-    if (nets_.find(kNMOS.getSource()) == nets_.end() && kNMOS.getSource() != "VSS" && kNMOS.getSource() != "VDD") {
-      nets_.emplace(kNMOS.getSource(), net);
-      net2mos.electrode_name = "source";
-      nets_.find(kNMOS.getSource())->second.emplace_back(net2mos);
-    } else if (nets_.find(kNMOS.getSource()) != nets_.end() && kNMOS.getSource() != "VSS"
-        && kNMOS.getSource() != "VDD") {
-      net2mos.electrode_name = "source";
-      nets_.find(kNMOS.getSource())->second.emplace_back(net2mos);
+    if (nets_.find(kNMOS.getLeft()) == nets_.end() && kNMOS.getLeft() != "VSS" && kNMOS.getLeft() != "VDD") {
+      nets_.emplace(kNMOS.getLeft(), net);
+      net2mos.electrode_name = "left";
+      nets_.find(kNMOS.getLeft())->second.emplace_back(net2mos);
+    } else if (nets_.find(kNMOS.getLeft()) != nets_.end() && kNMOS.getLeft() != "VSS"
+        && kNMOS.getLeft() != "VDD") {
+      net2mos.electrode_name = "left";
+      nets_.find(kNMOS.getLeft())->second.emplace_back(net2mos);
     }
     idx++;
   }
-  idx = 0;
+  idx = nmos_list().size();
   for (auto &kPMOS : db_.pmos_list()) {
     net2mos.idx = idx;
-    net2mos.type = 1;
-    if (nets_.find(kPMOS.getDrain()) == nets_.end() && kPMOS.getDrain() != "VSS" && kPMOS.getDrain() != "VDD") {
-      nets_.emplace(kPMOS.getDrain(), net);
-      net2mos.electrode_name = "drain";
-      nets_.find(kPMOS.getDrain())->second.emplace_back(net2mos);
-    } else if (nets_.find(kPMOS.getDrain()) != nets_.end() && kPMOS.getDrain() != "VSS" && kPMOS.getDrain() != "VDD") {
-      net2mos.electrode_name = "drain";
-      nets_.find(kPMOS.getDrain())->second.emplace_back(net2mos);
+   // net2mos.type = 1;
+    if (nets_.find(kPMOS.getRight()) == nets_.end() && kPMOS.getRight() != "VSS" && kPMOS.getRight() != "VDD") {
+      nets_.emplace(kPMOS.getRight(), net);
+      net2mos.electrode_name = "right";
+      nets_.find(kPMOS.getRight())->second.emplace_back(net2mos);
+    } else if (nets_.find(kPMOS.getRight()) != nets_.end() && kPMOS.getRight() != "VSS" && kPMOS.getRight() != "VDD") {
+      net2mos.electrode_name = "right";
+      nets_.find(kPMOS.getRight())->second.emplace_back(net2mos);
     }
     if (nets_.find(kPMOS.getGate()) == nets_.end() && kPMOS.getGate() != "VSS" && kPMOS.getGate() != "VDD") {
       nets_.emplace(kPMOS.getGate(), net);
@@ -60,14 +60,14 @@ void gigaplace::PlaceDB::init() {
       net2mos.electrode_name = "gate";
       nets_.find(kPMOS.getGate())->second.emplace_back(net2mos);
     }
-    if (nets_.find(kPMOS.getSource()) == nets_.end() && kPMOS.getSource() != "VSS" && kPMOS.getSource() != "VDD") {
-      nets_.emplace(kPMOS.getSource(), net);
-      net2mos.electrode_name = "source";
-      nets_.find(kPMOS.getSource())->second.emplace_back(net2mos);
-    } else if (nets_.find(kPMOS.getSource()) != nets_.end() && kPMOS.getSource() != "VSS"
-        && kPMOS.getSource() != "VDD") {
-      net2mos.electrode_name = "source";
-      nets_.find(kPMOS.getSource())->second.emplace_back(net2mos);
+    if (nets_.find(kPMOS.getLeft()) == nets_.end() && kPMOS.getLeft() != "VSS" && kPMOS.getLeft() != "VDD") {
+      nets_.emplace(kPMOS.getLeft(), net);
+      net2mos.electrode_name = "left";
+      nets_.find(kPMOS.getLeft())->second.emplace_back(net2mos);
+    } else if (nets_.find(kPMOS.getLeft()) != nets_.end() && kPMOS.getLeft() != "VSS"
+        && kPMOS.getLeft() != "VDD") {
+      net2mos.electrode_name = "left";
+      nets_.find(kPMOS.getLeft())->second.emplace_back(net2mos);
     }
     idx++;
   }
@@ -89,7 +89,6 @@ void gigaplace::PlaceDB::init() {
     mos_ids().push_back(idx + nmos_list().size());
     idx++;
   }
-
 }
 
 

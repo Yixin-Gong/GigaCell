@@ -34,9 +34,9 @@ void gigaplace::Parser::parse() {
       mos.getWidth() = width*1000;
       subStr = tokens[0].substr(1);
       mos.getMosName() = subStr;
-      mos.getDrain() = tokens[1];
+      mos.getRight() = tokens[3];
       mos.getGate() = tokens[2];
-      mos.getSource() = tokens[3];
+      mos.getLeft() = tokens[1];
       mos.getType() = 1;
       //mos.getWidth()=
       db_.pmos_list().push_back(mos);
@@ -55,9 +55,9 @@ void gigaplace::Parser::parse() {
       mos.getWidth() = width*1000;
       subStr = tokens[0].substr(1);
       mos.getMosName() = subStr;
-      mos.getDrain() = tokens[1];
+      mos.getRight() = tokens[3];
       mos.getGate() = tokens[2];
-      mos.getSource() = tokens[3];
+      mos.getLeft() = tokens[1];
       mos.getType() = 0;
       //mos.getWidth()=
       db_.nmos_list().push_back(mos);
