@@ -9,8 +9,6 @@
 #include "database/database.h"
 #include "ops/operator.h"
 
-
-
 namespace gigaplace {
 typedef uint16_t index;
 
@@ -42,6 +40,8 @@ class PlaceDB {
   //getter
   std::unordered_map<std::string, std::vector<Net2Mos>> &nets() { return nets_; }
   const std::unordered_map<std::string, std::vector<Net2Mos>> &nets() const { return nets_; }
+  std::unordered_map<int32_t , std::vector<index>> &blocks() { return blocks_; }
+  const std::unordered_map<int32_t , std::vector<index>> &blocks() const { return blocks_; }
   std::vector<index> &nmos_ids() { return nmos_ids_; }
   std::vector<index> &pmos_ids() { return pmos_ids_; }
   std::vector<Mos> &nmos_list() { return nmos_list_; }
@@ -56,6 +56,7 @@ class PlaceDB {
  private:
   DataBase &db_;
   std::unordered_map<std::string, std::vector<Net2Mos>> nets_{};
+  std::unordered_map<int32_t , std::vector<index>> blocks_{};
   std::vector<index> nmos_ids_{};
   std::vector<Mos> nmos_list_{};
   std::vector<index> pmos_ids_{};
@@ -66,7 +67,6 @@ class PlaceDB {
   std::vector<Pair> pair_list_{};
   std::vector<index> config_ids_{};
   std::vector<Configuration> config_list_{};
-
 };
 }
 #endif //GIGACELL_GIGACELL_PLACEMENT_PLACE_DB_H_

@@ -50,8 +50,15 @@ void gigaplace::KaHyPar::partition() {
                     hyperedge_indices_.get(), hyperedges_.get(),
                     &objective_, context_, partition_.data());
 
-  for (int i = 0; i != num_vertices_; ++i) {
-    std::cout << i << ":" << partition_[i] << std::endl;
+  for (int i = 0; i != num_vertices_; i++) {
+    std::vector<index> ids;
+    if (pl_db_.blocks().find(partition_[i]) == pl_db_.blocks().end()) {
+      pl_db_.blocks().emplace(partition_[i], ids);
+      pl_db_.blocks().find(partition_[i])->second.emplace_back(i);
+    } else{
+      pl_db_.blocks().find(partition_[i])->second.emplace_back(i);
+    }
+//    std::cout << i << ":" << partition_[i] << std::endl;
   }
 
   kahypar_context_free(context_);
