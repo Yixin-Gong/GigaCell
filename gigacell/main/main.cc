@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
   gigaplace::KaHyPar ka_hy_par(pl_db);
   ka_hy_par.partition();
 
-  gigaplace::Cluster clu(pl_db, pl_db.blocks().at(1));
+  gigaplace::Cluster clu(pl_db, pl_db.blocks().at(0));
   clu.creatConfigList();
 
   for (auto &config : clu.config_list()) {
@@ -25,6 +25,9 @@ int main(int argc, char *argv[]) {
 
     }
   }
+  std::cout<<clu.config_list().at(0).left_net0;
+  gigaplace::Operator::configFlip(pl_db,clu.config_list().at(0));
+  std::cout<<clu.config_list().at(0).left_net0;
   for (auto index : pl_db.mos_ids())
     std::cout << index << std::endl;
 //  float loc = 0;
