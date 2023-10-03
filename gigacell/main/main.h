@@ -6,6 +6,7 @@
 #include "constraints/area.h"
 #include "ops/operator.h"
 #include "partition/kahypar.h"
+#include "ops/cluster.h"
 
 
 
