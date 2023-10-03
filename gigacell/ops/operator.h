@@ -7,6 +7,7 @@
 //
 //#include "database/database.h"
 #include "placement/place_db.h"
+#include <algorithm>
 
 namespace gigaplace {
     class Operator {
@@ -18,6 +19,8 @@ namespace gigaplace {
 
         static void mosFlip(PlaceDB &pl_db, index &mos_idx);
 
+        static void configFlip(PlaceDB &pl_db, Configuration &config);
+
         static void swap(PlaceDB &pl_db, index &index1, index &index2);
 
         //TODO:Implement pairing and sharing.@zy and lky
@@ -26,7 +29,7 @@ namespace gigaplace {
 
         static void share(PlaceDB &pl_db, std::vector<Configuration> &config_list);
 
-        static void creatConfig(PlaceDB &pl_db, std::vector<Configuration> &config_list,index &mos1_idx, index &mos2_idx);
+        static void addConfig(PlaceDB &pl_db, std::vector<Configuration> &config_list, index &mos1_idx, index &mos2_idx);
 
         static void createDummy(PlaceDB &pl_db, std::vector<Configuration> &config_list,index &single_mos);
 
