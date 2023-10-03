@@ -13,6 +13,12 @@ int main(int argc, char *argv[]) {
   gigaplace::PlaceDB pl_db(db);
   gigaplace::KaHyPar ka_hy_par(pl_db);
   ka_hy_par.partition();
+  gigaplace::Cluster clu(pl_db,pl_db.blocks().at(0));
+  clu.creatConfigList();
+    for(auto &config : clu.config_list()){
+        std::cout<<config.left_net0<<std::endl;
+        std::cout<<config.right_net1<<std::endl;
+    }
 //  float loc = 0;
 //  for (auto &nmos : pl_db.nmos_list()) {
 //    nmos.getGateLoc() = loc;
