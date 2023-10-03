@@ -13,12 +13,20 @@ int main(int argc, char *argv[]) {
   gigaplace::PlaceDB pl_db(db);
   gigaplace::KaHyPar ka_hy_par(pl_db);
   ka_hy_par.partition();
-  gigaplace::Cluster clu(pl_db,pl_db.blocks().at(0));
+
+  gigaplace::Cluster clu(pl_db, pl_db.blocks().at(1));
   clu.creatConfigList();
-    for(auto &config : clu.config_list()){
-        std::cout<<config.left_net0<<std::endl;
-        std::cout<<config.right_net1<<std::endl;
+
+  for (auto &config : clu.config_list()) {
+//    std::cout << config.pair_list.at << std::endl;
+//    std::cout << config.right_net1 << std::endl;
+    for (auto &pair : config.pair_list) {
+      std::cout << pair.nmos_idx << ' ' << pair.pmos_idx << std::endl;
+
     }
+  }
+  for (auto index : pl_db.mos_ids())
+    std::cout << index << std::endl;
 //  float loc = 0;
 //  for (auto &nmos : pl_db.nmos_list()) {
 //    nmos.getGateLoc() = loc;
@@ -45,8 +53,8 @@ int main(int argc, char *argv[]) {
 
 //  gigaplace::Operator::swap(pl_db.mos_list()[0], pl_db.mos_list()[9], pl_db.mos_ids()[0],
 //                            pl_db.mos_ids()[9]);
-//  gigaplace::Operator::flip(pl_db.mos_list().at(0));
-//  gigaplace::Operator::flip(pl_db.mos_list().at(1));
+//  gigaplace::Operator::mosFlip(pl_db.mos_list().at(0));
+//  gigaplace::Operator::mosFlip(pl_db.mos_list().at(1));
 
 //  for (auto &mos : pl_db.mos_list()) {
 //    std::cout << mos.getMosName() << ' ' << mos.getType() << ' ' << mos.getLeft() << ' ' << mos.getGate() << ' '
