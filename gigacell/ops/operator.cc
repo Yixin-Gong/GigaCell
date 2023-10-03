@@ -6,7 +6,7 @@
 #include "operator.h"
 
 
-void gigaplace::Operator::flip(index &mos_idx,PlaceDB &pl_db) {
+void gigaplace::Operator::mosFlip(PlaceDB &pl_db, index &mos_idx) {
     for(auto &kMOS : pl_db.nets().find(pl_db.mos_list().at(mos_idx).getLeft())->second){
         if(kMOS.idx == mos_idx)
             kMOS.electrode_name="right";
@@ -38,73 +38,6 @@ void gigaplace::Operator::swap(PlaceDB &pl_db, index &index1, index &index2) {
   mos1.getGateLoc() = loc;
 }
 
-//void gigaplace::Operator::fold(gigaplace::DataBase &db) {
-//
-//  int32_t idx = -1;
-//  DataBase db1 = db;
-//  for (auto &nmos : db1.nmos_list()) {
-//    idx++;
-//    if (nmos.getWidth() < 220) {
-//      continue;
-//    }
-//    index n;
-//    n = std::ceil(nmos.getWidth() / 220);
-//    nmos.getWidth() = (float) std::round((nmos.getWidth() / (float) n) * 100) / 100;
-//    db.nmos_list().at(idx).getWidth() = nmos.getWidth();
-//
-//    for (index i = 1; i < n; i++) {
-//      Mos new_mos;
-//      new_mos.getType() = 0;
-//
-//      std::string name;
-//      std::string mos_name = nmos.getMosName();
-//
-//      name.append(mos_name + "_finger_" + std::to_string(i));
-//
-//      new_mos.getMosName() = name;
-//      new_mos.getLeft() = nmos.getLeft();
-//      new_mos.getGate() = nmos.getGate();
-//      new_mos.getRight() = nmos.getRight();
-//      new_mos.getWidth() = nmos.getWidth();
-//      db.nmos_list().push_back(new_mos);
-//
-//      index new_index = i + db.nmos_ids().size();
-//      db.nmos_ids().push_back(new_index);
-//    }
-//
-//  }
-//  idx = -1;
-//  for (auto &pmos : db1.pmos_list()) {
-//    idx++;
-//    if (pmos.getWidth() < 220) {
-//      continue;
-//    }
-//    index n;
-//    n = std::ceil(pmos.getWidth() / 220);
-//    pmos.getWidth() = (float) std::round((pmos.getWidth() / (float) n) * 100) / 100;
-//    db.pmos_list().at(idx).getWidth() = pmos.getWidth();
-//    for (index i = 1; i < n; i++) {
-//      Mos new_mos;
-//      new_mos.getType() = 1;
-//      std::string mos_name;
-//      mos_name.append(pmos.getMosName() + "_finger_" + std::to_string(i));
-//      new_mos.getMosName() = mos_name;
-//      new_mos.getLeft() = pmos.getLeft();
-//      new_mos.getGate() = pmos.getGate();
-//      new_mos.getRight() = pmos.getRight();
-//      new_mos.getWidth() = pmos.getWidth();
-//      db.pmos_list().push_back(new_mos);
-//
-//      index new_index = i + db.pmos_ids().size();
-//      db.pmos_ids().push_back(new_index);
-//    }
-//  }
-//}
-
-bool gigaplace::Operator::isFold() {
-  return false;
-}
-
 bool gigaplace::Operator::shouldShare(PlaceDB &pl_db, Configuration &c1, Configuration &c2) {
   int i = 0, j = 0;
   if(c1.left_net0 == c2.left_net0 || c1.left_net0 == c2.right_net0)
@@ -121,11 +54,17 @@ bool gigaplace::Operator::shouldShare(PlaceDB &pl_db, Configuration &c1, Configu
     return false;
 }
 
-void gigaplace::Operator::share() {
-
+void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<Configuration> &config_list) {
+//    for(auto config1 : config_list){
+//      for(auto config2 : config_list){
+//        if(shouldShare(pl_db,config1,config2)){
+//          if()
+//        }
+//      }
+//    }
 }
 
-void gigaplace::Operator::creatConfig(index &mos1_idx, index &mos2_idx, std::vector<Configuration> &config_list, PlaceDB &pl_db) {
+void gigaplace::Operator::creatConfig(PlaceDB &pl_db,std::vector<Configuration> &config_list, index &mos1_idx, index &mos2_idx) {
   if (pl_db.mos_list().at(mos1_idx).getType() == pl_db.mos_list().at(mos2_idx).getType())
     return;
   if (pl_db.mos_list().at(mos1_idx).getGate() != pl_db.mos_list().at(mos2_idx).getGate())
@@ -152,9 +91,10 @@ void gigaplace::Operator::creatConfig(index &mos1_idx, index &mos2_idx, std::vec
   config_list.push_back(config);
 }
 
-Mos gigaplace::Operator::createDummy(index &single_mos_idx, PlaceDB &pl_db , std::vector<Configuration> &config_list) {
+void gigaplace::Operator::createDummy(PlaceDB &pl_db, std::vector<Configuration> &config_list,index &single_mos_idx) {
     Mos dummy_mos;
     Mos single_mos;
+
     single_mos = pl_db.mos_list().at(single_mos_idx);
 
     if(single_mos.getType() == 0)
@@ -163,15 +103,18 @@ Mos gigaplace::Operator::createDummy(index &single_mos_idx, PlaceDB &pl_db , std
         dummy_mos.getType() = 0;
 
     dummy_mos.getGate() = single_mos.getGate();
-    //dummy_mos.getGateLoc() = single_mos.getGateLoc();
     dummy_mos.getDummyFlag() = true;
+    std::string dummy;
+    dummy_mos.getMosName() = dummy;
 
     pl_db.mos_list().push_back(dummy_mos);
-    pl_db.mos_ids().push_back(pl_db.mos_list().size());
-    //may create error
+    pl_db.mos_ids().push_back(pl_db.mos_list().size()-1);
     index dummy_idx = pl_db.mos_ids()[pl_db.mos_ids().size() - 1];
-    gigaplace::Operator::creatConfig(single_mos_idx,dummy_idx,config_list,pl_db);
+    gigaplace::Operator::creatConfig(pl_db,config_list,single_mos_idx,dummy_idx);
 }
-bool gigaplace::Operator::isSingle() {
-  return false;
+
+bool gigaplace::Operator::shouldFlip(gigaplace::Configuration &config1, gigaplace::Configuration &config2) {
+    if(config1.left_net0 == config2.left_net1){
+
+    }
 }
