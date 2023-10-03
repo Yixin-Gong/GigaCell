@@ -30,7 +30,7 @@ namespace gigaplace {
 
         static void creatConfig(index &mos1_idx, index &mos2_idx, std::vector<Configuration> &config_list, PlaceDB &pl_db);
 
-        static Mos createDummy();
+        static Mos createDummy(index &single_mos , PlaceDB &pl_db, std::vector<Configuration> &config_list);
 
         static bool isSingle();
     };

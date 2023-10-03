@@ -130,9 +130,11 @@ void gigaplace::Operator::creatConfig(index &mos1_idx, index &mos2_idx, std::vec
     return;
   if (pl_db.mos_list().at(mos1_idx).getGate() != pl_db.mos_list().at(mos2_idx).getGate())
     return;
+  if(pl_db.mos_list().at(mos1_idx).getConfigFlag() || pl_db.mos_list().at(mos2_idx).getConfigFlag())
+    return;
+     pl_db.mos_list().at(mos1_idx).getConfigFlag() = true;
+     pl_db.mos_list().at(mos2_idx).getConfigFlag() = true;
 
-  pl_db.mos_list().at(mos1_idx).getFlag() = true;
-  pl_db.mos_list().at(mos2_idx).getFlag() = true;
   Pair p{};
   if (pl_db.mos_list().at(mos1_idx).getType() == 0) {
     p.nmos_idx = mos1_idx;
@@ -150,10 +152,26 @@ void gigaplace::Operator::creatConfig(index &mos1_idx, index &mos2_idx, std::vec
   config_list.push_back(config);
 }
 
-Mos gigaplace::Operator::createDummy() {
-  return {};
-}
+Mos gigaplace::Operator::createDummy(index &single_mos_idx, PlaceDB &pl_db , std::vector<Configuration> &config_list) {
+    Mos dummy_mos;
+    Mos single_mos;
+    single_mos = pl_db.mos_list().at(single_mos_idx);
 
+    if(single_mos.getType() == 0)
+        dummy_mos.getType() = 1;
+    else
+        dummy_mos.getType() = 0;
+
+    dummy_mos.getGate() = single_mos.getGate();
+    //dummy_mos.getGateLoc() = single_mos.getGateLoc();
+    dummy_mos.getDummyFlag() = true;
+
+    pl_db.mos_list().push_back(dummy_mos);
+    pl_db.mos_ids().push_back(pl_db.mos_list().size());
+    //may create error
+    index dummy_idx = pl_db.mos_ids()[pl_db.mos_ids().size() - 1];
+    gigaplace::Operator::creatConfig(single_mos_idx,dummy_idx,config_list,pl_db);
+}
 bool gigaplace::Operator::isSingle() {
   return false;
 }
