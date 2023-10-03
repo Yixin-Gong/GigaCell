@@ -18,7 +18,7 @@ class Cluster {
 
 
  private:
-  std::vector<Configuration> config_list_;
+  std::vector<Configuration> config_list_{};
   PlaceDB &pl_db_;
   std::vector<index> &block_;
 

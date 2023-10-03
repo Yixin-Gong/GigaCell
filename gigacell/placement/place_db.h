@@ -26,7 +26,7 @@ struct Pair {
 struct Configuration {
   std::vector<Pair> pair_list;
   int32_t num_finger = 0;
-  bool flag = false;
+  bool share_flag = false;
   float config_loc = 0;
   std::string left_net0;
   std::string left_net1;
@@ -44,6 +44,8 @@ class PlaceDB {
 
   //setter
   void init();
+
+  static void fold(DataBase &db);
 
   //getter
   std::unordered_map<std::string, std::vector<Net2Mos>> &nets() { return nets_; }
@@ -72,11 +74,6 @@ class PlaceDB {
   std::vector<index> config_ids_{};
   std::vector<Configuration> config_list_{};
 };
-class Fold{
- public:
-  Fold() = default;
-  static void fold(DataBase &db);
 
-};
 }
 #endif //GIGACELL_GIGACELL_PLACEMENT_PLACE_DB_H_

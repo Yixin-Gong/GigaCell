@@ -7,7 +7,7 @@ void gigaplace::PlaceDB::init() {
   Net2Mos net2mos{};
   std::vector<Net2Mos> net{};
   index idx = 0;
-  gigaplace::Fold::fold(db_);
+  fold(db_);
   for (auto &kNMOS : db_.nmos_list()) {
     net2mos.idx = idx;
 
@@ -87,7 +87,8 @@ void gigaplace::PlaceDB::init() {
     idx++;
   }
 }
-void gigaplace::Fold::fold(gigaplace::DataBase &db) {
+
+void gigaplace::PlaceDB::fold(gigaplace::DataBase &db)  {
   int32_t idx = -1;
   DataBase db1 = db;
   for (auto &nmos : db1.nmos_list()) {
