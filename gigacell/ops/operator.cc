@@ -8,19 +8,23 @@
 void gigaplace::Operator::mosFlip(PlaceDB &pl_db, index &mos_idx) {
   if(pl_db.mos_list().at(mos_idx).getDummyFlag())
     return;
-  for (auto &kMOS : pl_db.nets().find(pl_db.mos_list().at(mos_idx).getLeft())->second) {
-    if (kMOS.idx == mos_idx)
-      kMOS.electrode_name = "right";
+
+  if(pl_db.mos_list().at(mos_idx).getLeft() != "VDD" && pl_db.mos_list().at(mos_idx).getLeft() != "VSS"){
+    for (auto &kMOS : pl_db.nets().find(pl_db.mos_list().at(mos_idx).getLeft())->second) {
+      if (kMOS.idx == mos_idx)
+        kMOS.electrode_name = "right";
+    }
   }
-  for (auto &kMOS : pl_db.nets().find(pl_db.mos_list().at(mos_idx).getRight())->second) {
-    if (kMOS.idx == mos_idx)
-      kMOS.electrode_name = "left";
+  if(pl_db.mos_list().at(mos_idx).getRight() != "VDD" && pl_db.mos_list().at(mos_idx).getRight() != "VSS") {
+    for (auto &kMOS : pl_db.nets().find(pl_db.mos_list().at(mos_idx).getRight())->second) {
+      if (kMOS.idx == mos_idx)
+        kMOS.electrode_name = "left";
+    }
   }
   std::string temp;
-  temp = pl_db.mos_list().at(mos_idx).getLeft();
+  temp = pl_db.mos_list().  at(mos_idx).getLeft();
   pl_db.mos_list().at(mos_idx).getLeft() = pl_db.mos_list().at(mos_idx).getRight();
   pl_db.mos_list().at(mos_idx).getRight() = temp;
-
 }
 
 void gigaplace::Operator::swap(PlaceDB &pl_db, index &index1, index &index2) {
@@ -118,9 +122,9 @@ void gigaplace::Operator::createDummy(PlaceDB &pl_db, std::vector<Configuration>
 
 bool gigaplace::Operator::shouldFlip(gigaplace::Configuration &config1, gigaplace::Configuration &config2) {
   if (config1.left_net0 == config2.left_net1) {
-
   }
 }
+
 void gigaplace::Operator::configFlip(gigaplace::PlaceDB &pl_db, gigaplace::Configuration &config) {
   std::reverse(config.pair_list.begin(), config.pair_list.end());
   for (auto &pair : config.pair_list) {
@@ -135,6 +139,4 @@ void gigaplace::Operator::configFlip(gigaplace::PlaceDB &pl_db, gigaplace::Confi
   temp = config.right_net1;
   config.right_net1 = config.left_net1;
   config.left_net1 = temp;
-
-
 }
