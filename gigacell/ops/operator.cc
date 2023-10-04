@@ -43,6 +43,8 @@ void gigaplace::Operator::swap(PlaceDB &pl_db, index &index1, index &index2) {
 }
 
 std::string gigaplace::Operator::shouldShare(PlaceDB &pl_db, Configuration &c1, Configuration &c2) {
+  if (c1.share_flag || c2.share_flag)
+    return "1/2 config had been used";
   //two pair
   if (c1.num_finger == 0 && c2.num_finger == 0) {
     //flip 0
@@ -70,56 +72,56 @@ std::string gigaplace::Operator::shouldShare(PlaceDB &pl_db, Configuration &c1, 
     if (c1.left_net1 == c2.right_net1 && c1.left_net0 == c2.left_net0)
       return "mosFlip c2_1 configFlip c1";
     //flip 2
-    if(c1.left_net1 == c2.right_net1 && c1.right_net0 == c2.left_net0)
+    if (c1.left_net1 == c2.right_net1 && c1.right_net0 == c2.left_net0)
       return "mosFlip c1_1 c2_1";
-    if(c1.right_net1 == c2.right_net1 && c1.right_net0 == c2.right_net1)
+    if (c1.right_net1 == c2.right_net1 && c1.right_net0 == c2.right_net1)
       return "configFlip c2";
-    if(c1.right_net1 == c2.left_net1 && c1.left_net0 == c2.right_net0)
+    if (c1.right_net1 == c2.left_net1 && c1.left_net0 == c2.right_net0)
       return " mosFlip c1_0 c2_0";
-    if(c1.left_net1 == c2.left_net1 && c1.left_net0 == c2.left_net0)
+    if (c1.left_net1 == c2.left_net1 && c1.left_net0 == c2.left_net0)
       return "configFlip c1";
-    if(c1.left_net1 == c2.left_net1 && c1.right_net0 == c2.right_net0)
+    if (c1.left_net1 == c2.left_net1 && c1.right_net0 == c2.right_net0)
       return "mosFlip c1_1 c2_0";
-    if(c1.right_net1 == c2.right_net1 && c1.left_net0 == c2.left_net0)
+    if (c1.right_net1 == c2.right_net1 && c1.left_net0 == c2.left_net0)
       return "mosFlip c1_0 c2_1";
   }
 
   //one pair one config
   if (c1.num_finger == 0 && c2.num_finger != 0) {
-      if(c1.right_net1 == c2.left_net1 && c1.right_net0 == c2.left_net0)
-        return "do without Flip";
-      if(c1.left_net1 == c2.left_net1 && c1.right_net0 == c2.left_net0)
-        return "mosFlip c1_1";
-      if(c1.right_net1 == c2.left_net1 && c1.left_net0 == c2.left_net0)
-        return "mosFlip c1_0";
-      if(c1.left_net1 == c2.left_net1 && c1.left_net0 == c2.left_net0)
-        return "configFlip c1";
-      if(c1.right_net1 == c2.right_net1 && c1.right_net0 == c2.right_net0)
-        return "configFlip c2";
-      if(c1.left_net1 == c2.right_net1 && c1.right_net0 == c2.right_net0)
-        return "mosFlip c1_1 configFlip c2";
-      if(c1.right_net1 == c2.right_net1 && c1.left_net0 == c2.right_net0)
-        return "mosFlip c1_0 configFlip c2";
-      if(c1.left_net1 == c2.right_net1 && c1.left_net0 == c2.right_net0)
-        return "configFlip c1 c2";
+    if (c1.right_net1 == c2.left_net1 && c1.right_net0 == c2.left_net0)
+      return "do without Flip";
+    if (c1.left_net1 == c2.left_net1 && c1.right_net0 == c2.left_net0)
+      return "mosFlip c1_1";
+    if (c1.right_net1 == c2.left_net1 && c1.left_net0 == c2.left_net0)
+      return "mosFlip c1_0";
+    if (c1.left_net1 == c2.left_net1 && c1.left_net0 == c2.left_net0)
+      return "configFlip c1";
+    if (c1.right_net1 == c2.right_net1 && c1.right_net0 == c2.right_net0)
+      return "configFlip c2";
+    if (c1.left_net1 == c2.right_net1 && c1.right_net0 == c2.right_net0)
+      return "mosFlip c1_1 configFlip c2";
+    if (c1.right_net1 == c2.right_net1 && c1.left_net0 == c2.right_net0)
+      return "mosFlip c1_0 configFlip c2";
+    if (c1.left_net1 == c2.right_net1 && c1.left_net0 == c2.right_net0)
+      return "configFlip c1 c2";
   }
-  if(c1.num_finger !=0 && c2.num_finger ==0 ){
-      if(c1.right_net1 == c2.left_net1 && c1.right_net0 == c2.left_net0)
-        return "do without Flip";
-      if(c1.right_net1 == c2.right_net1 && c1.right_net0 == c2.left_net0)
-        return "mosFlip c2_1";
-      if(c1.right_net1 == c2.left_net1 && c1.right_net0 == c2.right_net0)
-        return "mosFlip c2_0";
-      if(c1.right_net1 == c2.right_net1 && c1.right_net0 == c2.right_net0)
-        return "configFlip c2";
-      if(c1.left_net1 == c2.left_net1 && c1.left_net0 == c2.left_net0)
-        return "configFlip c1";
-      if(c1.left_net1 == c2.right_net1 && c1.left_net0 == c2.left_net0)
-        return "mosFlip c2_1 configFlip c1";
-      if(c1.left_net1 == c2.left_net1 && c1.left_net0 == c2.right_net0)
-        return "mosFlip c2_0 configFlip c1";
-      if(c1.left_net1 == c2.right_net1 && c1.left_net0 == c2.right_net0)
-        return "configFlip c1 c2";
+  if (c1.num_finger != 0 && c2.num_finger == 0) {
+    if (c1.right_net1 == c2.left_net1 && c1.right_net0 == c2.left_net0)
+      return "do without Flip";
+    if (c1.right_net1 == c2.right_net1 && c1.right_net0 == c2.left_net0)
+      return "mosFlip c2_1";
+    if (c1.right_net1 == c2.left_net1 && c1.right_net0 == c2.right_net0)
+      return "mosFlip c2_0";
+    if (c1.right_net1 == c2.right_net1 && c1.right_net0 == c2.right_net0)
+      return "configFlip c2";
+    if (c1.left_net1 == c2.left_net1 && c1.left_net0 == c2.left_net0)
+      return "configFlip c1";
+    if (c1.left_net1 == c2.right_net1 && c1.left_net0 == c2.left_net0)
+      return "mosFlip c2_1 configFlip c1";
+    if (c1.left_net1 == c2.left_net1 && c1.left_net0 == c2.right_net0)
+      return "mosFlip c2_0 configFlip c1";
+    if (c1.left_net1 == c2.right_net1 && c1.left_net0 == c2.right_net0)
+      return "configFlip c1 c2";
   }
   //two config
   if (c1.num_finger != 0 && c2.num_finger != 0) {
@@ -136,11 +138,49 @@ std::string gigaplace::Operator::shouldShare(PlaceDB &pl_db, Configuration &c1, 
 }
 
 void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<Configuration> &config_list) {
-  for (auto config1 : config_list) {
-    for (auto config2 : config_list){
+  index primary_config_list_size, current_config_list_size;
+  primary_config_list_size = config_list.size();
+  current_config_list_size = config_list.size();
+
+  for (auto i = 0; i < primary_config_list_size; i++) {
+
+    for (auto j = 0; j < current_config_list_size; j++) {
+      auto should_do = gigaplace::Operator::shouldShare(pl_db, config_list.at(i), config_list.at(j));
+
+      if (should_do == "1/2 config had been used")
+        continue;
+
+      if (should_do == "do without Flip") {
+        Configuration temp = config_list.at(i);
+        for (auto &pair : config_list.at(j).pair_list)
+          temp.pair_list.push_back(pair);
+        temp.right_net1 = config_list.at(j).right_net1;
+        temp.right_net0 = config_list.at(j).right_net0;
+        temp.num_finger = temp.num_finger + config_list.at(j).num_finger + 1;
+        config_list.at(i).share_flag = true;
+        config_list.at(j).share_flag = true;
+        config_list.push_back(temp);
+        current_config_list_size = current_config_list_size + 1;
+      }
+
+      if(should_do == "mosFlip c1_0_1 c2_0_1"){
+        gigaplace::Operator::mosFlip(pl_db,config_list.at(i).pair_list.at(0).nmos_idx);
+        gigaplace::Operator::mosFlip(pl_db,config_list.at(i).pair_list.at(0).pmos_idx);
+        gigaplace::Operator::mosFlip(pl_db,config_list.at(j).pair_list.at(0).nmos_idx);
+        gigaplace::Operator::mosFlip(pl_db,config_list.at(j).pair_list.at(0).pmos_idx);
+
+      }
 
     }
+    if (!config_list.at(i).share_flag) {
+
+
+      Configuration temp = config_list.at(i);
+      config_list.push_back(temp);
+      config_list.at(i).share_flag = true;
+    }
   }
+
 }
 
 void gigaplace::Operator::addConfig(PlaceDB &pl_db,
@@ -194,7 +234,6 @@ void gigaplace::Operator::createDummy(PlaceDB &pl_db, std::vector<Configuration>
   index dummy_idx = pl_db.mos_ids()[pl_db.mos_ids().size() - 1];
   gigaplace::Operator::addConfig(pl_db, config_list, single_mos_idx, dummy_idx);
 }
-
 
 void gigaplace::Operator::configFlip(gigaplace::PlaceDB &pl_db, gigaplace::Configuration &config) {
   std::reverse(config.pair_list.begin(), config.pair_list.end());
