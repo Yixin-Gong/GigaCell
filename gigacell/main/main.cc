@@ -17,19 +17,35 @@ int main(int argc, char *argv[]) {
   gigaplace::Cluster clu(pl_db, pl_db.blocks().at(0));
   clu.creatConfigList();
 
+//  std::cout<<clu.config_list().at(0).left_net0<<std::endl;
+//  gigaplace::Operator::configFlip(pl_db,clu.config_list().at(0));
+//  std::cout<<clu.config_list().at(0).left_net0<<std::endl;
+
+  gigaplace::index a1=1;
+  std::cout<<pl_db.mos_list().at(a1).getLeft()<<std::endl;
+  gigaplace::Operator::mosFlip(pl_db, a1);
+  std::cout<<pl_db.mos_list().at(a1).getLeft()<<std::endl;
+
+
+  //test creat config list from block
   for (auto &config : clu.config_list()) {
 //    std::cout << config.pair_list.at << std::endl;
 //    std::cout << config.right_net1 << std::endl;
     for (auto &pair : config.pair_list) {
       std::cout << pair.nmos_idx << ' ' << pair.pmos_idx << std::endl;
-
     }
   }
-  std::cout<<clu.config_list().at(0).left_net0;
-  gigaplace::Operator::configFlip(pl_db,clu.config_list().at(0));
-  std::cout<<clu.config_list().at(0).left_net0;
+
+  std::cout << clu.config_list().at(0).left_net0<<std::endl;
+  gigaplace::Operator::configFlip(pl_db, clu.config_list().at(0));
+  std::cout << clu.config_list().at(0).left_net0<<std::endl;
+
+
   for (auto index : pl_db.mos_ids())
     std::cout << index << std::endl;
+
+
+  //init mos loc
 //  float loc = 0;
 //  for (auto &nmos : pl_db.nmos_list()) {
 //    nmos.getGateLoc() = loc;
@@ -46,14 +62,16 @@ int main(int argc, char *argv[]) {
 //    loc += 2;
 //  }
 //
-  auto loc = 0;
-  for (auto &mos : pl_db.mos_list()) {
-    mos.getGateLoc() = loc;
-    mos.getLeftLoc() = mos.getGateLoc() - 0.5;
-    mos.getRightLoc() = mos.getGateLoc() + 0.5;
-    loc += 2;
-  }
+//  auto loc = 0;
+//  for (auto &mos : pl_db.mos_list()) {
+//    mos.getGateLoc() = loc;
+//    mos.getLeftLoc() = mos.getGateLoc() - 0.5;
+//    mos.getRightLoc() = mos.getGateLoc() + 0.5;
+//    loc += 2;
+//  }
 
+
+  //test  mos_swap and mos_flip
 //  gigaplace::Operator::swap(pl_db.mos_list()[0], pl_db.mos_list()[9], pl_db.mos_ids()[0],
 //                            pl_db.mos_ids()[9]);
 //  gigaplace::Operator::mosFlip(pl_db.mos_list().at(0));
@@ -76,13 +94,20 @@ int main(int argc, char *argv[]) {
 //              << pmos.getRightLoc() << ' ' << pmos.getWidth() << std::endl;
 //  }
 //
-  gigaplace::NetLength length(pl_db);
-  loc = length.netLength();
-  std::cout << loc << std::endl;
+
+
+////test calculate net length
+//  gigaplace::NetLength length(pl_db);
+//  loc = length.netLength();
+//  std::cout << loc << std::endl;
+//
+
+  //test calculate net area
 //  gigaplace::Area area0(pl_db);
 //  loc = area0.computeArea();
 //  std::cout << loc << std::endl;
-//
+
+  //test map of nets
 //  for (auto &item : pl_db.nets()) {
 //    std::cout << item.first << "\t";
 //    for (auto &kItem : item.second) {
