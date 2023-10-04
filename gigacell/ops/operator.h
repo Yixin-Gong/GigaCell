@@ -15,8 +15,6 @@ namespace gigaplace {
     public:
         Operator() = default;
 
-        static bool shouldFlip(Configuration &config1, Configuration &config2);
-
         static void mosFlip(PlaceDB &pl_db, index &mos_idx);
 
         static void configFlip(PlaceDB &pl_db, Configuration &config);
@@ -25,7 +23,7 @@ namespace gigaplace {
 
         //TODO:Implement pairing and sharing.@zy and lky
 
-        static bool shouldShare(PlaceDB &pl_db, Configuration &c1, Configuration &c2);
+        static std::string shouldShare(PlaceDB &pl_db, Configuration &c1, Configuration &c2);
 
         static void share(PlaceDB &pl_db, std::vector<Configuration> &config_list);
 
