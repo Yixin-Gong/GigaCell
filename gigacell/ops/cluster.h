@@ -10,17 +10,17 @@ namespace gigaplace {
 
 class Cluster {
  public:
-  Cluster(PlaceDB &pl_db,std::vector<index> &block) : pl_db_(pl_db),block_(block){}
+  explicit Cluster(PlaceDB &pl_db) : pl_db_(pl_db){}
   std::vector<Configuration> &config_list() {return config_list_;}
 
   void creatConfigList();
   void clearConfigList();
-
+  void getBlock(std::vector<index> &block);
 
  private:
   std::vector<Configuration> config_list_{};
   PlaceDB &pl_db_;
-  std::vector<index> &block_;
+  std::vector<index> block_;
 
 };
 }
