@@ -289,6 +289,12 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<Configuration> &conf
       current_config_list_size = current_config_list_size + 1;
     }
   }
+
+  for(auto &config : config_list){
+    if(!config.share_flag)
+      pl_db.config_list().push_back(config);
+  }
+
 }
 
 void gigaplace::Operator::addConfig(PlaceDB &pl_db,
