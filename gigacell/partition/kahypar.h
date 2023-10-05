@@ -19,7 +19,7 @@ class KaHyPar {
         imbalance_(0.03),
         num_vertices_(pl_db.mos_list().size()),
         partition_(num_vertices_, -1),
-        k_((int32_t)pl_db.mos_list().size()/4),
+        k_((int32_t)2),
         objective_(0),
         pl_db_(pl_db) {}
   void partition();
