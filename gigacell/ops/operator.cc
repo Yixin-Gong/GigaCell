@@ -250,3 +250,23 @@ void gigaplace::Operator::configFlip(gigaplace::PlaceDB &pl_db, gigaplace::Confi
   config.right_net1 = config.left_net1;
   config.left_net1 = temp;
 }
+
+gigaplace::Configuration gigaplace::Operator::creatTempConfig(gigaplace::PlaceDB &pl_db, gigaplace::Configuration &c1,
+                                                              gigaplace::Configuration &c2) {
+    Configuration temp{};
+    for(auto &pair : c1.pair_list)
+        temp.pair_list.push_back(pair);
+    for(auto &pair : c2.pair_list)
+        temp.pair_list.push_back(pair);
+    temp.left_net0=pl_db.mos_list().at(temp.pair_list.at(0).nmos_idx).getLeft();
+    temp.left_net1=pl_db.mos_list().at(temp.pair_list.at(0).pmos_idx).getLeft();
+    temp.right_net0=pl_db.mos_list().at(temp.pair_list.at(temp.pair_list.size()-1).nmos_idx).getRight();
+    temp.right_net1=pl_db.mos_list().at(temp.pair_list.at(temp.pair_list.size()-1).pmos_idx).getRight();
+    temp.num_finger=c1.num_finger+c2.num_finger+1;
+    c1.share_flag= true;
+    c2.share_flag= true;
+
+
+
+    return temp;
+}
