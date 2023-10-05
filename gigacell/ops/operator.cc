@@ -143,7 +143,7 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<Configuration> &conf
   current_config_list_size = config_list.size();
 
   for (auto i = 0; i < primary_config_list_size; i++) {
-    for (auto j = 0; j < current_config_list_size; j++) {
+    for (auto j = i+1; j < current_config_list_size; j++) {
       auto should_do = gigaplace::Operator::shouldShare(pl_db, config_list.at(i), config_list.at(j));
 //not all share_flag equal false
       if (should_do == "1/2 config had been used" || should_do == "could not share")

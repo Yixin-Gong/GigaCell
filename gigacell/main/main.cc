@@ -14,35 +14,73 @@ int main(int argc, char *argv[]) {
   gigaplace::KaHyPar ka_hy_par(pl_db);
   ka_hy_par.partition();
 
-  gigaplace::Cluster clu(pl_db, pl_db.blocks().at(0));
+  gigaplace::Cluster clu(pl_db);
+  clu.getBlock(pl_db.blocks().at(0));
   clu.creatConfigList();
+//  for(auto &config : clu.config_list()){
+//      std::cout<<config.pair_list.at(0).nmos_idx<<' '<<config.pair_list.at(0).pmos_idx<<std::endl;
+//
+//  }
+  gigaplace::Operator::share(pl_db,clu.config_list());
+//  for(auto &config : pl_db.config_list()) {
+//      std::cout << config.left_net0 << ' ' << config.left_net1<<std::endl;
+//      std::cout<<config.right_net0 << ' ' << config.right_net1<< std::endl;
+//      std::cout<<config.num_finger<<std::endl;
+//      for(auto &pair : config.pair_list)
+//          std::cout<<pair.nmos_idx<<' '<<pair.pmos_idx<<std::endl;
+//      for(auto &pair : config.pair_list) {
+//          std::cout <<pl_db.mos_list().at(pair.pmos_idx).getLeft()<<' '<<pl_db.mos_list().at(pair.pmos_idx).getRight()<<std::endl;
+//          std::cout <<pl_db.mos_list().at(pair.nmos_idx).getLeft()<<' '<<pl_db.mos_list().at(pair.nmos_idx).getRight()<<std::endl;
+//      }
+//  }
+  clu.clearConfigList();
+  clu.getBlock(pl_db.blocks().at(1));
+  clu.creatConfigList();
+  gigaplace::Operator::share(pl_db,clu.config_list());
+    for(auto &config : pl_db.config_list()) {
+        std::cout << config.left_net0 << ' ' << config.left_net1<<std::endl;
+        std::cout<<config.right_net0 << ' ' << config.right_net1<< std::endl;
+        std::cout<<config.num_finger<<std::endl;
+        for(auto &pair : config.pair_list)
+            std::cout<<pair.nmos_idx<<' '<<pair.pmos_idx<<std::endl;
+        for(auto &pair : config.pair_list) {
+            std::cout <<pl_db.mos_list().at(pair.pmos_idx).getLeft()<<' '<<pl_db.mos_list().at(pair.pmos_idx).getRight()<<std::endl;
+            std::cout <<pl_db.mos_list().at(pair.nmos_idx).getLeft()<<' '<<pl_db.mos_list().at(pair.nmos_idx).getRight()<<std::endl;
+        }
+    }
+
+//  std::vector<gigaplace::index> index_list={0,1,2,3,4,5};
+//  std::reverse(index_list.begin(), index_list.end());
+//  for(auto &index : index_list)
+//      std::cout << index<<std::endl;
+//  std::cout<<' '<<std::endl;
 
 //  std::cout<<clu.config_list().at(0).left_net0<<std::endl;
 //  gigaplace::Operator::configFlip(pl_db,clu.config_list().at(0));
 //  std::cout<<clu.config_list().at(0).left_net0<<std::endl;
 
-  gigaplace::index a1=1;
-  std::cout<<pl_db.mos_list().at(a1).getLeft()<<std::endl;
-  gigaplace::Operator::mosFlip(pl_db, a1);
-  std::cout<<pl_db.mos_list().at(a1).getLeft()<<std::endl;
+//  gigaplace::index a1=1;
+//  std::cout<<pl_db.mos_list().at(a1).getLeft()<<std::endl;
+//  gigaplace::Operator::mosFlip(pl_db, a1);
+//  std::cout<<pl_db.mos_list().at(a1).getLeft()<<std::endl;
 
 
   //test creat config list from block
-  for (auto &config : clu.config_list()) {
+//  for (auto &config : clu.config_list()) {
 //    std::cout << config.pair_list.at << std::endl;
 //    std::cout << config.right_net1 << std::endl;
-    for (auto &pair : config.pair_list) {
-      std::cout << pair.nmos_idx << ' ' << pair.pmos_idx << std::endl;
-    }
-  }
+//    for (auto &pair : config.pair_list) {
+//      std::cout << pair.nmos_idx << ' ' << pair.pmos_idx << std::endl;
+//    }
+//  }
 
-  std::cout << clu.config_list().at(0).left_net0<<std::endl;
-  gigaplace::Operator::configFlip(pl_db, clu.config_list().at(0));
-  std::cout << clu.config_list().at(0).left_net0<<std::endl;
-
-
-  for (auto index : pl_db.mos_ids())
-    std::cout << index << std::endl;
+//  std::cout << clu.config_list().at(0).left_net0<<std::endl;
+//  gigaplace::Operator::configFlip(pl_db, clu.config_list().at(0));
+//  std::cout << clu.config_list().at(0).left_net0<<std::endl;
+//
+//
+//  for (auto index : pl_db.mos_ids())
+//    std::cout << index << std::endl;
 
 
   //init mos loc
