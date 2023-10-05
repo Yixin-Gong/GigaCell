@@ -143,7 +143,6 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<Configuration> &conf
   current_config_list_size = config_list.size();
 
   for (auto i = 0; i < primary_config_list_size; i++) {
-
     for (auto j = 0; j < current_config_list_size; j++) {
       auto should_do = gigaplace::Operator::shouldShare(pl_db, config_list.at(i), config_list.at(j));
 //not all share_flag equal false
@@ -218,7 +217,6 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<Configuration> &conf
         Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
         config_list.push_back(temp);
         current_config_list_size = current_config_list_size + 1;
-
       }
 //flip 2
       if (should_do == "mosFlip c1_1 c2_1") {
@@ -227,14 +225,12 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<Configuration> &conf
         Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
         config_list.push_back(temp);
         current_config_list_size = current_config_list_size + 1;
-
       }
       if (should_do == "configFlip c2") {
         gigaplace::Operator::configFlip(pl_db, config_list.at(j));
         Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
         config_list.push_back(temp);
         current_config_list_size = current_config_list_size + 1;
-
       }
       if (should_do == "mosFlip c1_0 c2_0") {
         gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).nmos_idx);
@@ -242,14 +238,12 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<Configuration> &conf
         Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
         config_list.push_back(temp);
         current_config_list_size = current_config_list_size + 1;
-
       }
       if (should_do == "configFlip c1") {
         gigaplace::Operator::configFlip(pl_db, config_list.at(i));
         Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
         config_list.push_back(temp);
         current_config_list_size = current_config_list_size + 1;
-
       }
       if (should_do == "mosFlip c1_1 c2_0") {
         gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).pmos_idx);
@@ -257,7 +251,6 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<Configuration> &conf
         Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
         config_list.push_back(temp);
         current_config_list_size = current_config_list_size + 1;
-
       }
       if (should_do == "mosFLip c1_0 c2_1") {
         gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).nmos_idx);
@@ -265,58 +258,8 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<Configuration> &conf
         Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
         config_list.push_back(temp);
         current_config_list_size = current_config_list_size + 1;
-
       }
-      if (should_do == "do without Flip") {
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
-
       //pair and config
-      if (should_do == "do without Flip") {
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
-      if (should_do == "mosFlip c1_1") {
-        gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).pmos_idx);
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
-      if (should_do == "mosFlip c1_0") {
-        gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).nmos_idx);
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
-      if (should_do == "configFlip c1") {
-        gigaplace::Operator::configFlip(pl_db, config_list.at(i));
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
-      if (should_do == "configFlip c2") {
-        gigaplace::Operator::configFlip(pl_db, config_list.at(j));
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
-      if (should_do == "mosFlip c1_0 configFlip c2") {
-        gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).nmos_idx);
-        gigaplace::Operator::configFlip(pl_db, config_list.at(j));
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
-      if (should_do == "mosFlip c1_1 configFlip c2") {
-        gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).pmos_idx);
-        gigaplace::Operator::configFlip(pl_db, config_list.at(j));
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
       if (should_do == "configFlip c1 c2") {
         gigaplace::Operator::configFlip(pl_db, config_list.at(i));
         gigaplace::Operator::configFlip(pl_db, config_list.at(j));
@@ -324,86 +267,21 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<Configuration> &conf
         config_list.push_back(temp);
         current_config_list_size = current_config_list_size + 1;
       }
-
       //config and pair
-      if (should_do == "do without Flip") {
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
-      if (should_do == "mosFlip c2_1") {
-        gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).pmos_idx);
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
-      if (should_do == "mosFlip c2_0") {
-        gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).nmos_idx);
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
       if (should_do == "configFlip c1") {
         gigaplace::Operator::configFlip(pl_db, config_list.at(i));
         Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
         config_list.push_back(temp);
         current_config_list_size = current_config_list_size + 1;
       }
-      if (should_do == "configFlip c2") {
-        gigaplace::Operator::configFlip(pl_db, config_list.at(j));
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
-      if (should_do == "mosFlip c2_0 configFlip c1") {
-        gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).nmos_idx);
-        gigaplace::Operator::configFlip(pl_db, config_list.at(i));
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
-      if (should_do == "mosFlip c2_1 configFlip c1") {
-        gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).pmos_idx);
-        gigaplace::Operator::configFlip(pl_db, config_list.at(i));
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
-      if (should_do == "configFlip c1 c2") {
-        gigaplace::Operator::configFlip(pl_db, config_list.at(i));
-        gigaplace::Operator::configFlip(pl_db, config_list.at(j));
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
-
       //two config
-      if (should_do == "configFlip c1 c2") {
-        gigaplace::Operator::configFlip(pl_db, config_list.at(i));
-        gigaplace::Operator::configFlip(pl_db, config_list.at(j));
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
-      if (should_do == "do without Flip") {
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
       if (should_do == "configFlip c1 ") {
         gigaplace::Operator::configFlip(pl_db, config_list.at(i));
         Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
         config_list.push_back(temp);
         current_config_list_size = current_config_list_size + 1;
       }
-      if (should_do == "configFlip c2") {
-        gigaplace::Operator::configFlip(pl_db, config_list.at(j));
-        Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i), config_list.at(j));
-        config_list.push_back(temp);
-        current_config_list_size = current_config_list_size + 1;
-      }
     }
-
     if (!config_list.at(i).share_flag) {
       Configuration temp = config_list.at(i);
       config_list.push_back(temp);
@@ -411,7 +289,6 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<Configuration> &conf
       current_config_list_size = current_config_list_size + 1;
     }
   }
-
 }
 
 void gigaplace::Operator::addConfig(PlaceDB &pl_db,
