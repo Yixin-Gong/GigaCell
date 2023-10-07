@@ -17,21 +17,21 @@ namespace gigaplace {
 
         static void mosFlip(PlaceDB &pl_db, index &mos_idx);
 
-        static void configFlip(PlaceDB &pl_db, Configuration &config);
+        static void configFlip(PlaceDB &pl_db, PlaceDB::Configuration &config);
 
         static void swap(PlaceDB &pl_db, index &index1, index &index2);
 
         //TODO:Implement pairing and sharing.@zy and lky
 
-        static std::string shouldShare(PlaceDB &pl_db, Configuration &c1, Configuration &c2);
+        static std::string shouldShare(PlaceDB &pl_db, PlaceDB::Configuration &c1, PlaceDB::Configuration &c2);
 
-        static void share(PlaceDB &pl_db, std::vector<Configuration> &config_list);
+        static void share(PlaceDB &pl_db, std::vector<PlaceDB::Configuration> &config_list);
 
-        static void addConfig(PlaceDB &pl_db, std::vector<Configuration> &config_list, index &mos1_idx, index &mos2_idx);
+        static void addConfig(PlaceDB &pl_db, std::vector<PlaceDB::Configuration> &config_list, index &mos1_idx, index &mos2_idx);
 
-        static void createDummy(PlaceDB &pl_db, std::vector<Configuration> &config_list,index &single_mos);
+        static void createDummy(PlaceDB &pl_db, std::vector<PlaceDB::Configuration> &config_list,index &single_mos);
 
-        static Configuration creatTempConfig(PlaceDB &pl_db,Configuration & c1 ,Configuration & c2);
+        static PlaceDB::Configuration creatTempConfig(PlaceDB &pl_db,PlaceDB::Configuration & c1 ,PlaceDB::Configuration & c2);
     };
 }
 #endif //GIGACELL_GIGACELL_OPS_OPERATOR_H_

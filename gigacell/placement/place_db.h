@@ -12,28 +12,6 @@
 namespace gigaplace {
 typedef uint16_t index;
 
-struct Net2Mos {
-  std::string electrode_name;//left gate right
-  index idx;//in mos_list
-};
-
-//TODO:Implement Pair and Configuration structure@zy and lky
-struct Pair {
-  index pmos_idx{};
-  index nmos_idx{};
-};
-
-struct Configuration {
-  std::vector<Pair> pair_list;
-  int32_t num_finger = 0;
-  bool share_flag = false;
-  float config_loc = 0;
-  std::string left_net0;
-  std::string left_net1;
-  std::string right_net0;
-  std::string right_net1;
-};
-
 class PlaceDB {
  public:
   //constructor
@@ -47,11 +25,31 @@ class PlaceDB {
 
   static void fold(DataBase &db);
 
+  struct Net2Mos {
+    std::string electrode_name;//left gate right
+    index idx;//in mos_list
+  };
+
+  struct Pair {
+    index pmos_idx{};
+    index nmos_idx{};
+  };
+
+  struct Configuration {
+    std::vector<Pair> pair_list;
+    int32_t num_finger = 0;
+    bool share_flag = false;
+    float config_loc = 0;
+    std::string left_net0;
+    std::string left_net1;
+    std::string right_net0;
+    std::string right_net1;
+  };
   //getter
   std::unordered_map<std::string, std::vector<Net2Mos>> &nets() { return nets_; }
   const std::unordered_map<std::string, std::vector<Net2Mos>> &nets() const { return nets_; }
-  std::unordered_map<int32_t , std::vector<index>> &blocks() { return blocks_; }
-  const std::unordered_map<int32_t , std::vector<index>> &blocks() const { return blocks_; }
+  std::unordered_map<int32_t, std::vector<index>> &blocks() { return blocks_; }
+  const std::unordered_map<int32_t, std::vector<index>> &blocks() const { return blocks_; }
   std::vector<index> &nmos_ids() { return nmos_ids_; }
   std::vector<index> &pmos_ids() { return pmos_ids_; }
   std::vector<Mos> &nmos_list() { return nmos_list_; }
@@ -64,7 +62,7 @@ class PlaceDB {
  private:
   DataBase &db_;
   std::unordered_map<std::string, std::vector<Net2Mos>> nets_{};
-  std::unordered_map<int32_t , std::vector<index>> blocks_{};
+  std::unordered_map<int32_t, std::vector<index>> blocks_{};
   std::vector<index> nmos_ids_{};
   std::vector<Mos> nmos_list_{};
   std::vector<index> pmos_ids_{};

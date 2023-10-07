@@ -20,7 +20,7 @@ void gigaplace::Cluster::creatConfigList() {
 }
 
 void gigaplace::Cluster::clearConfigList() {
-  std::vector<Configuration>().swap(config_list_);
+  std::vector<PlaceDB::Configuration>().swap(config_list_);
   std::vector<index>().swap(block_);
 }
 
