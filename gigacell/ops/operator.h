@@ -29,11 +29,11 @@ namespace gigaplace {
 
         static void addConfig(PlaceDB &pl_db, std::vector<PlaceDB::Configuration> &config_list, index &mos1_idx, index &mos2_idx);
 
-        static void createDummy(PlaceDB &pl_db, PlaceDB::Configuration &config_pair,index &single_mos);
+        static void createDummy(PlaceDB &pl_db, PlaceDB::Configuration &config_pair,index &single_idx);
 
         static PlaceDB::Configuration creatTempConfig(PlaceDB &pl_db,PlaceDB::Configuration & c1 ,PlaceDB::Configuration & c2);
 
-        static void pairSingleMos(PlaceDB &pl_db,std::vector<index> &single_mos_ids,std::vector<PlaceDB::Configuration> &pair_list);
+        static void pairSingleMos(PlaceDB &pl_db);
     };
 }
 #endif //GIGACELL_GIGACELL_OPS_OPERATOR_H_
