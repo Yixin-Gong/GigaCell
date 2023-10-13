@@ -56,6 +56,8 @@ class PlaceDB {
   std::vector<Mos> &pmos_list() { return pmos_list_; }
   std::vector<index> &mos_ids() { return mos_ids_; }
   std::vector<Mos> &mos_list() { return mos_list_; }
+  std::vector<Configuration> &pair_list(){return pair_list_;}
+  std::vector<index> &single_mos_idx(){return single_mos_idx_;}
   std::vector<index> &config_ids() { return config_ids_; }
   std::vector<Configuration> &config_list() { return config_list_; }
 
@@ -69,6 +71,8 @@ class PlaceDB {
   std::vector<Mos> pmos_list_{};
   std::vector<index> mos_ids_{};
   std::vector<Mos> mos_list_{};
+  std::vector<Configuration> pair_list_;
+  std::vector<index> single_mos_idx_;
   std::vector<index> config_ids_{};
   std::vector<Configuration> config_list_{};
 };
