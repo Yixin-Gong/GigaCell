@@ -18,7 +18,7 @@ void gigaplace::Cluster::creatConfigList() {
   for (auto &mos_idx : block_) {
     if (!pl_db_.mos_list().at(mos_idx).getConfigFlag()) {
 //      gigaplace::Operator::createDummy( pl_db_, config_list_,mos_idx);
-        pl_db_.single_mos_idx().push_back(mos_idx);
+        pl_db_.single_mos_ids().push_back(mos_idx);
     }
   }
 }
