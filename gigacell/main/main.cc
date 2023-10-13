@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 
       }
 
-
+gigaplace::Operator::pairSingleMos(pl_db);
 //
 //  cluster.getBlock(pl_db.blocks().at(0));
 //  cluster.creatConfigList();
@@ -47,23 +47,27 @@ int main(int argc, char *argv[]) {
 //  cluster.getBlock(pl_db.blocks().at(1));
 //  cluster.creatConfigList();
 //  gigaplace::Operator::share(pl_db,cluster.config_list());
-    for(auto &config : pl_db.config_list()) {
-        std::cout << config.left_net0 << ' ' << config.left_net1<<std::endl;
-        std::cout<<config.right_net0 << ' ' << config.right_net1<< std::endl;
-        std::cout<<config.num_finger<<std::endl;
-        for(auto &pair : config.pair_list)
-            std::cout<<pair.nmos_idx<<' '<<pair.pmos_idx<<std::endl;
-        for(auto &pair : config.pair_list) {
-            std::cout <<pl_db.mos_list().at(pair.pmos_idx).getLeft()<<' '<<pl_db.mos_list().at(pair.pmos_idx).getRight()<<std::endl;
-            std::cout <<pl_db.mos_list().at(pair.nmos_idx).getLeft()<<' '<<pl_db.mos_list().at(pair.nmos_idx).getRight()<<std::endl;
-        }
-    }
-    for(auto &pair : pl_db.pair_list())
-        std::cout<<pair.pair_list.at(0).nmos_idx<<' '<<pair.pair_list.at(0).pmos_idx<<std::endl;
-    for(auto &single_mos_idx : pl_db.single_mos_ids())
-        std::cout<<single_mos_idx<<std::endl;
+//    for(auto &config : pl_db.config_list()) {
+//        std::cout << config.left_net0 << ' ' << config.left_net1<<std::endl;
+//        std::cout<<config.right_net0 << ' ' << config.right_net1<< std::endl;
+//        std::cout<<config.num_finger<<std::endl;
+//        for(auto &pair : config.pair_list)
+//            std::cout<<pair.nmos_idx<<' '<<pair.pmos_idx<<std::endl;
+//        for(auto &pair : config.pair_list) {
+//            std::cout <<pl_db.mos_list().at(pair.pmos_idx).getLeft()<<' '<<pl_db.mos_list().at(pair.pmos_idx).getRight()<<std::endl;
+//            std::cout <<pl_db.mos_list().at(pair.nmos_idx).getLeft()<<' '<<pl_db.mos_list().at(pair.nmos_idx).getRight()<<std::endl;
+//        }
+//    }
+//    for(auto &pair : pl_db.pair_list())
+//        std::cout<<pair.pair_list.at(0).nmos_idx<<' '<<pair.pair_list.at(0).pmos_idx<<std::endl;
+//    for(auto &single_mos_idx : pl_db.single_mos_ids())
+//        std::cout<<single_mos_idx<<std::endl;
+
+for(auto &mos : pl_db.mos_list()){
 
 
+    std::cout<<mos.getLeft()<<' '<<mos.getRight()<<std::endl;
+}
 
 
 //  std::vector<gigaplace::index> index_list={0,1,2,3,4,5};
