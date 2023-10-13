@@ -327,28 +327,44 @@ void gigaplace::Operator::addConfig(PlaceDB &pl_db,
   config_list.push_back(config);
 }
 
-void gigaplace::Operator::createDummy(PlaceDB &pl_db,
-                                      std::vector<PlaceDB::Configuration> &config_list,
-                                      index &single_mos_idx) {
-  Mos dummy_mos{};
-  Mos single_mos{};
+void gigaplace::Operator::createDummy(PlaceDB &pl_db, PlaceDB::Configuration &config_pair, index &single_idx) {
+  Mos dummy{};
+  Mos single{};
+  PlaceDB::Configuration config{};
+  single = pl_db.mos_list().at(single_idx);
 
-  single_mos = pl_db.mos_list().at(single_mos_idx);
-
-  if (single_mos.getType() == 0)
-    dummy_mos.getType() = 1;
+  if (single.getType() == 0)
+    dummy.getType() = 1;
   else
-    dummy_mos.getType() = 0;
+    dummy.getType() = 0;
 
-  dummy_mos.getGate() = single_mos.getGate();
-  dummy_mos.getDummyFlag() = true;
-  std::string dummy;
-  dummy_mos.getMosName() = dummy;
-
-  pl_db.mos_list().push_back(dummy_mos);
+  //create dummy
+  dummy.getGate() = single.getGate();
+  dummy.getDummyFlag() = true;
+  std::string dummy_name;
+  dummy.getMosName() = dummy_name;
   pl_db.mos_ids().push_back(pl_db.mos_list().size() - 1);
   index dummy_idx = pl_db.mos_ids()[pl_db.mos_ids().size() - 1];
-  gigaplace::Operator::addConfig(pl_db, config_list, single_mos_idx, dummy_idx);
+
+  pl_db.mos_list().push_back(dummy);
+
+  //create config
+  if (single.getType() == 0) {
+    config.left_net0 = pl_db.mos_list().at(single_idx).getLeft();
+    config.right_net0 = pl_db.mos_list().at(single_idx).getRight();
+    config.left_net1 = pl_db.mos_list().at(config_pair.pair_list.at(0).pmos_idx).getLeft();
+    config.right_net1 = pl_db.mos_list().at(config_pair.pair_list.at(0).pmos_idx).getRight();
+    config.pair_list.at(0).pmos_idx = dummy_idx;
+    config.pair_list.at(0).nmos_idx = single_idx;
+  }else{
+    config.left_net0 = pl_db.mos_list().at(config_pair.pair_list.at(0).pmos_idx).getLeft();
+    config.right_net0 = pl_db.mos_list().at(config_pair.pair_list.at(0).pmos_idx).getRight();
+    config.left_net1 =  pl_db.mos_list().at(single_idx).getLeft();
+    config.right_net1 = pl_db.mos_list().at(single_idx).getRight();
+    config.pair_list.at(0).pmos_idx = single_idx;
+    config.pair_list.at(0).nmos_idx = dummy_idx;
+  }
+  pl_db.config_list().push_back(config);
 }
 
 void gigaplace::Operator::configFlip(gigaplace::PlaceDB &pl_db, gigaplace::PlaceDB::Configuration &config) {
@@ -400,4 +416,4 @@ gigaplace::PlaceDB::Configuration gigaplace::Operator::creatTempConfig(gigaplace
 
 
 
-}
+//}

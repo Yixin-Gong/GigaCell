@@ -29,7 +29,7 @@ namespace gigaplace {
 
         static void addConfig(PlaceDB &pl_db, std::vector<PlaceDB::Configuration> &config_list, index &mos1_idx, index &mos2_idx);
 
-        static void createDummy(PlaceDB &pl_db, std::vector<PlaceDB::Configuration> &config_list,index &single_mos);
+        static void createDummy(PlaceDB &pl_db, PlaceDB::Configuration &config_pair,index &single_mos);
 
         static PlaceDB::Configuration creatTempConfig(PlaceDB &pl_db,PlaceDB::Configuration & c1 ,PlaceDB::Configuration & c2);
 
