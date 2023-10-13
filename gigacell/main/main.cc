@@ -15,13 +15,23 @@ int main(int argc, char *argv[]) {
   ka_hy_par.partition();
 
   gigaplace::Cluster clu(pl_db);
-  clu.getBlock(pl_db.blocks().at(0));
-  clu.creatConfigList();
+  for(auto &block_hash : pl_db.blocks()){
+          clu.getBlock(block_hash.second);
+          clu.creatConfigList();
+          gigaplace::Operator::share(pl_db,clu.config_list());
+          clu.clearConfigList();
+
+      }
+
+
+//
+//  clu.getBlock(pl_db.blocks().at(0));
+//  clu.creatConfigList();
 //  for(auto &config : clu.config_list()){
 //      std::cout<<config.pair_list.at(0).nmos_idx<<' '<<config.pair_list.at(0).pmos_idx<<std::endl;
 //
 //  }
-  gigaplace::Operator::share(pl_db,clu.config_list());
+//  gigaplace::Operator::share(pl_db,clu.config_list());
 //  for(auto &config : pl_db.config_list()) {
 //      std::cout << config.left_net0 << ' ' << config.left_net1<<std::endl;
 //      std::cout<<config.right_net0 << ' ' << config.right_net1<< std::endl;
@@ -33,10 +43,10 @@ int main(int argc, char *argv[]) {
 //          std::cout <<pl_db.mos_list().at(pair.nmos_idx).getLeft()<<' '<<pl_db.mos_list().at(pair.nmos_idx).getRight()<<std::endl;
 //      }
 //  }
-  clu.clearConfigList();
-  clu.getBlock(pl_db.blocks().at(1));
-  clu.creatConfigList();
-  gigaplace::Operator::share(pl_db,clu.config_list());
+//  clu.clearConfigList();
+//  clu.getBlock(pl_db.blocks().at(1));
+//  clu.creatConfigList();
+//  gigaplace::Operator::share(pl_db,clu.config_list());
     for(auto &config : pl_db.config_list()) {
         std::cout << config.left_net0 << ' ' << config.left_net1<<std::endl;
         std::cout<<config.right_net0 << ' ' << config.right_net1<< std::endl;
@@ -48,6 +58,13 @@ int main(int argc, char *argv[]) {
             std::cout <<pl_db.mos_list().at(pair.nmos_idx).getLeft()<<' '<<pl_db.mos_list().at(pair.nmos_idx).getRight()<<std::endl;
         }
     }
+    for(auto &pair : pl_db.pair_list())
+        std::cout<<pair.pair_list.at(0).nmos_idx<<' '<<pair.pair_list.at(0).pmos_idx<<std::endl;
+    for(auto &single_mos_idx : pl_db.single_mos_idx())
+        std::cout<<single_mos_idx<<std::endl;
+
+
+
 
 //  std::vector<gigaplace::index> index_list={0,1,2,3,4,5};
 //  std::reverse(index_list.begin(), index_list.end());
