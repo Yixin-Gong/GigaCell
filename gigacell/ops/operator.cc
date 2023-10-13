@@ -385,3 +385,19 @@ gigaplace::PlaceDB::Configuration gigaplace::Operator::creatTempConfig(gigaplace
 
   return temp;
 }
+
+//void gigaplace::Operator::singleMosPair(gigaplace::PlaceDB &pl_db, std::vector<index> &single_mos_idx,
+//                                        std::vector<PlaceDB::Configuration> &pair_list) {
+//    for(auto &single_mos : single_mos_idx){
+//        if(!pl_db.mos_list().at(single_mos).getType()) {
+//            for (auto &pair: pair_list) {
+//                if (pl_db.mos_list().at(single_mos).getGate() ==
+//                    pl_db.mos_list().at(pair.pair_list.at(0).nmos_idx).getGate() )
+//            }
+//        }
+//    }
+
+
+
+
+}
