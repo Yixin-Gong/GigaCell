@@ -11,10 +11,14 @@ void gigaplace::Cluster::creatConfigList() {
       gigaplace::Operator::addConfig(pl_db_, config_list_, block_.at(mos1_idx), block_.at(mos2_idx));
     }
   }
+  for(auto &config : config_list_){
+      pl_db_.pair_list().push_back(config);
+  }
 
-  for (auto mos_idx : block_) {
+  for (auto &mos_idx : block_) {
     if (!pl_db_.mos_list().at(mos_idx).getConfigFlag()) {
-      gigaplace::Operator::createDummy( pl_db_, config_list_,mos_idx);
+//      gigaplace::Operator::createDummy( pl_db_, config_list_,mos_idx);
+        pl_db_.single_mos_idx().push_back(mos_idx);
     }
   }
 }
