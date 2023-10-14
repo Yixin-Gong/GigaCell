@@ -311,7 +311,7 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<PlaceDB::Configurati
 
     for (auto &config: config_list) {
         if (!config.share_flag)
-            pl_db.config_list().push_back(config);
+            pl_db.v_config().push_back(config);
     }
 
 }
@@ -386,12 +386,12 @@ void gigaplace::Operator::createDummy(PlaceDB &pl_db, PlaceDB::Configuration &co
         pair.nmos_idx=dummy_idx;
         pair.pmos_idx=single_idx;
         config.pair_list.push_back(pair);
-        config.left_net0 = pl_db.mos_list().at(config_pair.pair_list.at(0).pmos_idx).getLeft();
-        config.right_net0 = pl_db.mos_list().at(config_pair.pair_list.at(0).pmos_idx).getRight();
+        config.left_net0 = pl_db.mos_list().at(config_pair.pair_list.at(0).nmos_idx).getLeft();
+        config.right_net0 = pl_db.mos_list().at(config_pair.pair_list.at(0).nmos_idx).getRight();
         config.left_net1 = pl_db.mos_list().at(single_idx).getLeft();
         config.right_net1 = pl_db.mos_list().at(single_idx).getRight();
     }
-    pl_db.config_list().push_back(config);
+    pl_db.v_config().push_back(config);
 }
 void gigaplace::Operator::configFlip(gigaplace::PlaceDB &pl_db, gigaplace::PlaceDB::Configuration &config) {
     std::reverse(config.pair_list.begin(), config.pair_list.end());

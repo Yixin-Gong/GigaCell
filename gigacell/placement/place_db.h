@@ -33,6 +33,7 @@ class PlaceDB {
   struct Pair {
     index pmos_idx{};
     index nmos_idx{};
+    index pair_idx{};
   };
 
   struct Configuration {
@@ -56,10 +57,10 @@ class PlaceDB {
   std::vector<Mos> &pmos_list() { return pmos_list_; }
   std::vector<index> &mos_ids() { return mos_ids_; }
   std::vector<Mos> &mos_list() { return mos_list_; }
-  std::vector<Configuration> &pair_list(){return pair_list_;}
+  std::vector<Configuration> &pair_list(){return pair_list_;}//true pair(have not shared)
   std::vector<index> &single_mos_ids(){return single_mos_ids_;}
   std::vector<index> &config_ids() { return config_ids_; }
-  std::vector<Configuration> &config_list() { return config_list_; }
+  std::vector<Configuration> &v_config() { return v_config_; }
 
  private:
   DataBase &db_;
@@ -74,7 +75,7 @@ class PlaceDB {
   std::vector<Configuration> pair_list_;
   std::vector<index> single_mos_ids_;
   std::vector<index> config_ids_{};
-  std::vector<Configuration> config_list_{};
+  std::vector<Configuration> v_config_{};
 };
 
 }

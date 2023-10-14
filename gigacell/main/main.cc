@@ -23,16 +23,27 @@ int main(int argc, char *argv[]) {
 
       }
 
-gigaplace::Operator::pairSingleMos(pl_db);
+    gigaplace::Operator::pairSingleMos(pl_db);
+  auto index = 0;
+    for(auto &config : pl_db.v_config()){
+        for(auto &pair : config.pair_list){
+            pair.pair_idx=index;
+            index++;
+        }
+    }
+    for(auto &config : pl_db.v_config()){
+        for(auto &pair : config.pair_list)
+            std::cout<<pair.pair_idx<<std::endl;
+    }
 //
 //  cluster.getBlock(pl_db.blocks().at(0));
 //  cluster.creatConfigList();
-//  for(auto &config : cluster.config_list()){
+//  for(auto &config : cluster.v_config()){
 //      std::cout<<config.pair_list.at(0).nmos_idx<<' '<<config.pair_list.at(0).pmos_idx<<std::endl;
 //
 //  }
-//  gigaplace::Operator::share(pl_db,cluster.config_list());
-//  for(auto &config : pl_db.config_list()) {
+//  gigaplace::Operator::share(pl_db,cluster.v_config());
+//  for(auto &config : pl_db.v_config()) {
 //      std::cout << config.left_net0 << ' ' << config.left_net1<<std::endl;
 //      std::cout<<config.right_net0 << ' ' << config.right_net1<< std::endl;
 //      std::cout<<config.num_finger<<std::endl;
@@ -46,8 +57,8 @@ gigaplace::Operator::pairSingleMos(pl_db);
 //  cluster.clearConfigList();
 //  cluster.getBlock(pl_db.blocks().at(1));
 //  cluster.creatConfigList();
-//  gigaplace::Operator::share(pl_db,cluster.config_list());
-//    for(auto &config : pl_db.config_list()) {
+//  gigaplace::Operator::share(pl_db,cluster.v_config());
+//    for(auto &config : pl_db.v_config()) {
 //        std::cout << config.left_net0 << ' ' << config.left_net1<<std::endl;
 //        std::cout<<config.right_net0 << ' ' << config.right_net1<< std::endl;
 //        std::cout<<config.num_finger<<std::endl;
@@ -76,9 +87,9 @@ for(auto &mos : pl_db.mos_list()){
 //      std::cout << index<<std::endl;
 //  std::cout<<' '<<std::endl;
 
-//  std::cout<<cluster.config_list().at(0).left_net0<<std::endl;
-//  gigaplace::Operator::configFlip(pl_db,cluster.config_list().at(0));
-//  std::cout<<cluster.config_list().at(0).left_net0<<std::endl;
+//  std::cout<<cluster.v_config().at(0).left_net0<<std::endl;
+//  gigaplace::Operator::configFlip(pl_db,cluster.v_config().at(0));
+//  std::cout<<cluster.v_config().at(0).left_net0<<std::endl;
 
 //  gigaplace::index a1=1;
 //  std::cout<<pl_db.mos_list().at(a1).getLeft()<<std::endl;
@@ -87,7 +98,7 @@ for(auto &mos : pl_db.mos_list()){
 
 
   //test creat config list from block
-//  for (auto &config : cluster.config_list()) {
+//  for (auto &config : cluster.v_config()) {
 //    std::cout << config.pair_list.at << std::endl;
 //    std::cout << config.right_net1 << std::endl;
 //    for (auto &pair : config.pair_list) {
@@ -95,9 +106,9 @@ for(auto &mos : pl_db.mos_list()){
 //    }
 //  }
 
-//  std::cout << cluster.config_list().at(0).left_net0<<std::endl;
-//  gigaplace::Operator::configFlip(pl_db, cluster.config_list().at(0));
-//  std::cout << cluster.config_list().at(0).left_net0<<std::endl;
+//  std::cout << cluster.v_config().at(0).left_net0<<std::endl;
+//  gigaplace::Operator::configFlip(pl_db, cluster.v_config().at(0));
+//  std::cout << cluster.v_config().at(0).left_net0<<std::endl;
 //
 //
 //  for (auto index : pl_db.mos_ids())
