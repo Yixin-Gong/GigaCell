@@ -571,6 +571,8 @@ void gigaplace::Operator::splitConfig(gigaplace::PlaceDB &pl_db, index &split_pa
 
   auto it = pl_db.l_config().begin();
   std::advance(it, find_config_idx + 1);
+  if(find_config.num_finger==0)
+      return;
   if (find_pair_idx == 0) {
     PlaceDB::Configuration select_pair{};
     PlaceDB::Configuration select_right{};
