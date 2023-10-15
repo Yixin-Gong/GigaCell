@@ -15,26 +15,30 @@ int main(int argc, char *argv[]) {
   ka_hy_par.partition();
 
   gigaplace::Cluster cluster(pl_db);
-  for(auto &block_hash : pl_db.blocks()){
-          cluster.getBlock(block_hash.second);
-          cluster.creatConfigList();
-          gigaplace::Operator::share(pl_db, cluster.config_list());
-          cluster.clearConfigList();
+  for (auto &block_hash : pl_db.blocks()) {
+    cluster.getBlock(block_hash.second);
+    cluster.creatConfigList();
+    gigaplace::Operator::share(pl_db, cluster.config_list());
+    for (auto &config : cluster.config_list()) {
+      if (!config.share_flag)
+        pl_db.v_config().push_back(config);
+    }
+    cluster.clearConfigList();
 
-      }
+  }
 
-    gigaplace::Operator::pairSingleMos(pl_db);
+  gigaplace::Operator::pairSingleMos(pl_db);
   auto index = 0;
-    for(auto &config : pl_db.v_config()){
-        for(auto &pair : config.pair_list){
-            pair.pair_idx=index;
-            index++;
-        }
+  for (auto &config : pl_db.v_config()) {
+    for (auto &pair : config.pair_list) {
+      pair.pair_idx = index;
+      index++;
     }
-    for(auto &config : pl_db.v_config()){
-        for(auto &pair : config.pair_list)
-            std::cout<<pair.pair_idx<<std::endl;
-    }
+  }
+  for (auto &config : pl_db.v_config()) {
+    for (auto &pair : config.pair_list)
+      std::cout << pair.pair_idx << std::endl;
+  }
 //
 //  cluster.getBlock(pl_db.blocks().at(0));
 //  cluster.creatConfigList();
@@ -74,11 +78,10 @@ int main(int argc, char *argv[]) {
 //    for(auto &single_mos_idx : pl_db.single_mos_ids())
 //        std::cout<<single_mos_idx<<std::endl;
 
-for(auto &mos : pl_db.mos_list()){
+  for (auto &mos : pl_db.mos_list()) {
 
-
-    std::cout<<mos.getLeft()<<' '<<mos.getRight()<<std::endl;
-}
+    std::cout << mos.getLeft() << ' ' << mos.getRight() << std::endl;
+  }
 
 
 //  std::vector<gigaplace::index> index_list={0,1,2,3,4,5};
