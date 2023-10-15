@@ -7,6 +7,7 @@
 #include <vector>
 #include <unordered_map>
 #include "database/database.h"
+#include <list>
 //#include "ops/operator.h"
 
 namespace gigaplace {
@@ -61,6 +62,7 @@ class PlaceDB {
   std::vector<index> &single_mos_ids(){return single_mos_ids_;}
   std::vector<index> &config_ids() { return config_ids_; }
   std::vector<Configuration> &v_config() { return v_config_; }
+  std::list<Configuration> &l_config() { return l_config_; }
 
  private:
   DataBase &db_;
@@ -76,6 +78,7 @@ class PlaceDB {
   std::vector<index> single_mos_ids_;
   std::vector<index> config_ids_{};
   std::vector<Configuration> v_config_{};
+  std::list<Configuration> l_config_{};
 };
 
 }
