@@ -4,8 +4,6 @@
 
 #ifndef GIGACELL_GIGACELL_OPS_OPERATOR_H_
 #define GIGACELL_GIGACELL_OPS_OPERATOR_H_
-//
-//#include "database/database.h"
 #include "placement/place_db.h"
 #include <algorithm>
 
