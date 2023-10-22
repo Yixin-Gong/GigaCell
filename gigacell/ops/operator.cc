@@ -27,19 +27,26 @@ void gigaplace::Operator::mosFlip(PlaceDB &pl_db, index &mos_idx) {
   pl_db.mos_list().at(mos_idx).getRight() = temp;
 }
 
-void gigaplace::Operator::swap(PlaceDB &pl_db, index &index1, index &index2) {
-  Mos mos1, mos2;
-  mos1 = pl_db.mos_list().at(index1);
-  mos2 = pl_db.mos_list().at(index2);
-  if (mos1.getType() != mos2.getType()) {
-    std::cerr << "Error" << std::endl;
-    return;
+void gigaplace::Operator::swap(PlaceDB &pl_db, index &pair1, index &pair2) {
+  int32_t find_pair_idx1 = -1;
+  int32_t find_pair_idx2 = -1;
+  for (auto &config : pl_db.l_config()) {
+    find_pair_idx1++;
+    if (config.pair_list.at(0).pair_idx == pair1)
+      break;
   }
 
-  float loc;
-  loc = mos2.getGateLoc();
-  mos2.getGateLoc() = mos1.getGateLoc();
-  mos1.getGateLoc() = loc;
+  for (auto &config : pl_db.l_config()) {
+    find_pair_idx2++;
+    if (config.pair_list.at(0).pair_idx == pair2)
+      break;
+  }
+
+  auto it1 = pl_db.l_config().begin();
+  std::advance(it1, find_pair_idx1);
+  auto it2 = pl_db.l_config().begin();
+  std::advance(it2, find_pair_idx2);
+  std::swap(*it1, *it2);
 }
 
 std::string gigaplace::Operator::shouldShare(PlaceDB &pl_db, PlaceDB::Configuration &c1, PlaceDB::Configuration &c2) {
@@ -308,12 +315,6 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<PlaceDB::Configurati
       current_config_list_size = current_config_list_size + 1;
     }
   }
-
-  for (auto &config : config_list) {
-    if (!config.share_flag)
-      pl_db.config_list().push_back(config);
-  }
-
 }
 
 void gigaplace::Operator::addConfig(PlaceDB &pl_db,
@@ -386,12 +387,12 @@ void gigaplace::Operator::createDummy(PlaceDB &pl_db, PlaceDB::Configuration &co
     pair.nmos_idx = dummy_idx;
     pair.pmos_idx = single_idx;
     config.pair_list.push_back(pair);
-    config.left_net0 = pl_db.mos_list().at(config_pair.pair_list.at(0).pmos_idx).getLeft();
-    config.right_net0 = pl_db.mos_list().at(config_pair.pair_list.at(0).pmos_idx).getRight();
+    config.left_net0 = pl_db.mos_list().at(config_pair.pair_list.at(0).nmos_idx).getLeft();
+    config.right_net0 = pl_db.mos_list().at(config_pair.pair_list.at(0).nmos_idx).getRight();
     config.left_net1 = pl_db.mos_list().at(single_idx).getLeft();
     config.right_net1 = pl_db.mos_list().at(single_idx).getRight();
   }
-  pl_db.config_list().push_back(config);
+  pl_db.v_config().push_back(config);
 }
 void gigaplace::Operator::configFlip(gigaplace::PlaceDB &pl_db, gigaplace::PlaceDB::Configuration &config) {
   std::reverse(config.pair_list.begin(), config.pair_list.end());
@@ -513,5 +514,207 @@ void gigaplace::Operator::pairSingleMos(gigaplace::PlaceDB &pl_db) {
       }
     }
     pair_flag = false;
+  }
+}
+void gigaplace::Operator::v_configTol_config(gigaplace::PlaceDB &pl_db) {
+  for (auto &config : pl_db.v_config())
+    pl_db.l_config().push_back(config);
+}
+
+void gigaplace::Operator::setCoordinates(gigaplace::PlaceDB &pl_db,
+                                         std::list<PlaceDB::Configuration> &l_config) {
+  float current_loc = 0;
+  float half_unit = 0.5;
+  for (auto &config : l_config) {
+    config.config_loc = current_loc;
+    for (auto &pair : config.pair_list) {
+      pl_db.mos_list().at(pair.nmos_idx).getGateLoc() = current_loc;
+      pl_db.mos_list().at(pair.pmos_idx).getGateLoc() = current_loc;
+      pl_db.mos_list().at(pair.nmos_idx).getLeftLoc() = current_loc - half_unit;
+      pl_db.mos_list().at(pair.pmos_idx).getLeftLoc() = current_loc - half_unit;
+      pl_db.mos_list().at(pair.nmos_idx).getRightLoc() = current_loc + half_unit;
+      pl_db.mos_list().at(pair.pmos_idx).getRightLoc() = current_loc + half_unit;
+
+      current_loc += 1;
+    }
+    current_loc += 1;
+  }
+}
+
+void gigaplace::Operator::createNewLayout(gigaplace::PlaceDB &pl_db, gigaplace::index &pair1, gigaplace::index &pair2) {
+  gigaplace::Operator::splitConfig(pl_db, pair1);
+  gigaplace::Operator::splitConfig(pl_db, pair2);
+  gigaplace::Operator::swap(pl_db, pair1, pair2);
+  gigaplace::Operator::adjacentShare(pl_db, pair1);
+  gigaplace::Operator::adjacentShare(pl_db, pair2);
+
+}
+
+void gigaplace::Operator::splitConfig(gigaplace::PlaceDB &pl_db, index &split_pair) {
+  int32_t find_config_idx = -1;//in l_config
+  int32_t find_pair_idx = -1;//in config--pair_list
+  PlaceDB::Configuration find_config;
+  bool find_flag = false;
+  for (auto &config : pl_db.l_config()) {
+    find_config_idx++;
+    for (auto &pair : config.pair_list) {
+      find_pair_idx++;
+      if (pair.pair_idx == split_pair) {
+        find_flag = true;
+        find_config = config;
+        break;
+      }
+    }
+    if (find_flag)
+      break;
+  }
+
+  auto it = pl_db.l_config().begin();
+  std::advance(it, find_config_idx + 1);
+  if(find_config.num_finger==0)
+      return;
+  if (find_pair_idx == 0) {
+    PlaceDB::Configuration select_pair{};
+    PlaceDB::Configuration select_right{};
+    select_pair.pair_list.at(0) = find_config.pair_list.at(find_pair_idx);
+    select_pair.left_net0 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).nmos_idx).getLeft();
+    select_pair.right_net0 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).nmos_idx).getRight();
+    select_pair.left_net1 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).pmos_idx).getLeft();
+    select_pair.right_net1 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).pmos_idx).getRight();
+    for (auto i = find_pair_idx + 1; i < find_config.pair_list.size(); i++) {
+      select_right.pair_list.push_back(find_config.pair_list.at(i));
+      if (i == find_pair_idx + 1) {
+        select_right.left_net0 = pl_db.mos_list().at(find_config.pair_list.at(i).nmos_idx).getLeft();
+        select_right.left_net1 = pl_db.mos_list().at(find_config.pair_list.at(i).pmos_idx).getLeft();
+      }
+      if (i == find_config.pair_list.size() - 1) {
+        select_right.right_net0 = pl_db.mos_list().at(find_config.pair_list.at(i).nmos_idx).getRight();
+        select_right.right_net1 = pl_db.mos_list().at(find_config.pair_list.at(i).pmos_idx).getRight();
+      }
+      select_right.num_finger += 1;
+    }
+    select_right.num_finger = select_right.num_finger - 1;
+
+    pl_db.l_config().insert(it, {select_pair, select_right});
+    it = pl_db.l_config().begin();
+    std::advance(it, find_config_idx);
+    pl_db.l_config().erase(it);
+
+  } else if (find_pair_idx == find_config.pair_list.size() - 1) {
+    PlaceDB::Configuration select_pair{};
+    PlaceDB::Configuration select_left{};
+    select_pair.pair_list.at(0) = find_config.pair_list.at(find_pair_idx);
+    select_pair.left_net0 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).nmos_idx).getLeft();
+    select_pair.right_net0 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).nmos_idx).getRight();
+    select_pair.left_net1 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).pmos_idx).getLeft();
+    select_pair.right_net1 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).pmos_idx).getRight();
+
+    for (auto i = 0; i < find_config.pair_list.size() - 1; i++) {
+      select_left.pair_list.push_back(find_config.pair_list.at(i));
+      if (i == 0) {
+        select_left.left_net0 = pl_db.mos_list().at(find_config.pair_list.at(i).nmos_idx).getLeft();
+        select_left.left_net1 = pl_db.mos_list().at(find_config.pair_list.at(i).pmos_idx).getLeft();
+      }
+      if (i == find_config.pair_list.size() - 2) {
+        select_left.right_net0 = pl_db.mos_list().at(find_config.pair_list.at(i).nmos_idx).getRight();
+        select_left.right_net1 = pl_db.mos_list().at(find_config.pair_list.at(i).pmos_idx).getRight();
+      }
+      select_left.num_finger += 1;
+    }
+    select_left.num_finger = select_left.num_finger - 1;
+
+    pl_db.l_config().insert(it, {select_left, select_pair});
+    it = pl_db.l_config().begin();
+    std::advance(it, find_config_idx);
+    pl_db.l_config().erase(it);
+
+  } else {
+    PlaceDB::Configuration select_pair{};
+    PlaceDB::Configuration select_left{};
+    PlaceDB::Configuration select_right{};
+
+    select_pair.pair_list.at(0) = find_config.pair_list.at(find_pair_idx);
+    select_pair.left_net0 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).nmos_idx).getLeft();
+    select_pair.right_net0 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).nmos_idx).getRight();
+    select_pair.left_net1 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).pmos_idx).getLeft();
+    select_pair.right_net1 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).pmos_idx).getRight();
+
+    for (auto i = find_pair_idx + 1; i < find_config.pair_list.size(); i++) {
+      select_right.pair_list.push_back(find_config.pair_list.at(i));
+      if (i == find_pair_idx + 1) {
+        select_right.left_net0 = pl_db.mos_list().at(find_config.pair_list.at(i).nmos_idx).getLeft();
+        select_right.left_net1 = pl_db.mos_list().at(find_config.pair_list.at(i).pmos_idx).getLeft();
+      }
+      if (i == find_config.pair_list.size() - 1) {
+        select_right.right_net0 = pl_db.mos_list().at(find_config.pair_list.at(i).nmos_idx).getRight();
+        select_right.right_net1 = pl_db.mos_list().at(find_config.pair_list.at(i).pmos_idx).getRight();
+      }
+      select_right.num_finger += 1;
+    }
+    select_right.num_finger = select_right.num_finger - 1;
+
+    for (auto i = 0; i < find_pair_idx; i++) {
+      select_left.pair_list.push_back(find_config.pair_list.at(i));
+      if (i == 0) {
+        select_left.left_net0 = pl_db.mos_list().at(find_config.pair_list.at(i).nmos_idx).getLeft();
+        select_left.left_net1 = pl_db.mos_list().at(find_config.pair_list.at(i).pmos_idx).getLeft();
+      }
+      if (i == find_pair_idx - 1) {
+        select_left.right_net0 = pl_db.mos_list().at(find_config.pair_list.at(i).nmos_idx).getRight();
+        select_left.right_net1 = pl_db.mos_list().at(find_config.pair_list.at(i).pmos_idx).getRight();
+      }
+      select_left.num_finger += 1;
+    }
+    select_left.num_finger = select_left.num_finger - 1;
+
+    pl_db.l_config().insert(it, {select_left, select_pair, select_right});
+    it = pl_db.l_config().begin();
+    std::advance(it, find_config_idx);
+    pl_db.l_config().erase(it);
+  }
+}
+
+void gigaplace::Operator::adjacentShare(gigaplace::PlaceDB &pl_db, gigaplace::index &pair) {
+  std::vector<PlaceDB::Configuration> brothers{};
+  int32_t find_config_idx = -1;
+  for (auto &config : pl_db.l_config()) {
+    find_config_idx++;
+    if (config.pair_list.at(0).pair_idx == pair)
+      break;
+  }
+
+  auto it = pl_db.l_config().begin();
+  std::advance(it, find_config_idx);
+
+  //get left and right
+  auto leftIt = std::prev(it);
+  auto rightIt = std::next(it);
+
+  if (leftIt != pl_db.l_config().begin())
+    brothers.push_back(*leftIt);
+  brothers.push_back(*it);
+  if (rightIt != pl_db.l_config().end())
+    brothers.push_back(*rightIt);
+  gigaplace::Operator::share(pl_db, brothers);
+  if (rightIt != pl_db.l_config().end()) {
+    auto insertHere = pl_db.l_config().begin();
+    std::advance(insertHere, find_config_idx + 2);
+    for (auto &config : brothers) {
+      if (!config.share_flag)
+        pl_db.l_config().insert(insertHere, config);
+    }
+    pl_db.l_config().erase(rightIt);
+    pl_db.l_config().erase(it);
+    pl_db.l_config().erase(leftIt);
+
+  } else {
+    auto insertHere = pl_db.l_config().begin();
+    std::advance(insertHere, find_config_idx + 1);
+    for (auto &config : brothers) {
+      if (!config.share_flag)
+        pl_db.l_config().insert(insertHere, config);
+    }
+    pl_db.l_config().erase(it);
+    pl_db.l_config().erase(leftIt);
   }
 }
