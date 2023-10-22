@@ -25,6 +25,12 @@ void gigaplace::KaHyPar::partition() {
   idx2 = 1;
   num = 0;
   hyperedge_indices_[0] = 0;
+  for(auto &kNet : pl_db_.nets()) {
+    hyperedge_weights_[idx2 - 1] = 1;
+    idx2++;
+  }
+  
+  idx2 = 1;
   for (auto &kNet : pl_db_.nets()) {
     num += kNet.second.size();
     hyperedge_indices_[idx2] = num;
@@ -34,8 +40,6 @@ void gigaplace::KaHyPar::partition() {
       //set high weight to those have gate net
       if (kMos.electrode_name == "gate")
         hyperedge_weights_[idx2 - 1] = 1000;
-      else
-        hyperedge_weights_[idx2 - 1] = 1;
       idx1++;
     }
     idx2++;
