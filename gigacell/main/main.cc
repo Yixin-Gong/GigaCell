@@ -39,6 +39,17 @@ int main(int argc, char *argv[]) {
     for (auto &pair : config.pair_list)
       std::cout << pair.pair_idx << std::endl;
   }
+
+  gigaplace::Operator::v_configTol_config(pl_db);
+//  gigaplace::Operator::setCoordinates(pl_db,pl_db.l_config());
+gigaplace::index p1=4;
+gigaplace::index p2=5;
+//gigaplace::Operator::createNewLayout(pl_db,p1,p2);
+gigaplace::Operator::splitConfig(pl_db,p1);
+//  std::cout<<pl_db.pair_list().size()<<std::endl;
+
+//for(auto &config : pl_db.v_config())
+//  std::cout<<config.pair_list.size()<<std::endl;
 //
 //  cluster.getBlock(pl_db.blocks().at(0));
 //  cluster.creatConfigList();
@@ -78,10 +89,48 @@ int main(int argc, char *argv[]) {
 //    for(auto &single_mos_idx : pl_db.single_mos_ids())
 //        std::cout<<single_mos_idx<<std::endl;
 
-  for (auto &mos : pl_db.mos_list()) {
+for(auto &mos : pl_db.mos_list()){
 
-    std::cout << mos.getLeft() << ' ' << mos.getRight() << std::endl;
-  }
+
+    std::cout<<mos.getLeft()<<' '<<mos.getRight()<<std::endl;
+}
+std::list<int32_t> list1={10,20,30,40,50};
+auto it=list1.begin();
+auto left_of_begin = std::prev(list1.begin());
+std::advance(it ,2);
+auto left = std::prev(it);
+auto right = std::next(it);
+auto insertHere = list1.begin();
+std::advance(insertHere,4);
+list1.insert(insertHere,60);
+list1.insert(insertHere,70);
+
+list1.erase(right);
+list1.erase(it);
+if(left != left_of_begin)
+        list1.erase(left);
+
+
+
+//std::cout<<*it1<<std::endl;
+//std::advance(it,4);
+//auto leftIt=std::prev(it);
+//auto rightIt=std::next(it);
+//auto insertHere=list1.begin();
+//
+//list1.insert(insertHere,45);
+//list1.insert(insertHere,46);
+//list1.erase(it);
+//list1.erase(leftIt);
+//
+for(auto &i : list1)
+    std::cout<<i<<std::endl;
+
+//list1.erase(rightIt);
+//std::advance(it1,1);
+//auto it2=list1.begin();
+//std::advance(it2,3);
+//std::swap(*it1,*it2);
 
 
 //  std::vector<gigaplace::index> index_list={0,1,2,3,4,5};
