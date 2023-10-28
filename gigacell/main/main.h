@@ -7,6 +7,7 @@
 #include "ops/operator.h"
 #include "partition/kahypar.h"
 #include "ops/cluster.h"
+#include <list>
 
 
 
