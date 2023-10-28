@@ -568,7 +568,7 @@ void gigaplace::Operator::splitConfig(gigaplace::PlaceDB &pl_db, index &split_pa
 
     if (find_flag)
       break;
-    find_config_idx = -1;
+    find_pair_idx = -1;
   }
 
   auto it = pl_db.l_config().begin();
@@ -578,7 +578,7 @@ void gigaplace::Operator::splitConfig(gigaplace::PlaceDB &pl_db, index &split_pa
   if (find_pair_idx == 0) {
     PlaceDB::Configuration select_pair{};
     PlaceDB::Configuration select_right{};
-    select_pair.pair_list.at(0) = find_config.pair_list.at(find_pair_idx);
+    select_pair.pair_list.push_back(find_config.pair_list.at(find_pair_idx));
     select_pair.left_net0 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).nmos_idx).getLeft();
     select_pair.right_net0 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).nmos_idx).getRight();
     select_pair.left_net1 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).pmos_idx).getLeft();
@@ -605,7 +605,7 @@ void gigaplace::Operator::splitConfig(gigaplace::PlaceDB &pl_db, index &split_pa
   } else if (find_pair_idx == find_config.pair_list.size() - 1) {
     PlaceDB::Configuration select_pair{};
     PlaceDB::Configuration select_left{};
-    select_pair.pair_list.at(0) = find_config.pair_list.at(find_pair_idx);
+    select_pair.pair_list.push_back(find_config.pair_list.at(find_pair_idx));
     select_pair.left_net0 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).nmos_idx).getLeft();
     select_pair.right_net0 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).nmos_idx).getRight();
     select_pair.left_net1 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).pmos_idx).getLeft();
@@ -635,7 +635,7 @@ void gigaplace::Operator::splitConfig(gigaplace::PlaceDB &pl_db, index &split_pa
     PlaceDB::Configuration select_left{};
     PlaceDB::Configuration select_right{};
 
-    select_pair.pair_list.at(0) = find_config.pair_list.at(find_pair_idx);
+    select_pair.pair_list.push_back(find_config.pair_list.at(find_pair_idx));
     select_pair.left_net0 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).nmos_idx).getLeft();
     select_pair.right_net0 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).nmos_idx).getRight();
     select_pair.left_net1 = pl_db.mos_list().at(find_config.pair_list.at(find_pair_idx).pmos_idx).getLeft();
