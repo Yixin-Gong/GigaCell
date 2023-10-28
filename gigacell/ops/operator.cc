@@ -81,7 +81,7 @@ std::string gigaplace::Operator::shouldShare(PlaceDB &pl_db, PlaceDB::Configurat
     //flip 2
     if (c1.left_net1 == c2.right_net1 && c1.right_net0 == c2.left_net0)
       return "mosFlip c1_1 c2_1";
-    if (c1.right_net1 == c2.right_net1 && c1.right_net0 == c2.right_net1)
+    if (c1.right_net1 == c2.right_net1 && c1.right_net0 == c2.right_net0)
       return "configFlip c2";
     if (c1.right_net1 == c2.left_net1 && c1.left_net0 == c2.right_net0)
       return " mosFlip c1_0 c2_0";
@@ -565,8 +565,10 @@ void gigaplace::Operator::splitConfig(gigaplace::PlaceDB &pl_db, index &split_pa
         break;
       }
     }
+
     if (find_flag)
       break;
+    find_config_idx = -1;
   }
 
   auto it = pl_db.l_config().begin();
@@ -675,14 +677,14 @@ void gigaplace::Operator::splitConfig(gigaplace::PlaceDB &pl_db, index &split_pa
 }
 
 void gigaplace::Operator::adjacentShare(gigaplace::PlaceDB &pl_db, gigaplace::index &pair) {
-  std::vector<PlaceDB::Configuration> brothers{};
+  std::vector<PlaceDB::Configuration> neighbors{};
   int32_t find_config_idx = -1;
   for (auto &config : pl_db.l_config()) {
     find_config_idx++;
     if (config.pair_list.at(0).pair_idx == pair)
       break;
   }
-
+  auto left_of_begin = std::prev(pl_db.l_config().begin());
   auto it = pl_db.l_config().begin();
   std::advance(it, find_config_idx);
 
@@ -690,31 +692,33 @@ void gigaplace::Operator::adjacentShare(gigaplace::PlaceDB &pl_db, gigaplace::in
   auto leftIt = std::prev(it);
   auto rightIt = std::next(it);
 
-  if (leftIt != pl_db.l_config().begin())
-    brothers.push_back(*leftIt);
-  brothers.push_back(*it);
+  if (leftIt != left_of_begin)
+    neighbors.push_back(*leftIt);
+  neighbors.push_back(*it);
   if (rightIt != pl_db.l_config().end())
-    brothers.push_back(*rightIt);
-  gigaplace::Operator::share(pl_db, brothers);
+    neighbors.push_back(*rightIt);
+  gigaplace::Operator::share(pl_db, neighbors);
   if (rightIt != pl_db.l_config().end()) {
     auto insertHere = pl_db.l_config().begin();
     std::advance(insertHere, find_config_idx + 2);
-    for (auto &config : brothers) {
+    for (auto &config : neighbors) {
       if (!config.share_flag)
         pl_db.l_config().insert(insertHere, config);
     }
     pl_db.l_config().erase(rightIt);
     pl_db.l_config().erase(it);
-    pl_db.l_config().erase(leftIt);
+    if(leftIt!=left_of_begin)
+      pl_db.l_config().erase(leftIt);
 
   } else {
     auto insertHere = pl_db.l_config().begin();
     std::advance(insertHere, find_config_idx + 1);
-    for (auto &config : brothers) {
+    for (auto &config : neighbors) {
       if (!config.share_flag)
         pl_db.l_config().insert(insertHere, config);
     }
     pl_db.l_config().erase(it);
-    pl_db.l_config().erase(leftIt);
+    if(leftIt != left_of_begin)
+       pl_db.l_config().erase(leftIt);
   }
 }
