@@ -190,6 +190,151 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<PlaceDB::Configurati
     for (auto i = 0; i < primary_config_list_size; i++) {
         for (auto j = i + 1; j < current_config_list_size; j++) {
             auto should_do = gigaplace::Operator::shouldShare(pl_db, config_list.at(i), config_list.at(j));
+//            switch (should_do) {
+//                case CONFIG_HAD_BEEN_USED:
+//                    break;
+//                case COULD_NOT_SHARE:
+//                    break;
+//                case NO_FLIP:{
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                                    config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case CONFIGFLIP_C1_C2:{
+//                    gigaplace::Operator::configFlip(pl_db, config_list.at(i));
+//                    gigaplace::Operator::configFlip(pl_db, config_list.at(j));
+//
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case MOSFLIP_C1P:{
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).pmos_idx);
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case MOSFLIP_C1N:{
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).nmos_idx);
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case MOSFLIP_C2P:{
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).pmos_idx);
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case MOSFLIP_C2N:{
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).nmos_idx);
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case MOSFLIP_C1N_CONFIGFLIP_C2:{
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).nmos_idx);
+//                    gigaplace::Operator::configFlip(pl_db, config_list.at(j));
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case MOSFLIP_C1P_CONFIGFLIP_C2:{
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).pmos_idx);
+//                    gigaplace::Operator::configFlip(pl_db, config_list.at(j));
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case MOSFLIP_C2N_CONFIGFLIP_C1:{
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).nmos_idx);
+//                    gigaplace::Operator::configFlip(pl_db, config_list.at(i));
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case MOSFLIP_C2P_CONFIGFLIP_C1:{
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).pmos_idx);
+//                    gigaplace::Operator::configFlip(pl_db, config_list.at(i));
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case MOSFLIP_C1P_C2P:{
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).pmos_idx);
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).pmos_idx);
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case CONFIGFLIP_C2:{
+//                    gigaplace::Operator::configFlip(pl_db, config_list.at(j));
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case MOSFLIP_C1N_C2N:{
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).nmos_idx);
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).nmos_idx);
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case CONFIGFLIP_C1:{
+//                    gigaplace::Operator::configFlip(pl_db, config_list.at(i));
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case MOSFLIP_C1P_C2N:{
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).pmos_idx);
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).nmos_idx);
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                case MOSFLIP_C1N_C2P:{
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).nmos_idx);
+//                    gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).pmos_idx);
+//                    PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
+//                                                                                       config_list.at(j));
+//                    config_list.push_back(temp);
+//                    current_config_list_size = current_config_list_size + 1;
+//                    break;
+//                }
+//                default:
+//                    break;
+//            }
 //not all share_flag equal false
             if (should_do == CONFIG_HAD_BEEN_USED || should_do == COULD_NOT_SHARE)
                 continue;
@@ -218,22 +363,19 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<PlaceDB::Configurati
                                                                                    config_list.at(j));
                 config_list.push_back(temp);
                 current_config_list_size = current_config_list_size + 1;
-            }
-            else if (should_do == MOSFLIP_C1N) {
+            } else if (should_do == MOSFLIP_C1N) {
                 gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).nmos_idx);
                 PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
                                                                                    config_list.at(j));
                 config_list.push_back(temp);
                 current_config_list_size = current_config_list_size + 1;
-            }
-            else if (should_do == MOSFLIP_C2P) {
+            } else if (should_do == MOSFLIP_C2P) {
                 gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).pmos_idx);
                 PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
                                                                                    config_list.at(j));
                 config_list.push_back(temp);
                 current_config_list_size = current_config_list_size + 1;
-            }
-            else if (should_do == MOSFLIP_C2N) {
+            } else if (should_do == MOSFLIP_C2N) {
                 gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).nmos_idx);
                 PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
                                                                                    config_list.at(j));
@@ -248,24 +390,21 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<PlaceDB::Configurati
                                                                                    config_list.at(j));
                 config_list.push_back(temp);
                 current_config_list_size = current_config_list_size + 1;
-            }
-            else if (should_do == MOSFLIP_C1P_CONFIGFLIP_C2) {
+            } else if (should_do == MOSFLIP_C1P_CONFIGFLIP_C2) {
                 gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).pmos_idx);
                 gigaplace::Operator::configFlip(pl_db, config_list.at(j));
                 PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
                                                                                    config_list.at(j));
                 config_list.push_back(temp);
                 current_config_list_size = current_config_list_size + 1;
-            }
-            else if (should_do == MOSFLIP_C2N_CONFIGFLIP_C1) {
+            } else if (should_do == MOSFLIP_C2N_CONFIGFLIP_C1) {
                 gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).nmos_idx);
                 gigaplace::Operator::configFlip(pl_db, config_list.at(i));
                 PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
                                                                                    config_list.at(j));
                 config_list.push_back(temp);
                 current_config_list_size = current_config_list_size + 1;
-            }
-            else if (should_do == MOSFLIP_C2P_CONFIGFLIP_C1) {
+            } else if (should_do == MOSFLIP_C2P_CONFIGFLIP_C1) {
                 gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).pmos_idx);
                 gigaplace::Operator::configFlip(pl_db, config_list.at(i));
                 PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
@@ -281,38 +420,33 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<PlaceDB::Configurati
                                                                                    config_list.at(j));
                 config_list.push_back(temp);
                 current_config_list_size = current_config_list_size + 1;
-            }
-            else if (should_do == CONFIGFLIP_C2) {
+            } else if (should_do == CONFIGFLIP_C2) {
                 gigaplace::Operator::configFlip(pl_db, config_list.at(j));
                 PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
                                                                                    config_list.at(j));
                 config_list.push_back(temp);
                 current_config_list_size = current_config_list_size + 1;
-            }
-            else if (should_do == MOSFLIP_C1N_C2N) {
+            } else if (should_do == MOSFLIP_C1N_C2N) {
                 gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).nmos_idx);
                 gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).nmos_idx);
                 PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
                                                                                    config_list.at(j));
                 config_list.push_back(temp);
                 current_config_list_size = current_config_list_size + 1;
-            }
-            else if (should_do == CONFIGFLIP_C1) {
+            } else if (should_do == CONFIGFLIP_C1) {
                 gigaplace::Operator::configFlip(pl_db, config_list.at(i));
                 PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
                                                                                    config_list.at(j));
                 config_list.push_back(temp);
                 current_config_list_size = current_config_list_size + 1;
-            }
-            else if (should_do == MOSFLIP_C1P_C2N) {
+            } else if (should_do == MOSFLIP_C1P_C2N) {
                 gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).pmos_idx);
                 gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).nmos_idx);
                 PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
                                                                                    config_list.at(j));
                 config_list.push_back(temp);
                 current_config_list_size = current_config_list_size + 1;
-            }
-            else if (should_do == MOSFLIP_C1N_C2P) {
+            } else if (should_do == MOSFLIP_C1N_C2P) {
                 gigaplace::Operator::mosFlip(pl_db, config_list.at(i).pair_list.at(0).nmos_idx);
                 gigaplace::Operator::mosFlip(pl_db, config_list.at(j).pair_list.at(0).pmos_idx);
                 PlaceDB::Configuration temp = gigaplace::Operator::creatTempConfig(pl_db, config_list.at(i),
@@ -580,16 +714,20 @@ void gigaplace::Operator::createNewLayout(gigaplace::PlaceDB &pl_db, gigaplace::
 //  if((leftIt != left_of_begin && (*leftIt).pair_list.at(0).pair_idx == pair2) || (rightIt != pl_db.l_config.end() && (*rightIt).pair_list.at(0).pair_idx == pair2)
     if (leftIt != left_of_begin) {
         if ((*leftIt).pair_list.at(0).pair_idx == pair2) {
-            gigaplace::Operator::adjacentShareTwoSelectedPair(pl_db,pair1,pair2);
+            gigaplace::Operator::adjacentShareTwoSelectedPair(pl_db, pair1, pair2);
+            return;
         }
-    } else if (rightIt != pl_db.l_config().end()) {
+    }
+    if (rightIt != pl_db.l_config().end()) {
         if ((*rightIt).pair_list.at(0).pair_idx == pair2) {
-            gigaplace::Operator::adjacentShareTwoSelectedPair(pl_db,pair1,pair2);
+            gigaplace::Operator::adjacentShareTwoSelectedPair(pl_db, pair1, pair2);
+            return;
         }
-    } else {
+    }
         gigaplace::Operator::adjacentShare(pl_db, pair1);
         gigaplace::Operator::adjacentShare(pl_db, pair2);
-    }
+
+
 }
 
 void gigaplace::Operator::splitConfig(gigaplace::PlaceDB &pl_db, index &split_pair) {
@@ -828,42 +966,44 @@ void gigaplace::Operator::adjacentShareTwoSelectedPair(gigaplace::PlaceDB &pl_db
 
 
         }
-    } else {//p1 p2
-        if(leftIt1 != left_of_begin)
-            neighbors.push_back(*leftIt1);
-        neighbors.push_back(*it1);
-        neighbors.push_back(*it2);
-        if (rightIt2 != pl_db.l_config().end())
-            neighbors.push_back(*rightIt2);
-        gigaplace::Operator::share(pl_db,neighbors);
-        if (rightIt2 != pl_db.l_config().end()) {
-            auto insertHere = pl_db.l_config().begin();
-            std::advance(insertHere, find_config_idx2 + 2);
-            for (auto &config: neighbors) {
-                if (!config.share_flag)
-                    pl_db.l_config().insert(insertHere, config);
-            }
-            pl_db.l_config().erase(rightIt2);
-            pl_db.l_config().erase(it2);
-            pl_db.l_config().erase(it1);
-            if (leftIt1 != left_of_begin)
-                pl_db.l_config().erase(leftIt1);
-
-        } else {
-            auto insertHere = pl_db.l_config().begin();
-            std::advance(insertHere, find_config_idx2 + 1);
-            for (auto &config: neighbors) {
-                if (!config.share_flag)
-                    pl_db.l_config().insert(insertHere, config);
-            }
-            pl_db.l_config().erase(it2);
-            pl_db.l_config().erase(it1);
-            if (leftIt1 != left_of_begin)
-                pl_db.l_config().erase(leftIt1);
-        }
-
-
     }
+    if(rightIt1 != pl_db.l_config().end()) {//p1 p2
+        if ((*rightIt1).pair_list.at(0).pair_idx == pair2) {
+            if (leftIt1 != left_of_begin)
+                neighbors.push_back(*leftIt1);
+            neighbors.push_back(*it1);
+            neighbors.push_back(*it2);
+            if (rightIt2 != pl_db.l_config().end())
+                neighbors.push_back(*rightIt2);
+            gigaplace::Operator::share(pl_db, neighbors);
+            if (rightIt2 != pl_db.l_config().end()) {
+                auto insertHere = pl_db.l_config().begin();
+                std::advance(insertHere, find_config_idx2 + 2);
+                for (auto &config: neighbors) {
+                    if (!config.share_flag)
+                        pl_db.l_config().insert(insertHere, config);
+                }
+                pl_db.l_config().erase(rightIt2);
+                pl_db.l_config().erase(it2);
+                pl_db.l_config().erase(it1);
+                if (leftIt1 != left_of_begin)
+                    pl_db.l_config().erase(leftIt1);
 
+            } else {
+                auto insertHere = pl_db.l_config().begin();
+                std::advance(insertHere, find_config_idx2 + 1);
+                for (auto &config: neighbors) {
+                    if (!config.share_flag)
+                        pl_db.l_config().insert(insertHere, config);
+                }
+                pl_db.l_config().erase(it2);
+                pl_db.l_config().erase(it1);
+                if (leftIt1 != left_of_begin)
+                    pl_db.l_config().erase(leftIt1);
+            }
+
+
+        }
+    }
 
 }
