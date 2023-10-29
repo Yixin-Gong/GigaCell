@@ -725,7 +725,7 @@ void gigaplace::Operator::createNewLayout(gigaplace::PlaceDB &pl_db, gigaplace::
         }
     }
         gigaplace::Operator::adjacentShare(pl_db, pair1);
-        gigaplace::Operator::adjacentShare(pl_db, pair2);
+        gigaplace::Operator::adjacentShare(pl_db, pair2);//
 
 
 }
@@ -964,7 +964,7 @@ void gigaplace::Operator::adjacentShareTwoSelectedPair(gigaplace::PlaceDB &pl_db
                     pl_db.l_config().erase(leftIt2);
             }
 
-
+            return;
         }
     }
     if(rightIt1 != pl_db.l_config().end()) {//p1 p2
@@ -1004,6 +1004,7 @@ void gigaplace::Operator::adjacentShareTwoSelectedPair(gigaplace::PlaceDB &pl_db
 
 
         }
+        return;
     }
 
 }
