@@ -6,14 +6,33 @@ int main(int argc, char *argv[]) {
   a.parse_check(argc, argv);
   std::string filename = a.get<std::string>("file_name");
 
-  gigaplace::DataBase db;
-  gigaplace::Parser parser(db, filename);
+  std::vector<gigaplace::DataBase> db;
+  gigaplace::Parser parser(filename ,db);
   parser.parse();
 
-  gigaplace::PlaceDB pl_db(db);
-  gigaplace::KaHyPar ka_hy_par(pl_db);
-  ka_hy_par.partition();
+  for(auto cell : db){
+    std::cout << cell.cell_name() << std::endl;
+    for(auto mos : cell.pmos_list()){
+      std::cout << mos.getMosName() << " " ;
+    }
+    std::cout << " " << std::endl;
+    for(auto mos : cell.nmos_list()){
+      std::cout << mos.getMosName() << " " ;
+    }
+    std::cout << " " << std::endl;
+  }
 
+  for(auto current_db : db){
+    gigaplace::PlaceDB pl_db(current_db);
+  }
+
+//  for(auto current_db : db){
+//    gigaplace::PlaceDB pl_db(current_db);
+//    gigaplace::KaHyPar ka_hy_par(pl_db);
+//    ka_hy_par.partition();
+//  }
+
+  /*
   gigaplace::Cluster cluster(pl_db);
   for (auto &block_hash : pl_db.blocks()) {
     cluster.getBlock(block_hash.second);
@@ -47,7 +66,7 @@ gigaplace::index p2=5;
 //gigaplace::Operator::createNewLayout(pl_db,p1,p2);
 gigaplace::Operator::splitConfig(pl_db,p1);
 //  std::cout<<pl_db.pair_list().size()<<std::endl;
-
+  */
 //for(auto &config : pl_db.v_config())
 //  std::cout<<config.pair_list.size()<<std::endl;
 //
@@ -89,6 +108,8 @@ gigaplace::Operator::splitConfig(pl_db,p1);
 //    for(auto &single_mos_idx : pl_db.single_mos_ids())
 //        std::cout<<single_mos_idx<<std::endl;
 
+
+/*
 for(auto &mos : pl_db.mos_list()){
 
 
@@ -111,7 +132,7 @@ if(left != left_of_begin)
         list1.erase(left);
 
 
-
+*/
 //std::cout<<*it1<<std::endl;
 //std::advance(it,4);
 //auto leftIt=std::prev(it);
@@ -123,8 +144,8 @@ if(left != left_of_begin)
 //list1.erase(it);
 //list1.erase(leftIt);
 //
-for(auto &i : list1)
-    std::cout<<i<<std::endl;
+//for(auto &i : list1)
+//    std::cout<<i<<std::endl;
 
 //list1.erase(rightIt);
 //std::advance(it1,1);
