@@ -9,23 +9,20 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
-namespace  gigaplace {
+#include "area.h"
+namespace gigaplace {
 
-class PinDensity{
+class PinDensity {
  public:
-  explicit  PinDensity(PlaceDB &pl_db,float &width) : pl_db_(pl_db),width_(width){}
-
-  float &width(){return width_;}
+  explicit PinDensity(PlaceDB &pl_db) : pl_db_(pl_db) {}
 
   static float calStandardDeviation(const std::vector<float> &pin_spacing);
-  float getPinScore();
-  static bool isPinNet(const std::string &netName,const std::vector<std::string> &v_pin_name);
-
-
+  float getPinAccess();
+  static bool isPinNet(const std::string &netName, const std::vector<std::string> &v_pin_name);
 
  private:
   PlaceDB &pl_db_;
-  float &width_;
+
 };
 }
 #endif //GIGACELL_GIGACELL_CONSTRAINTS_PINDENSITY_H_
