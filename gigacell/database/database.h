@@ -29,6 +29,8 @@ class DataBase {
   };
   std::vector<Pin> &v_pin_list() {return v_pin_list_;}
   std::string &cell_name() {return cell_name_;}
+  float getRefWidth();
+
 
 
  private:
