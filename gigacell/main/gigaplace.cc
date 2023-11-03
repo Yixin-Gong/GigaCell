@@ -37,12 +37,12 @@ void gigaplace::GigaPlace::SAPlace(uint16_t pair_num) {
   while (T > 0.001) {
     Operator::setCoordinates(pl_db_, pl_db_.l_config());
     auto config_list = pl_db_.l_config();
-    auto old_cost = pl_obj_.computeCost();
+    auto old_cost = pl_obj_.get_score();
     auto pair = generate2Num(pl_db_, pair_num);
 
     Operator::createNewLayout(pl_db_, pair.first, pair.second);
     Operator::setCoordinates(pl_db_, pl_db_.l_config());
-    auto new_cost = pl_obj_.computeCost();
+    auto new_cost = pl_obj_.get_score();
 
     auto delta_C = computeDeltaC(new_cost, old_cost);
     if (!accept(delta_C, T)) {
