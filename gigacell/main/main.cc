@@ -23,6 +23,7 @@ int main(int argc, char *argv[]) {
 //  }
 
   for (auto current_db : db) {
+    auto ref_width = current_db.getRefWidth();
     auto *current_pl_db = new gigaplace::PlaceDB(current_db);
     gigaplace::KaHyPar ka_hy_par(*current_pl_db);
     ka_hy_par.partition();
@@ -49,10 +50,11 @@ int main(int argc, char *argv[]) {
       for (auto &pair : config.pair_list)
         std::cout << pair.pair_idx << std::endl;
     }
-
     gigaplace::Operator::v_configTol_config(*current_pl_db);
-    gigaplace::Operator::setCoordinates(*current_pl_db,(*current_pl_db).l_config());
 
+    auto giga_place = new gigaplace::GigaPlace(*current_pl_db,ref_width,1000);
+    giga_place->SAPlace(index - 1);
+    delete giga_place;
     delete current_pl_db;
   }
 
