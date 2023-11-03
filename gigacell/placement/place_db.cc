@@ -86,6 +86,10 @@ void gigaplace::PlaceDB::init() {
     mos_ids().push_back(idx + nmos_list().size());
     idx++;
   }
+  for(auto &pin : db_.v_pin_list())
+      v_pin_list().push_back(pin);
+
+
 }
 
 void gigaplace::PlaceDB::fold(gigaplace::DataBase &db)  {
