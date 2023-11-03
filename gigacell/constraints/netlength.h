@@ -13,7 +13,7 @@ class NetLength {
  public:
  explicit NetLength(PlaceDB &pl_db) : pl_db_(pl_db){}
 
-  float netLength();
+  float calNetLength();
  private:
   PlaceDB &pl_db_;
 
