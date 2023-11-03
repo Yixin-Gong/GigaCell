@@ -1,5 +1,5 @@
-#ifndef GIGACELL_MOS_H
-#define GIGACELL_MOS_H
+#ifndef GIGACELL_GIGACELL_DATABASE_MOS_H
+#define GIGACELL_GIGACELL_DATABASE_MOS_H
 
 #include <iostream>
 
@@ -34,4 +34,4 @@ class Mos {
   bool dummy_flag_= false;
 };
 
-#endif //GIGACELL_MOS_H
+#endif //GIGACELL_GIGACELL_DATABASE_MOS_H
