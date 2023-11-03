@@ -17,9 +17,8 @@ class PinDensity {
   explicit PinDensity(PlaceDB &pl_db) : pl_db_(pl_db) {}
 
   static float calStandardDeviation(const std::vector<float> &pin_spacing);
-  float getPinAccess();
   static bool isPinNet(const std::string &netName, const std::vector<std::string> &v_pin_name);
-
+  float getPinAccess();
  private:
   PlaceDB &pl_db_;
 
