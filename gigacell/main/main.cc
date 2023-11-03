@@ -6,48 +6,98 @@ int main(int argc, char *argv[]) {
   a.parse_check(argc, argv);
   std::string filename = a.get<std::string>("file_name");
 
-  gigaplace::DataBase db;
-  gigaplace::Parser parser(db, filename);
+  std::vector<gigaplace::DataBase> db;
+  gigaplace::Parser parser(filename, db);
   parser.parse();
 
-  gigaplace::PlaceDB pl_db(db);
-  gigaplace::KaHyPar ka_hy_par(pl_db);
-  ka_hy_par.partition();
+//  for(auto cell : db){
+//    std::cout << cell.cell_name() << std::endl;
+//    for(auto mos : cell.pmos_list()){
+//      std::cout << mos.getMosName() << " " ;
+//    }
+//    std::cout << " " << std::endl;
+//    for(auto mos : cell.nmos_list()){
+//      std::cout << mos.getMosName() << " " ;
+//    }
+//    std::cout << " " << std::endl;
+//  }
 
-  gigaplace::Cluster cluster(pl_db);
-  for (auto &block_hash : pl_db.blocks()) {
-    cluster.getBlock(block_hash.second);
-    cluster.creatConfigList();
-    gigaplace::Operator::share(pl_db, cluster.config_list());
-    for (auto &config : cluster.config_list()) {
-      if (!config.share_flag)
-        pl_db.v_config().push_back(config);
+  for (auto current_db : db) {
+    auto *current_pl_db = new gigaplace::PlaceDB(current_db);
+    gigaplace::KaHyPar ka_hy_par(*current_pl_db);
+    ka_hy_par.partition();
+    gigaplace::Cluster cluster(*current_pl_db);
+    for (auto &block_hash : (*current_pl_db).blocks()) {
+      cluster.getBlock(block_hash.second);
+      cluster.creatConfigList();
+      gigaplace::Operator::share(*current_pl_db, cluster.config_list());
+      for (auto &config : cluster.config_list()) {
+        if (!config.share_flag)
+          (*current_pl_db).v_config().push_back(config);
+      }
+      cluster.clearConfigList();
     }
-    cluster.clearConfigList();
-
-  }
-
-  gigaplace::Operator::pairSingleMos(pl_db);
-  auto index = 0;
-  for (auto &config : pl_db.v_config()) {
-    for (auto &pair : config.pair_list) {
-      pair.pair_idx = index;
-      index++;
+    gigaplace::Operator::pairSingleMos(*current_pl_db);
+    auto index = 0;
+    for (auto &config : (*current_pl_db).v_config()) {
+      for (auto &pair : config.pair_list) {
+        pair.pair_idx = index;
+        index++;
+      }
     }
-  }
-  for (auto &config : pl_db.v_config()) {
-    for (auto &pair : config.pair_list)
-      std::cout << pair.pair_idx << std::endl;
+    for (auto &config : (*current_pl_db).v_config()) {
+      for (auto &pair : config.pair_list)
+        std::cout << pair.pair_idx << std::endl;
+    }
+
+    gigaplace::Operator::v_configTol_config(*current_pl_db);
+    gigaplace::Operator::setCoordinates(*current_pl_db,(*current_pl_db).l_config());
+
+    delete current_pl_db;
   }
 
-  gigaplace::Operator::v_configTol_config(pl_db);
+
+//  for(auto current_db : db){
+//    gigaplace::PlaceDB pl_db(current_db);
+//    gigaplace::KaHyPar ka_hy_par(pl_db);
+//    ka_hy_par.partition();
+//  }
+
+/*
+gigaplace::Cluster cluster(pl_db);
+for (auto &block_hash : pl_db.blocks()) {
+  cluster.getBlock(block_hash.second);
+  cluster.creatConfigList();
+  gigaplace::Operator::share(pl_db, cluster.config_list());
+  for (auto &config : cluster.config_list()) {
+    if (!config.share_flag)
+      pl_db.v_config().push_back(config);
+  }
+  cluster.clearConfigList();
+
+}
+
+gigaplace::Operator::pairSingleMos(pl_db);
+auto index = 0;
+for (auto &config : pl_db.v_config()) {
+  for (auto &pair : config.pair_list) {
+    pair.pair_idx = index;
+    index++;
+  }
+}
+for (auto &config : pl_db.v_config()) {
+  for (auto &pair : config.pair_list)
+    std::cout << pair.pair_idx << std::endl;
+}
+
+gigaplace::Operator::v_configTol_config(pl_db);
 //  gigaplace::Operator::setCoordinates(pl_db,pl_db.l_config());
 gigaplace::index p1=4;
 gigaplace::index p2=5;
 //gigaplace::Operator::createNewLayout(pl_db,p1,p2);
 gigaplace::Operator::splitConfig(pl_db,p1);
 //  std::cout<<pl_db.pair_list().size()<<std::endl;
-
+*/
 //for(auto &config : pl_db.v_config())
 //  std::cout<<config.pair_list.size()<<std::endl;
 //
@@ -89,6 +139,8 @@ gigaplace::Operator::splitConfig(pl_db,p1);
 //    for(auto &single_mos_idx : pl_db.single_mos_ids())
 //        std::cout<<single_mos_idx<<std::endl;
 
+
+/*
 for(auto &mos : pl_db.mos_list()){
 
 
@@ -111,7 +163,7 @@ if(left != left_of_begin)
         list1.erase(left);
 
 
-
+*/
 //std::cout<<*it1<<std::endl;
 //std::advance(it,4);
 //auto leftIt=std::prev(it);
@@ -123,8 +175,8 @@ if(left != left_of_begin)
 //list1.erase(it);
 //list1.erase(leftIt);
 //
-for(auto &i : list1)
-    std::cout<<i<<std::endl;
+//for(auto &i : list1)
+//    std::cout<<i<<std::endl;
 
 //list1.erase(rightIt);
 //std::advance(it1,1);
@@ -149,7 +201,7 @@ for(auto &i : list1)
 //  std::cout<<pl_db.mos_list().at(a1).getLeft()<<std::endl;
 
 
-  //test creat config list from block
+//test creat config list from block
 //  for (auto &config : cluster.v_config()) {
 //    std::cout << config.pair_list.at << std::endl;
 //    std::cout << config.right_net1 << std::endl;
@@ -167,7 +219,7 @@ for(auto &i : list1)
 //    std::cout << index << std::endl;
 
 
-  //init mos loc
+//init mos loc
 //  float loc = 0;
 //  for (auto &nmos : pl_db.nmos_list()) {
 //    nmos.getGateLoc() = loc;
@@ -193,7 +245,7 @@ for(auto &i : list1)
 //  }
 
 
-  //test  mos_swap and mos_flip
+//test  mos_swap and mos_flip
 //  gigaplace::Operator::swap(pl_db.mos_list()[0], pl_db.mos_list()[9], pl_db.mos_ids()[0],
 //                            pl_db.mos_ids()[9]);
 //  gigaplace::Operator::mosFlip(pl_db.mos_list().at(0));
@@ -224,12 +276,12 @@ for(auto &i : list1)
 //  std::cout << loc << std::endl;
 //
 
-  //test calculate net area
+//test calculate net area
 //  gigaplace::Area area0(pl_db);
 //  loc = area0.computeArea();
 //  std::cout << loc << std::endl;
 
-  //test map of nets
+//test map of nets
 //  for (auto &item : pl_db.nets()) {
 //    std::cout << item.first << "\t";
 //    for (auto &kItem : item.second) {
@@ -240,5 +292,5 @@ for(auto &i : list1)
 //  for (const auto &item : pl_db.mos_ids()) {
 //    std::cout << item << " ";
 //  }
-  return 0;
+return 0;
 }
