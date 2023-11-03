@@ -13,6 +13,7 @@ set(INCLUDE_DIRS
         ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 set(LINK_LIBS
+        database_cxx
         placement_cxx
         utils_cxx
         parser_cxx
