@@ -64,7 +64,6 @@ float gigaplace::PinDensity::getPinAccess() {
   float half_unit = 0.5;
   std::sort(pin_coords.begin(), pin_coords.end());
   std::vector<float> pin_spacing{};
-  float pin_access;
   float left_spacing = pin_coords.at(0) + half_unit;
   float right_spacing = width - half_unit - pin_coords.at(pin_coords.size() - 1);
   if (left_spacing > 1)
@@ -76,7 +75,6 @@ float gigaplace::PinDensity::getPinAccess() {
     pin_spacing.push_back((pin_coords.at(i + 1) - pin_coords.at(i)) / width);
 
   return calStandardDeviation(pin_spacing);
-
 }
 
 bool gigaplace::PinDensity::isPinNet(const std::string &netName, const std::vector<std::string> &v_pin_name) {
