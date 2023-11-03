@@ -6,7 +6,7 @@
 
 float gigaplace::PinDensity::getPinAccess() {
   Area area(pl_db_);
-  auto width = area.computeArea();
+  auto width = area.calWidth();
   std::vector<std::string> v_pin_name{};
   std::vector<float> pin_coords{};
   for (auto &pin : pl_db_.v_pin_list())

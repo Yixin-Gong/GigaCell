@@ -5,7 +5,7 @@
 #include "netlength.h"
 #include <limits>
 
-float gigaplace::NetLength::netLength() {
+float gigaplace::NetLength::calNetLength() {
 
   float total_length = 0;
 
