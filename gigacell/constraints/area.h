@@ -8,11 +8,11 @@
 namespace gigaplace {
 class Area {
  public:
-  explicit Area(PlaceDB &place_db) : place_db_(place_db) {}
-  float computeArea();
+  explicit Area(PlaceDB &place_db) : pl_db_(place_db) {}
+  float calWidth();
 
  private:
-  PlaceDB &place_db_;
+  PlaceDB &pl_db_;
 };
 }
 #endif //GIGACELL_GIGACELL_CONSTRAINTS_AREA_H_
