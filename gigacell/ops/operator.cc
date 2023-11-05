@@ -94,121 +94,117 @@ int32_t gigaplace::Operator::shouldShare(PlaceDB &pl_db, PlaceDB::Configuration 
 ////      return "mosFlip c1_0_1 c2_0_1";
       return CONFIGFLIP_C1_C2;
     //flip 1
-    if ((c1.left_net1 == c2.left_net1 || or_c1l1_c2l1_dummy) && (c1.right_net0 == c2.left_net0 || or_c1r0_c2l0_dummy))
+    if ((eq_c1l1_c2l1 || or_c1l1_c2l1_dummy) && (eq_c1r0_c2l0 || or_c1r0_c2l0_dummy))
 ////      return "mosFlip c1_1";
       return MOSFLIP_C1P;
-    if ((c1.right_net1 == c2.left_net1 || or_c1r1_c2l1_dummy) && (c1.left_net0 == c2.left_net0 || or_c1l0_c2l0_dummy))
+    if ((eq_c1r1_c2l1 || or_c1r1_c2l1_dummy) && (eq_c1l0_c2l0 || or_c1l0_c2l0_dummy))
 ////      return "mosFlip c1_0";
       return MOSFLIP_C1N;
-    if ((c1.right_net1 == c2.right_net1 || or_c1r1_c2r1_dummy) && (c1.right_net0 == c2.left_net0 || or_c1r0_c2l0_dummy))
+    if ((eq_c1r1_c2r1 || or_c1r1_c2r1_dummy) && (eq_c1r0_c2l0 || or_c1r0_c2l0_dummy))
 ////      return "mosFlip c2_1";
       return MOSFLIP_C2P;
-    if ((c1.right_net1 == c2.left_net1 || or_c1r1_c2l1_dummy) && (c1.right_net0 == c2.right_net0 || or_c1r0_c2r0_dummy))
+    if ((eq_c1r1_c2l1 || or_c1r1_c2l1_dummy) && (eq_c1r0_c2r0 || or_c1r0_c2r0_dummy))
 ////      return "mosFlip c2_0";
       return MOSFLIP_C2N;
     //flip 3
-    if ((c1.right_net1 == c2.right_net1 || or_c1r1_c2r1_dummy) && (c1.left_net0 == c2.right_net0 || or_c1l0_c2r0_dummy))
+    if ((eq_c1r1_c2r1 || or_c1r1_c2r1_dummy) && (eq_c1l0_c2r0 || or_c1l0_c2r0_dummy))
 ////      return "mosFlip c1_0 configFlip c2";
       return MOSFLIP_C1N_CONFIGFLIP_C2;
-    if ((c1.left_net1 == c2.right_net1 || or_c1l1_c2r1_dummy) && (c1.right_net0 == c2.right_net0 || or_c1r0_c2r0_dummy))
+    if ((eq_c1l1_c2r1 || or_c1l1_c2r1_dummy) && (eq_c1r0_c2r0 || or_c1r0_c2r0_dummy))
 ////      return "mosFlip c1_1 configFlip c2";
       return MOSFLIP_C1P_CONFIGFLIP_C2;
-    if ((c1.left_net1 == c2.left_net1 || or_c1l1_c2l1_dummy) && (c1.left_net0 == c2.right_net0 || or_c1l0_c2r0_dummy))
+    if ((eq_c1l1_c2l1 || or_c1l1_c2l1_dummy) && (eq_c1l0_c2r0 || or_c1l0_c2r0_dummy))
 ////      return "mosFlip c2_0 configFlip c1";
       return MOSFLIP_C2N_CONFIGFLIP_C1;
-    if ((c1.left_net1 == c2.right_net1 || or_c1l1_c2r1_dummy) && (c1.left_net0 == c2.left_net0 || or_c1l0_c2l0_dummy))
+    if ((eq_c1l1_c2r1 || or_c1l1_c2r1_dummy) && (eq_c1l0_c2l0 || or_c1l0_c2l0_dummy))
 ////      return "mosFlip c2_1 configFlip c1";
       return MOSFLIP_C2P_CONFIGFLIP_C1;
     //flip 2
-    if ((c1.left_net1 == c2.right_net1 || or_c1l1_c2r1_dummy) && (c1.right_net0 == c2.left_net0 || or_c1r0_c2l0_dummy))
+    if ((eq_c1l1_c2r1 || or_c1l1_c2r1_dummy) && (eq_c1r0_c2l0 || or_c1r0_c2l0_dummy))
 ////      return "mosFlip c1_1 c2_1";
       return MOSFLIP_C1P_C2P;
-    if ((c1.right_net1 == c2.right_net1 || or_c1r1_c2r1_dummy)
-        && (c1.right_net0 == c2.right_net0 || or_c1r0_c2r0_dummy))
+    if ((eq_c1r1_c2r1 || or_c1r1_c2r1_dummy) && (eq_c1r0_c2r0 || or_c1r0_c2r0_dummy))
 ////      return "configFlip c2";
       return CONFIGFLIP_C2;
-    if ((c1.right_net1 == c2.left_net1 || or_c1r1_c2l1_dummy) && (c1.left_net0 == c2.right_net0 || or_c1l0_c2r0_dummy))
+    if ((eq_c1r1_c2l1 || or_c1r1_c2l1_dummy) && (eq_c1l0_c2r0 || or_c1l0_c2r0_dummy))
 ////      return "mosFlip c1_0 c2_0";
       return MOSFLIP_C1N_C2N;
-    if ((c1.left_net1 == c2.left_net1 || or_c1l1_c2l1_dummy) && (c1.left_net0 == c2.left_net0 || or_c1l0_c2l0_dummy))
+    if ((eq_c1l1_c2l1 || or_c1l1_c2l1_dummy) && (eq_c1l0_c2l0 || or_c1l0_c2l0_dummy))
 ////      return "configFlip c1";
       return CONFIGFLIP_C1;
-    if ((c1.left_net1 == c2.left_net1 || or_c1l1_c2l1_dummy) && (c1.right_net0 == c2.right_net0 || or_c1l0_c2l0_dummy))
+    if ((eq_c1l1_c2l1 || or_c1l1_c2l1_dummy) && (eq_c1l0_c2l0 || or_c1l0_c2l0_dummy))
 ////      return "mosFlip c1_1 c2_0";
       return MOSFLIP_C1P_C2N;
-    if ((c1.right_net1 == c2.right_net1 || or_c1r1_c2r1_dummy) && (c1.left_net0 == c2.left_net0 || or_c1l0_c2l0_dummy))
+    if ((eq_c1r1_c2r1 || or_c1r1_c2r1_dummy) && (eq_c1l0_c2l0 || or_c1l0_c2l0_dummy))
 ////      return "mosFlip c1_0 c2_1";
       return MOSFLIP_C1N_C2P;
   }
 
   //one pair one config
   if (c1.num_finger == 0 && c2.num_finger != 0) {
-    if ((c1.right_net1 == c2.left_net1 || or_c1r1_c2l1_dummy) && (c1.right_net0 == c2.left_net0 || or_c1r0_c2l0_dummy))
+    if ((eq_c1r1_c2l1 || or_c1r1_c2l1_dummy) && (eq_c1r0_c2l0 || or_c1r0_c2l0_dummy))
 ////      return "do without Flip";
       return NO_FLIP;
-    if ((c1.left_net1 == c2.left_net1 || or_c1l1_c2l1_dummy) && (c1.right_net0 == c2.left_net0 || or_c1r0_c2l0_dummy))
+    if ((eq_c1l1_c2l1 || or_c1l1_c2l1_dummy) && (eq_c1r0_c2l0 || or_c1r0_c2l0_dummy))
 ////      return "mosFlip c1_1";
       return MOSFLIP_C1P;
-    if ((c1.right_net1 == c2.left_net1 || or_c1r1_c2l1_dummy) && (c1.left_net0 == c2.left_net0 || or_c1l0_c2l0_dummy))
+    if ((eq_c1r1_c2l1 || or_c1r1_c2l1_dummy) && (eq_c1l0_c2l0 || or_c1l0_c2l0_dummy))
 ////      return "mosFlip c1_0";
       return MOSFLIP_C1N;
-    if ((c1.left_net1 == c2.left_net1 || or_c1l1_c2l1_dummy) && (c1.left_net0 == c2.left_net0 || or_c1l0_c2l0_dummy))
+    if ((eq_c1l1_c2l1 || or_c1l1_c2l1_dummy) && (eq_c1l0_c2l0 || or_c1l0_c2l0_dummy))
 ////      return "configFlip c1";
       return CONFIGFLIP_C1;
-    if ((c1.right_net1 == c2.right_net1 || or_c1r1_c2r1_dummy)
-        && (c1.right_net0 == c2.right_net0 || or_c1r0_c2r0_dummy))
+    if ((eq_c1r1_c2r1 || or_c1r1_c2r1_dummy) && (eq_c1r0_c2r0 || or_c1r0_c2r0_dummy))
 ////      return "configFlip c2";
       return CONFIGFLIP_C2;
-    if ((c1.left_net1 == c2.right_net1 || or_c1l1_c2r1_dummy) && (c1.right_net0 == c2.right_net0 || or_c1r0_c2r0_dummy))
+    if ((eq_c1l1_c2r1 || or_c1l1_c2r1_dummy) && (eq_c1r0_c2r0 || or_c1r0_c2r0_dummy))
 ////      return "mosFlip c1_1 configFlip c2";
       return MOSFLIP_C1P_CONFIGFLIP_C2;
-    if ((c1.right_net1 == c2.right_net1 || or_c1r1_c2r1_dummy) && (c1.left_net0 == c2.right_net0 || or_c1l0_c2r0_dummy))
+    if ((eq_c1r1_c2r1 || or_c1r1_c2r1_dummy) && (eq_c1l0_c2r0 || or_c1l0_c2r0_dummy))
 ////      return "mosFlip c1_0 configFlip c2";
       return MOSFLIP_C1N_CONFIGFLIP_C2;
-    if ((c1.left_net1 == c2.right_net1 || or_c1l1_c2r1_dummy) && (c1.left_net0 == c2.right_net0 || or_c1l0_c2r0_dummy))
+    if ((eq_c1l1_c2r1 || or_c1l1_c2r1_dummy) && (eq_c1l0_c2r0 || or_c1l0_c2r0_dummy))
 ////      return "configFlip c1 c2";
       return CONFIGFLIP_C1_C2;
   }
   if (c1.num_finger != 0 && c2.num_finger == 0) {
-    if ((c1.right_net1 == c2.left_net1 || or_c1r1_c2l1_dummy) && (c1.right_net0 == c2.left_net0 || or_c1r0_c2l0_dummy))
+    if ((eq_c1r1_c2l1 || or_c1r1_c2l1_dummy) && (eq_c1r0_c2l0 || or_c1r0_c2l0_dummy))
 ////      return "do without Flip";
       return NO_FLIP;
-    if ((c1.right_net1 == c2.right_net1 || or_c1r1_c2r1_dummy) && (c1.right_net0 == c2.left_net0 || or_c1r0_c2l0_dummy))
+    if ((eq_c1r1_c2r1 || or_c1r1_c2r1_dummy) && (eq_c1r0_c2l0 || or_c1r0_c2l0_dummy))
 ////      return "mosFlip c2_1";
       return MOSFLIP_C2P;
-    if ((c1.right_net1 == c2.left_net1 || or_c1r1_c2l1_dummy) && (c1.right_net0 == c2.right_net0 || or_c1r0_c2r0_dummy))
+    if ((eq_c1r1_c2l1 || or_c1r1_c2l1_dummy) && (eq_c1r0_c2r0 || or_c1r0_c2r0_dummy))
 ////      return "mosFlip c2_0";
       return MOSFLIP_C2N;
-    if ((c1.right_net1 == c2.right_net1 || or_c1r1_c2r1_dummy)
-        && (c1.right_net0 == c2.right_net0 || or_c1r0_c2r0_dummy))
+    if ((eq_c1r1_c2r1 || or_c1r1_c2r1_dummy) && (eq_c1r0_c2r0 || or_c1r0_c2r0_dummy))
 ////      return "configFlip c2";
       return CONFIGFLIP_C2;
-    if ((c1.left_net1 == c2.left_net1 || or_c1l1_c2l1_dummy) && (c1.left_net0 == c2.left_net0 || or_c1l0_c2l0_dummy))
+    if ((eq_c1l1_c2l1 || or_c1l1_c2l1_dummy) && (eq_c1l0_c2l0 || or_c1l0_c2l0_dummy))
 ////      return "configFlip c1";
       return CONFIGFLIP_C1;
-    if ((c1.left_net1 == c2.right_net1 || or_c1l1_c2r1_dummy) && (c1.left_net0 == c2.left_net0 || or_c1l0_c2l0_dummy))
+    if ((eq_c1l1_c2r1 || or_c1l1_c2r1_dummy) && (eq_c1l0_c2l0 || or_c1l0_c2l0_dummy))
 ////      return "mosFlip c2_1 configFlip c1";
       return MOSFLIP_C2P_CONFIGFLIP_C1;
-    if ((c1.left_net1 == c2.left_net1 || or_c1l1_c2l1_dummy) && (c1.left_net0 == c2.right_net0 || or_c1l0_c2r0_dummy))
+    if ((eq_c1l1_c2l1 || or_c1l1_c2l1_dummy) && (eq_c1l0_c2r0 || or_c1l0_c2r0_dummy))
 ////      return "mosFlip c2_0 configFlip c1";
       return MOSFLIP_C2N_CONFIGFLIP_C1;
-    if ((c1.left_net1 == c2.right_net1 || or_c1l1_c2r1_dummy) && (c1.left_net0 == c2.right_net0 || or_c1l0_c2r0_dummy))
+    if ((eq_c1l1_c2r1 || or_c1l1_c2r1_dummy) && (eq_c1l0_c2r0 || or_c1l0_c2r0_dummy))
 ////      return "configFlip c1 c2";
       return CONFIGFLIP_C1_C2;
   }
   //two config
   if (c1.num_finger != 0 && c2.num_finger != 0) {
-    if ((c1.left_net0 == c2.left_net0 || or_c1l0_c2l0_dummy) && (c1.left_net1 == c2.left_net1 || or_c1l1_c2l1_dummy))
+    if ((eq_c1l0_c2l0 || or_c1l0_c2l0_dummy) && (eq_c1l1_c2l1 || or_c1l1_c2l1_dummy))
 ////      return "configFlip c1";
       return CONFIGFLIP_C1;
-    if ((c1.left_net0 == c2.right_net0 || or_c1l0_c2r0_dummy) && (c1.left_net1 == c2.right_net1 || or_c1l1_c2r1_dummy))
+    if ((eq_c1l0_c2r0 || or_c1l0_c2r0_dummy) && (eq_c1l1_c2r1 || or_c1l1_c2r1_dummy))
 ////      return "configFlip c1 c2";
       return CONFIGFLIP_C1_C2;
-    if ((c1.right_net0 == c2.left_net0 || or_c1r0_c2l0_dummy) && (c1.right_net1 == c2.left_net1 || or_c1r1_c2l1_dummy))
+    if ((eq_c1r0_c2l0 || or_c1r0_c2l0_dummy) && (eq_c1r1_c2l1 || or_c1r1_c2l1_dummy))
 ////      return "do without Flip";
       return NO_FLIP;
-    if ((c1.right_net0 == c2.right_net0 || or_c1r0_c2r0_dummy)
-        && (c1.right_net1 == c2.right_net1 || or_c1r1_c2r1_dummy))
+    if ((eq_c1r0_c2r0 || or_c1r0_c2r0_dummy) && (eq_c1r1_c2r1 || or_c1r1_c2r1_dummy))
 ////      return "configFlip c2";
       return CONFIGFLIP_C2;
   }
