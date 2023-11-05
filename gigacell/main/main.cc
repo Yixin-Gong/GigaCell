@@ -54,9 +54,14 @@ int main(int argc, char *argv[]) {
 
     auto giga_place = new gigaplace::GigaPlace(*current_pl_db,ref_width,10000000);
     giga_place->SAPlace(index - 1);
+
+    gigaplace::writer::exporter(*current_pl_db);
     delete giga_place;
     delete current_pl_db;
+
   }
+
+
 
 
 //  for(auto current_db : db){

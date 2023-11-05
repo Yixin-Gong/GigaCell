@@ -27,6 +27,7 @@ class PlaceObj {
   void getWidthScore();
   void getNetScore();
   void getPinScore();
+  void getSymmetric();
   float &get_score() { return score_; };
 
   void init();
@@ -40,6 +41,7 @@ class PlaceObj {
   float ws_{};
   float bs_{};
   float ps_{};
+  float symmetric_{};
 
   float score_{};
 };

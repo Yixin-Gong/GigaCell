@@ -17,22 +17,22 @@ float gigaplace::PlaceObj::getMinGap() {
     if (upper_Graph.find(kMos.getLeft()) == upper_Graph.end())
       upper_Graph.emplace(kMos.getLeft(), unit_degree);
     else
-      upper_Graph.find(kMos.getLeft())->second++;
+      upper_Graph.find(kMos.getLeft())->second+=1;
     if (upper_Graph.find(kMos.getRight()) == upper_Graph.end())
       upper_Graph.emplace(kMos.getRight(), unit_degree);
     else
-      upper_Graph.find(kMos.getRight())->second++;
+      upper_Graph.at(kMos.getRight())++;
 
   }
   for (auto &kMos : pl_db_.nmos_list()) {
     if (lower_Graph.find(kMos.getLeft()) == lower_Graph.end())
       lower_Graph.emplace(kMos.getLeft(), unit_degree);
     else
-      lower_Graph.find(kMos.getLeft())->second++;
+      lower_Graph.at(kMos.getLeft())++;
     if (lower_Graph.find(kMos.getRight()) == lower_Graph.end())
       lower_Graph.emplace(kMos.getRight(), unit_degree);
     else
-      lower_Graph.find(kMos.getRight())->second++;
+      lower_Graph.at(kMos.getRight())++;
   }
   for (auto &node : upper_Graph) {
     if (node.second % 2)
@@ -43,7 +43,7 @@ float gigaplace::PlaceObj::getMinGap() {
       l_odd_num += 1;
   }
 
-  return std::max(float(0.0), (u_odd_num + l_odd_num - 4) / 2);
+  return std::max((float) 0, (u_odd_num + l_odd_num - 4) / 2);
 }
 void gigaplace::PlaceObj::getCellRefWidth() {
   auto min_gap = getMinGap();
@@ -65,11 +65,35 @@ void gigaplace::PlaceObj::init() {
   getWidthScore();
   getNetScore();
   getPinScore();
-  score_ = ws_ + bs_ + ps_;
+  score_ = ws_ + bs_+ps_;
 }
 void gigaplace::PlaceObj::getPinScore() {
   PinDensity pindensity(pl_db_);
   auto pin_access = pindensity.getPinAccess();
-  ps_ = 10 * (1 - pin_access);
-
+  ps_ = 10 * (1-pin_access);
+}
+void gigaplace::PlaceObj::getSymmetric() {
+  symmetric_ = 10;
+  float flag = 0;
+  for(auto &pmos : pl_db_.mos_list()){
+    if(pmos.getType() == 0)
+      continue;
+    for(auto &nmos : pl_db_.mos_list()){
+      if(nmos.getType() == 1)
+        continue;
+      if(pmos.getGateLoc() == nmos.getGateLoc())
+        flag += 1;
+    }
+  }
+  for(auto &nmos : pl_db_.mos_list()){
+    if(nmos.getType() == 1)
+      continue;
+    for(auto &pmos : pl_db_.mos_list()){
+      if(pmos.getType() == 0)
+        continue;
+      if(pmos.getGateLoc() == nmos.getGateLoc())
+        flag += 1;
+    }
+  }
+  symmetric_ -= flag;
 }
