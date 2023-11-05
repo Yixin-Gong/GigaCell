@@ -49,8 +49,6 @@ namespace gigaplace {
 
         static void swap(PlaceDB &pl_db, index &pair1, index &pair2);
 
-        //TODO:Implement pairing and sharing.@zy and lky
-
         static int32_t shouldShare(PlaceDB &pl_db, PlaceDB::Configuration &c1, PlaceDB::Configuration &c2);
 
         static void share(PlaceDB &pl_db, std::vector<PlaceDB::Configuration> &config_list);
@@ -60,8 +58,6 @@ namespace gigaplace {
         static void adjacentShareTwoSelectedPair(PlaceDB &pl_db,index &pair1,index &pair2);
 
         static void addConfig(PlaceDB &pl_db, std::vector<PlaceDB::Configuration> &config_list, index &mos1_idx, index &mos2_idx);
-
-        static void createDummy(PlaceDB &pl_db, PlaceDB::Configuration &config_pair,index &single_idx);
 
         static PlaceDB::Configuration creatTempConfig(PlaceDB &pl_db,PlaceDB::Configuration & c1 ,PlaceDB::Configuration & c2);
 
