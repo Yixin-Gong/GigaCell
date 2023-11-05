@@ -19,7 +19,7 @@ void gigaplace::writer::exporter(gigaplace::PlaceDB &pl_db) {
     placement[kmos.getMosName()] = mos;
     j["placement"] = placement;
   }
-  std::ofstream os("Desktop/output.json");
+  std::ofstream os("../../output.json");
   os << std::setw(4) << j << std::endl;
   os.close();
 }
