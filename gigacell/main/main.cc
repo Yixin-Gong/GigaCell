@@ -46,13 +46,13 @@ int main(int argc, char *argv[]) {
         index++;
       }
     }
-    for (auto &config : (*current_pl_db).v_config()) {
-      for (auto &pair : config.pair_list)
-        std::cout << pair.pair_idx << std::endl;
-    }
+//    for (auto &config : (*current_pl_db).v_config()) {
+//      for (auto &pair : config.pair_list)
+//        std::cout << pair.pair_idx << std::endl;
+//    }
     gigaplace::Operator::v_configTol_config(*current_pl_db);
 
-    auto giga_place = new gigaplace::GigaPlace(*current_pl_db,ref_width,1000);
+    auto giga_place = new gigaplace::GigaPlace(*current_pl_db,ref_width,10000000);
     giga_place->SAPlace(index - 1);
     delete giga_place;
     delete current_pl_db;

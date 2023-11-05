@@ -35,7 +35,7 @@ std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::generate2Num(PlaceDB &place_
 
 void gigaplace::GigaPlace::SAPlace(uint16_t pair_num) {
 //  auto iter = 0;
-  while (T > 0.001) {
+  while (T > 0.0001) {
     Operator::setCoordinates(pl_db_, pl_db_.l_config());
     auto place_obj = new gigaplace::PlaceObj(pl_db_, ref_width_);
 
@@ -62,7 +62,7 @@ void gigaplace::GigaPlace::SAPlace(uint16_t pair_num) {
       pl_db_.mos_list() = mos_list;
       pl_db_.nets() = nets;
     }
-    T *= 0.9;
+    T *= 0.99;
 //    iter++;
 //    std::cout<<iter<<std::endl;
   }
