@@ -5,8 +5,8 @@
 #include "place_obj.h"
 
 float gigaplace::PlaceObj::getMinGap() {
-  float u_odd_num;
-  float l_odd_num;
+  float u_odd_num = 0;
+  float l_odd_num = 0;
 
   //make map
   std::unordered_map<std::string, int32_t> upper_Graph;
@@ -17,22 +17,22 @@ float gigaplace::PlaceObj::getMinGap() {
     if (upper_Graph.find(kMos.getLeft()) == upper_Graph.end())
       upper_Graph.emplace(kMos.getLeft(), unit_degree);
     else
-      upper_Graph.at(kMos.getLeft())++;
+      upper_Graph.find(kMos.getLeft())->second++;
     if (upper_Graph.find(kMos.getRight()) == upper_Graph.end())
       upper_Graph.emplace(kMos.getRight(), unit_degree);
     else
-      upper_Graph.at(kMos.getRight())++;
+      upper_Graph.find(kMos.getRight())->second++;
 
   }
   for (auto &kMos : pl_db_.nmos_list()) {
     if (lower_Graph.find(kMos.getLeft()) == lower_Graph.end())
       lower_Graph.emplace(kMos.getLeft(), unit_degree);
     else
-      lower_Graph.at(kMos.getLeft())++;
+      lower_Graph.find(kMos.getLeft())->second++;
     if (lower_Graph.find(kMos.getRight()) == lower_Graph.end())
       lower_Graph.emplace(kMos.getRight(), unit_degree);
     else
-      lower_Graph.at(kMos.getRight())++;
+      lower_Graph.find(kMos.getRight())->second++;
   }
   for (auto &node : upper_Graph) {
     if (node.second % 2)
@@ -43,7 +43,7 @@ float gigaplace::PlaceObj::getMinGap() {
       l_odd_num += 1;
   }
 
-  return std::max((float) 0, (u_odd_num + l_odd_num - 4) / 2);
+  return std::max(float(0.0), (u_odd_num + l_odd_num - 4) / 2);
 }
 void gigaplace::PlaceObj::getCellRefWidth() {
   auto min_gap = getMinGap();
@@ -65,12 +65,11 @@ void gigaplace::PlaceObj::init() {
   getWidthScore();
   getNetScore();
   getPinScore();
-  score_ = ws_ + bs_+ps_;
+  score_ = ws_ + bs_ + ps_;
 }
 void gigaplace::PlaceObj::getPinScore() {
   PinDensity pindensity(pl_db_);
   auto pin_access = pindensity.getPinAccess();
-  ps_ = 10 * (1-pin_access);
-
+  ps_ = 10 * (1 - pin_access);
 
 }
