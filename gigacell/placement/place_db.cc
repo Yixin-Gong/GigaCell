@@ -121,7 +121,7 @@ void gigaplace::PlaceDB::fold(gigaplace::DataBase &db)  {
       new_mos.getWidth() = nmos.getWidth();
       db.nmos_list().push_back(new_mos);
 
-      index new_index = i + db.nmos_ids().size();
+      index new_index = i + db.nmos_ids().size() -1;
       db.nmos_ids().push_back(new_index);
     }
 
