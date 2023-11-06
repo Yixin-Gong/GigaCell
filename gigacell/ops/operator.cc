@@ -219,7 +219,35 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<PlaceDB::Configurati
 
   for (auto i = 0; i < primary_config_list_size; i++) {
     for (auto j = i + 1; j < current_config_list_size; j++) {
-      auto should_do = gigaplace::Operator::shouldShare(pl_db, config_list.at(i), config_list.at(j));
+
+      std::vector<index> v_special_mos_idx{};
+      if (config_list.at(i).num_finger > 0) {
+        if (pl_db.mos_list().at(config_list.at(i).pair_list.at(1).pmos_idx).getDummyFlag())
+          v_special_mos_idx.push_back(config_list.at(i).pair_list.at(0).pmos_idx);
+        else if (pl_db.mos_list().at(config_list.at(i).pair_list.at(1).nmos_idx).getDummyFlag())
+          v_special_mos_idx.push_back(config_list.at(i).pair_list.at(0).nmos_idx);
+        if (pl_db.mos_list().at(config_list.at(i).pair_list.at(
+            config_list.at(i).num_finger - 1).pmos_idx).getDummyFlag())
+          v_special_mos_idx.push_back(config_list.at(i).pair_list.at(config_list.at(i).num_finger).pmos_idx);
+        else if (pl_db.mos_list().at(config_list.at(i).pair_list.at(
+            config_list.at(i).num_finger - 1).nmos_idx).getDummyFlag())
+          v_special_mos_idx.push_back(config_list.at(i).pair_list.at(config_list.at(i).num_finger).nmos_idx);
+      }
+      if (config_list.at(j).num_finger > 0) {
+        if (pl_db.mos_list().at(config_list.at(j).pair_list.at(1).pmos_idx).getDummyFlag())
+          v_special_mos_idx.push_back(config_list.at(j).pair_list.at(0).pmos_idx);
+        else if (pl_db.mos_list().at(config_list.at(j).pair_list.at(1).nmos_idx).getDummyFlag())
+          v_special_mos_idx.push_back(config_list.at(j).pair_list.at(0).nmos_idx);
+        if (pl_db.mos_list().at(config_list.at(j).pair_list.at(
+            config_list.at(j).num_finger - 1).pmos_idx).getDummyFlag())
+          v_special_mos_idx.push_back(config_list.at(j).pair_list.at(config_list.at(j).num_finger).pmos_idx);
+        else if (pl_db.mos_list().at(config_list.at(j).pair_list.at(
+            config_list.at(j).num_finger - 1).nmos_idx).getDummyFlag())
+          v_special_mos_idx.push_back(config_list.at(j).pair_list.at(config_list.at(j).num_finger).nmos_idx);
+      }
+
+      auto should_do = gigaplace::Operator::getShouldDo(pl_db, config_list.at(i), config_list.at(j), v_special_mos_idx);
+//      auto should_do = gigaplace::Operator::shouldShare(pl_db,config_list.at(i),config_list.at(j));
       switch (should_do) {
         case COULD_NOT_SHARE:
         case CONFIG_HAD_BEEN_USED:break;
@@ -940,4 +968,246 @@ void gigaplace::Operator::adjacentShareTwoSelectedPair(gigaplace::PlaceDB &pl_db
     return;
   }
 
+}
+int32_t gigaplace::Operator::getShouldDo(gigaplace::PlaceDB &pl_db,
+                                         gigaplace::PlaceDB::Configuration &c1,
+                                         gigaplace::PlaceDB::Configuration &c2,
+                                         std::vector<index> &v_special_mos_ids) {
+  auto should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+  if (should_do == CONFIG_HAD_BEEN_USED)
+    return should_do;
+  if (should_do != COULD_NOT_SHARE)
+    return should_do;
+  auto status = v_special_mos_ids.size();
+
+  if (status == 1) {
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    return should_do;
+  }
+  if (status == 2) {
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));//rollback
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    return should_do;
+  }
+  if (status == 3) {
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else {
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    }
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else {
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    }
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else {
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    }
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    return should_do;
+  }
+
+  if (status == 4) {
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else {
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    }
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else {
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    }
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else {
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+    }
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else {
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    }
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else {
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+    }
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else {
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+    }
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else {
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    }
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else {
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+    }
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else {
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+    }
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    if (should_do != COULD_NOT_SHARE)
+      return should_do;
+    else {
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+      gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+    }
+
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(0));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(1));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(2));
+    gigaplace::Operator::mosFlip(pl_db, v_special_mos_ids.at(3));
+    should_do = gigaplace::Operator::shouldShare(pl_db, c1, c2);
+    return should_do;
+  }
+
+  return should_do;
 }
