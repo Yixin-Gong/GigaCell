@@ -31,6 +31,7 @@ class PlaceObj {
   void getNotchScore();
   void getSymmetric();
   float &get_score() { return score_; };
+  float &get_symmetric() {return symmetric_;};
 
   void init();
 
