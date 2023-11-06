@@ -70,6 +70,8 @@ namespace gigaplace {
         static void createNewLayout(PlaceDB &pl_db, index &pair1, index &pair2);
 
         static void splitConfig(PlaceDB &pl_db,index &split_pair);
+
+        static int32_t getShouldDo(PlaceDB &pl_db,PlaceDB::Configuration &c1,PlaceDB::Configuration &c2,std::vector<index> &v_special_mos_ids);
     };
 }
 #endif //GIGACELL_GIGACELL_OPS_OPERATOR_H_
