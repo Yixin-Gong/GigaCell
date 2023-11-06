@@ -8,6 +8,7 @@
 #include "constraints/area.h"
 #include "constraints/netlength.h"
 #include "constraints/pindensity.h"
+#include "constraints/notch.h"
 #include <chrono>
 #include <cmath>
 #include <random>
@@ -27,6 +28,7 @@ class PlaceObj {
   void getWidthScore();
   void getNetScore();
   void getPinScore();
+  void getNotchScore();
   void getSymmetric();
   float &get_score() { return score_; };
 
@@ -42,6 +44,7 @@ class PlaceObj {
   float bs_{};
   float ps_{};
   float symmetric_{};
+  float ns_{};
 
   float score_{};
 };

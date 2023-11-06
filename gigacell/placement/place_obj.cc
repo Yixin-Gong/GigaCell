@@ -17,7 +17,7 @@ float gigaplace::PlaceObj::getMinGap() {
     if (upper_Graph.find(kMos.getLeft()) == upper_Graph.end())
       upper_Graph.emplace(kMos.getLeft(), unit_degree);
     else
-      upper_Graph.find(kMos.getLeft())->second+=1;
+      upper_Graph.find(kMos.getLeft())->second += 1;
     if (upper_Graph.find(kMos.getRight()) == upper_Graph.end())
       upper_Graph.emplace(kMos.getRight(), unit_degree);
     else
@@ -65,35 +65,44 @@ void gigaplace::PlaceObj::init() {
   getWidthScore();
   getNetScore();
   getPinScore();
-  score_ = ws_ + bs_+ps_;
+//  getSymmetric();
+  getNotchScore();
+  score_ = ws_ + bs_ + ps_ + ns_;
+//  std::cout<<symmetric_<<std::endl;
+  std::cout << ns_ << std::endl;
 }
 void gigaplace::PlaceObj::getPinScore() {
   PinDensity pindensity(pl_db_);
   auto pin_access = pindensity.getPinAccess();
-  ps_ = 10 * (1-pin_access);
+  ps_ = 10 * (1 - pin_access);
 }
 void gigaplace::PlaceObj::getSymmetric() {
   symmetric_ = 10;
   float flag = 0;
-  for(auto &pmos : pl_db_.mos_list()){
-    if(pmos.getType() == 0)
+  for (auto &pmos : pl_db_.mos_list()) {
+    if (pmos.getType() == 0)
       continue;
-    for(auto &nmos : pl_db_.mos_list()){
-      if(nmos.getType() == 1)
+    for (auto &nmos : pl_db_.mos_list()) {
+      if (nmos.getType() == 1)
         continue;
-      if(pmos.getGateLoc() == nmos.getGateLoc())
+      if (pmos.getGateLoc() == nmos.getGateLoc())
         flag += 1;
     }
   }
-  for(auto &nmos : pl_db_.mos_list()){
-    if(nmos.getType() == 1)
+  for (auto &nmos : pl_db_.mos_list()) {
+    if (nmos.getType() == 1)
       continue;
-    for(auto &pmos : pl_db_.mos_list()){
-      if(pmos.getType() == 0)
+    for (auto &pmos : pl_db_.mos_list()) {
+      if (pmos.getType() == 0)
         continue;
-      if(pmos.getGateLoc() == nmos.getGateLoc())
+      if (pmos.getGateLoc() == nmos.getGateLoc())
         flag += 1;
     }
   }
   symmetric_ -= flag;
+}
+void gigaplace::PlaceObj::getNotchScore() {
+  Notch notch(pl_db_);
+  auto notch_num = notch.notchNum();
+  ns_ = float(10 - 10 * notch_num);
 }

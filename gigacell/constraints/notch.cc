@@ -3,7 +3,7 @@
 //
 
 #include "notch.h"
-int32_t gigaplace::notch::notchNum() {
+int32_t gigaplace::Notch::notchNum() {
   int32_t notchNum = 0;
   for(auto &kconfig : pl_db_.l_config()){
     if(kconfig.num_finger < 2)
