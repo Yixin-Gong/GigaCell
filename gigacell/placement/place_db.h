@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include "database/database.h"
 #include <list>
+#include <algorithm>
 //#include "ops/operator.h"
 
 namespace gigaplace {
