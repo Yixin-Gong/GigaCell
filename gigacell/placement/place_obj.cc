@@ -75,25 +75,36 @@ void gigaplace::PlaceObj::getPinScore() {
 void gigaplace::PlaceObj::getSymmetric() {
   symmetric_ = 10;
   float flag = 0;
+  float num = 0;
+  float i = 1;
   for(auto &pmos : pl_db_.mos_list()){
     if(pmos.getType() == 0)
       continue;
     for(auto &nmos : pl_db_.mos_list()){
       if(nmos.getType() == 1)
         continue;
-      if(pmos.getGateLoc() == nmos.getGateLoc())
-        flag += 1;
+      if(pmos.getGateLoc() != nmos.getGateLoc())
+        continue;
+      else
+        i = 0;
     }
+    num += i;
+    i = 1;
   }
+
   for(auto &nmos : pl_db_.mos_list()){
     if(nmos.getType() == 1)
       continue;
     for(auto &pmos : pl_db_.mos_list()){
       if(pmos.getType() == 0)
         continue;
-      if(pmos.getGateLoc() == nmos.getGateLoc())
-        flag += 1;
+      if(pmos.getGateLoc() != nmos.getGateLoc())
+        continue;
+      else
+        i = 0;
     }
+    num +=i;
+    i = 1;
   }
-  symmetric_ -= flag;
+  symmetric_ -= num;
 }
