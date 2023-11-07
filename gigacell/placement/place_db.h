@@ -26,6 +26,7 @@ class PlaceDB {
   void init();
 
   static void fold(DataBase &db);
+  static Mos createNewMos(Mos &mos);
 
   struct Net2Mos {
     std::string electrode_name;//left gate right
