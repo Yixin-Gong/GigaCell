@@ -14,7 +14,7 @@ class GigaPlace {
   void SAPlace(uint16_t pair_num);
   static float computeDeltaC(float &new_cost, float &old_cost);
   static bool accept(float &delta_c, float T);
-  static std::pair<uint16_t, uint16_t> generate2Num(PlaceDB &place_db, uint16_t pair_num);
+  static std::pair<uint16_t, uint16_t> generate2Num(uint16_t pair_num);
   float &get_score() { return score_; }
  private:
   PlaceDB &pl_db_;
