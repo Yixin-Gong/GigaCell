@@ -12,36 +12,50 @@ void gigaplace::Parser::parse() {
     return;
   }
   Mos mos;
-  DataBase::Pin pin;
-  DataBase cell_db;
+  DataBase::Pin pin;;
   std::string subStr;
   int32_t pmos_idx = 0;
   int32_t nmos_idx = 0;
   std::string line;
-
+  index flag = 0;
 
   while (std::getline(file_, line)) {
     std::vector<std::string> tokens = split_(line, ' ');
+
     if (tokens[0] == ".SUBCKT") {
-      cell_db.cell_name() = tokens[1];
-      for (int32_t i = 2; i < tokens.size() - 2; i++) {
-        pin.pinName = tokens[i];
-        cell_db.v_pin_list().push_back(pin);
+      if (tokens[1] != cell_name_)
+        continue;
+      flag = 1;
+      db_.cell_name() = tokens[1];
+//      pin.pinName = tokens[i].substr(0, tokens[i].size() - 1);
+//      db_.v_pin_list().push_back(pin);
+      auto size = tokens.size();
+      if(tokens[size -1] == "\r"){
+        for(int32_t i = 2; i < tokens.size()-1; i++){
+          if(tokens[i] == "VDD" || tokens[i] == "VSS" )
+            continue;
+          pin.pinName = tokens[i];
+          db_.v_pin_list().push_back(pin);
+        }
+      }else{
+        for(int32_t i =2; i < tokens.size() ; i++){
+          if(tokens[i] == "VDD" || tokens[i] == "VSS" || tokens[i] == "VDD\r" || tokens[i] == "VSS\r")
+            continue;
+          if(i == tokens.size() - 1){
+            pin.pinName = tokens[i].substr(0, tokens[i].size() - 1);
+            db_.v_pin_list().push_back(pin);
+            continue;
+          }
+          pin.pinName = tokens[i];
+          db_.v_pin_list().push_back(pin);
+        }
       }
       continue;
     }
-    if (tokens[0].at(0) == '.' && tokens[0].at(1) == 'E') {
-      total_db_.push_back(cell_db);
-      pmos_idx = 0;
-      nmos_idx = 0;
-   //   cell_db.clearDB();
-      std::vector <index>().swap(cell_db.nmos_ids());
-      std::vector <index>().swap(cell_db.pmos_ids());
-      std::vector <Mos>().swap(cell_db.nmos_list());
-      std::vector <Mos>().swap(cell_db.pmos_list());
-      std::vector <DataBase::Pin>().swap(cell_db.v_pin_list());
-      cell_db.cell_name().clear();
+    if(flag == 0)
       continue;
+    if (flag == 1 && tokens[0].at(0) == '.' && tokens[0].at(1) == 'E') {
+      break;
     }
     std::string mos_initial;
     mos_initial = tokens[5].substr(0, 1);
@@ -93,8 +107,8 @@ void gigaplace::Parser::parse() {
       mos.getLeft() = tokens[1];
       mos.getType() = 0;
       //mos.getWidth()=
-      cell_db.nmos_list().push_back(mos);
-      cell_db.nmos_ids().push_back(nmos_idx);
+      db_.nmos_list().push_back(mos);
+      db_.nmos_ids().push_back(nmos_idx);
       nmos_idx++;
     } else {
       //pmos
@@ -124,7 +138,7 @@ void gigaplace::Parser::parse() {
         }
 
         std::string w_end;
-        if (tokens[7].at(tokens[7].size()-1) == '\r')
+        if (tokens[7].at(tokens[7].size() - 1) == '\r')
           w_end = tokens[7].substr(tokens[7].size() - 2, 1);
         else
           w_end = tokens[7].substr(tokens[7].size() - 1, 1);
@@ -145,8 +159,8 @@ void gigaplace::Parser::parse() {
       mos.getLeft() = tokens[1];
       mos.getType() = 1;
       //mos.getWidth()=
-      cell_db.pmos_list().push_back(mos);
-      cell_db.pmos_ids().push_back(pmos_idx);
+      db_.pmos_list().push_back(mos);
+      db_.pmos_ids().push_back(pmos_idx);
       pmos_idx++;
     }
 

@@ -3,65 +3,49 @@
 int main(int argc, char *argv[]) {
   cmdline::parser a;
   a.add<std::string>("file_name", 'f', "file name", true, "");
+  a.add<std::string>("cell_name", 'c', "cell name", true, "");
+
   a.parse_check(argc, argv);
   std::string filename = a.get<std::string>("file_name");
-
-  std::vector<gigaplace::DataBase> db;
-  gigaplace::Parser parser(filename, db);
+  std::string cellname = a.get<std::string>("cell_name");
+  gigaplace::DataBase db;
+  gigaplace::Parser parser(filename, db, cellname);
   parser.parse();
+  gigaplace::PlaceDB place_db(db);
 
-//  for(auto cell : db){
-//    std::cout << cell.cell_name() << std::endl;
-//    for(auto mos : cell.pmos_list()){
-//      std::cout << mos.getMosName() << " " ;
-//    }
-//    std::cout << " " << std::endl;
-//    for(auto mos : cell.nmos_list()){
-//      std::cout << mos.getMosName() << " " ;
-//    }
-//    std::cout << " " << std::endl;
-//  }
-
-  for (auto current_db : db) {
-    auto ref_width = current_db.getRefWidth();
-    auto *current_pl_db = new gigaplace::PlaceDB(current_db);
-    gigaplace::KaHyPar ka_hy_par(*current_pl_db);
-    ka_hy_par.partition();
-    gigaplace::Cluster cluster(*current_pl_db);
-    for (auto &block_hash : (*current_pl_db).blocks()) {
-      cluster.getBlock(block_hash.second);
-      cluster.creatConfigList();
-      gigaplace::Operator::share(*current_pl_db, cluster.config_list());
-      for (auto &config : cluster.config_list()) {
-        if (!config.share_flag)
-          (*current_pl_db).v_config().push_back(config);
-      }
-      cluster.clearConfigList();
+  auto ref_width = db.getRefWidth();
+  gigaplace::KaHyPar ka_hy_par(place_db);
+  ka_hy_par.partition();
+  gigaplace::Cluster cluster(place_db);
+  for (auto &block_hash : place_db.blocks()) {
+    cluster.getBlock(block_hash.second);
+    cluster.creatConfigList();
+    gigaplace::Operator::share(place_db, cluster.config_list());
+    for (auto &config : cluster.config_list()) {
+      if (!config.share_flag)
+        place_db.v_config().push_back(config);
     }
-    gigaplace::Operator::pairSingleMos(*current_pl_db);
-    auto index = 0;
-    for (auto &config : (*current_pl_db).v_config()) {
-      for (auto &pair : config.pair_list) {
-        pair.pair_idx = index;
-        index++;
-      }
+    cluster.clearConfigList();
+  }
+  gigaplace::Operator::pairSingleMos(place_db);
+  auto index = 0;
+  for (auto &config : place_db.v_config()) {
+    for (auto &pair : config.pair_list) {
+      pair.pair_idx = index;
+      index++;
     }
-//    for (auto &config : (*current_pl_db).v_config()) {
+  }
+//    for (auto &config : (*p_place_db).v_config()) {
 //      for (auto &pair : config.pair_list)
 //        std::cout << pair.pair_idx << std::endl;
 //    }
-    gigaplace::Operator::v_configTol_config(*current_pl_db);
+  gigaplace::Operator::v_configTol_config(place_db);
 
-    auto giga_place = new gigaplace::GigaPlace(*current_pl_db,ref_width,10000000);
-    giga_place->SAPlace(index - 1);
+  auto giga_place = new gigaplace::GigaPlace(place_db, ref_width, 10000000);
+  giga_place->SAPlace(index - 1);
 
-    gigaplace::writer::exporter(*current_pl_db);
-    delete giga_place;
-    delete current_pl_db;
-
-  }
-
-
+  gigaplace::writer::exporter(place_db);
+  delete giga_place;
 
 
 //  for(auto current_db : db){
@@ -299,5 +283,5 @@ if(left != left_of_begin)
 //  for (const auto &item : pl_db.mos_ids()) {
 //    std::cout << item << " ";
 //  }
-return 0;
+  return 0;
 }
