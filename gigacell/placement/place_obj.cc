@@ -65,15 +65,18 @@ void gigaplace::PlaceObj::init() {
   getWidthScore();
   getNetScore();
   getPinScore();
-//  getSymmetric();
   getNotchScore();
-  score_ = ws_ + bs_ + ps_ + ns_;
-//  std::cout<<symmetric_<<std::endl;
-  std::cout << ns_ << std::endl;
+  score_ = ws_ + bs_ + ps_+ ns_;
+//  std::cout<<ws_<<std::endl;
+//  std::cout<<bs_<<std::endl;
+//  std::cout<<ps_<<std::endl;
+//  std::cout<<ns_<<std::endl;
+
 }
 void gigaplace::PlaceObj::getPinScore() {
   PinDensity pindensity(pl_db_);
   auto pin_access = pindensity.getPinAccess();
+//  std::cout<<pin_access<<std::endl;
   ps_ = 10 * (1-pin_access);
 }
 void gigaplace::PlaceObj::getSymmetric() {
@@ -115,5 +118,6 @@ void gigaplace::PlaceObj::getSymmetric() {
 void gigaplace::PlaceObj::getNotchScore() {
   Notch notch(pl_db_);
   auto notch_num = notch.notchNum();
+//  std::cout<<notch_num<<std::endl;
   ns_ = float(10 - 10 * notch_num);
 }
