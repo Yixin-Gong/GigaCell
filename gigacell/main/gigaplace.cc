@@ -20,7 +20,7 @@ bool gigaplace::GigaPlace::accept(float &delta_c, float T) {
     return false;
 }
 
-std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::generate2Num(PlaceDB &place_db, uint16_t pair_num) {
+std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::generate2Num(uint16_t pair_num) {
   std::pair<uint16_t, uint16_t> pair{};
   std::random_device rd;
   std::mt19937_64 gen(rd());
@@ -35,7 +35,7 @@ std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::generate2Num(PlaceDB &place_
 
 void gigaplace::GigaPlace::SAPlace(uint16_t pair_num) {
 //  auto iter = 0;
-  while (T > 0.0001) {
+  while (T_ > 0.0001) {
     Operator::setCoordinates(pl_db_, pl_db_.l_config());
     auto place_obj = new gigaplace::PlaceObj(pl_db_, ref_width_);
 
@@ -44,8 +44,9 @@ void gigaplace::GigaPlace::SAPlace(uint16_t pair_num) {
     auto nets = pl_db_.nets();
 
     auto old_cost = -place_obj->get_score();
+    score_ = old_cost;
     std::cout << "old_cost" << old_cost << std::endl;
-    auto pair = generate2Num(pl_db_, pair_num);
+    auto pair = generate2Num(pair_num);
     delete place_obj;
     Operator::createNewLayout(pl_db_, pair.first, pair.second);
     Operator::setCoordinates(pl_db_, pl_db_.l_config());
@@ -57,13 +58,11 @@ void gigaplace::GigaPlace::SAPlace(uint16_t pair_num) {
     delete place_obj;
 
     auto delta_C = computeDeltaC(new_cost, old_cost);
-    if (!accept(delta_C, T)) {
+    if (!accept(delta_C, T_)) {
       pl_db_.l_config() = config_list;
       pl_db_.mos_list() = mos_list;
       pl_db_.nets() = nets;
     }
-    T *= 0.99;
-//    iter++;
-//    std::cout<<iter<<std::endl;
+    T_ *= 0.99;
   }
 }

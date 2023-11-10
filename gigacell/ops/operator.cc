@@ -219,35 +219,35 @@ void gigaplace::Operator::share(PlaceDB &pl_db, std::vector<PlaceDB::Configurati
 
   for (auto i = 0; i < primary_config_list_size; i++) {
     for (auto j = i + 1; j < current_config_list_size; j++) {
-
-      std::vector<index> v_special_mos_idx{};
-      if (config_list.at(i).num_finger > 0) {
-        if (pl_db.mos_list().at(config_list.at(i).pair_list.at(1).pmos_idx).getDummyFlag())
-          v_special_mos_idx.push_back(config_list.at(i).pair_list.at(0).pmos_idx);
-        else if (pl_db.mos_list().at(config_list.at(i).pair_list.at(1).nmos_idx).getDummyFlag())
-          v_special_mos_idx.push_back(config_list.at(i).pair_list.at(0).nmos_idx);
-        if (pl_db.mos_list().at(config_list.at(i).pair_list.at(
-            config_list.at(i).num_finger - 1).pmos_idx).getDummyFlag())
-          v_special_mos_idx.push_back(config_list.at(i).pair_list.at(config_list.at(i).num_finger).pmos_idx);
-        else if (pl_db.mos_list().at(config_list.at(i).pair_list.at(
-            config_list.at(i).num_finger - 1).nmos_idx).getDummyFlag())
-          v_special_mos_idx.push_back(config_list.at(i).pair_list.at(config_list.at(i).num_finger).nmos_idx);
-      }
-      if (config_list.at(j).num_finger > 0) {
-        if (pl_db.mos_list().at(config_list.at(j).pair_list.at(1).pmos_idx).getDummyFlag())
-          v_special_mos_idx.push_back(config_list.at(j).pair_list.at(0).pmos_idx);
-        else if (pl_db.mos_list().at(config_list.at(j).pair_list.at(1).nmos_idx).getDummyFlag())
-          v_special_mos_idx.push_back(config_list.at(j).pair_list.at(0).nmos_idx);
-        if (pl_db.mos_list().at(config_list.at(j).pair_list.at(
-            config_list.at(j).num_finger - 1).pmos_idx).getDummyFlag())
-          v_special_mos_idx.push_back(config_list.at(j).pair_list.at(config_list.at(j).num_finger).pmos_idx);
-        else if (pl_db.mos_list().at(config_list.at(j).pair_list.at(
-            config_list.at(j).num_finger - 1).nmos_idx).getDummyFlag())
-          v_special_mos_idx.push_back(config_list.at(j).pair_list.at(config_list.at(j).num_finger).nmos_idx);
-      }
-
-      auto should_do = gigaplace::Operator::getShouldDo(pl_db, config_list.at(i), config_list.at(j), v_special_mos_idx);
-//      auto should_do = gigaplace::Operator::shouldShare(pl_db,config_list.at(i),config_list.at(j));
+//
+//      std::vector<index> v_special_mos_idx{};
+//      if (config_list.at(i).num_finger > 0) {
+//        if (pl_db.mos_list().at(config_list.at(i).pair_list.at(1).pmos_idx).getDummyFlag())
+//          v_special_mos_idx.push_back(config_list.at(i).pair_list.at(0).pmos_idx);
+//        else if (pl_db.mos_list().at(config_list.at(i).pair_list.at(1).nmos_idx).getDummyFlag())
+//          v_special_mos_idx.push_back(config_list.at(i).pair_list.at(0).nmos_idx);
+//        if (pl_db.mos_list().at(config_list.at(i).pair_list.at(
+//            config_list.at(i).num_finger - 1).pmos_idx).getDummyFlag())
+//          v_special_mos_idx.push_back(config_list.at(i).pair_list.at(config_list.at(i).num_finger).pmos_idx);
+//        else if (pl_db.mos_list().at(config_list.at(i).pair_list.at(
+//            config_list.at(i).num_finger - 1).nmos_idx).getDummyFlag())
+//          v_special_mos_idx.push_back(config_list.at(i).pair_list.at(config_list.at(i).num_finger).nmos_idx);
+//      }
+//      if (config_list.at(j).num_finger > 0) {
+//        if (pl_db.mos_list().at(config_list.at(j).pair_list.at(1).pmos_idx).getDummyFlag())
+//          v_special_mos_idx.push_back(config_list.at(j).pair_list.at(0).pmos_idx);
+//        else if (pl_db.mos_list().at(config_list.at(j).pair_list.at(1).nmos_idx).getDummyFlag())
+//          v_special_mos_idx.push_back(config_list.at(j).pair_list.at(0).nmos_idx);
+//        if (pl_db.mos_list().at(config_list.at(j).pair_list.at(
+//            config_list.at(j).num_finger - 1).pmos_idx).getDummyFlag())
+//          v_special_mos_idx.push_back(config_list.at(j).pair_list.at(config_list.at(j).num_finger).pmos_idx);
+//        else if (pl_db.mos_list().at(config_list.at(j).pair_list.at(
+//            config_list.at(j).num_finger - 1).nmos_idx).getDummyFlag())
+//          v_special_mos_idx.push_back(config_list.at(j).pair_list.at(config_list.at(j).num_finger).nmos_idx);
+//      }
+//
+//      auto should_do = gigaplace::Operator::getShouldDo(pl_db, config_list.at(i), config_list.at(j), v_special_mos_idx);
+      auto should_do = gigaplace::Operator::shouldShare(pl_db,config_list.at(i),config_list.at(j));
       switch (should_do) {
         case COULD_NOT_SHARE:
         case CONFIG_HAD_BEEN_USED:break;
