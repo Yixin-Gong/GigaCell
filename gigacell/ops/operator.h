@@ -71,7 +71,11 @@ namespace gigaplace {
 
         static void splitConfig(PlaceDB &pl_db,index &split_pair);
 
-        static int32_t getShouldDo(PlaceDB &pl_db,PlaceDB::Configuration &c1,PlaceDB::Configuration &c2,std::vector<index> &v_special_mos_ids);
+        static int32_t getShouldDo(PlaceDB &pl_db,PlaceDB::Configuration &c1,PlaceDB::Configuration &c2,std::vector<std::pair<std::string,index>> &v_special_mos_pair);
+
+        static void fixConfigNet(PlaceDB &pl_db,PlaceDB::Configuration &c1,PlaceDB::Configuration &c2,std::pair<std::string,index> &special_mos);
     };
+
+
 }
 #endif //GIGACELL_GIGACELL_OPS_OPERATOR_H_
