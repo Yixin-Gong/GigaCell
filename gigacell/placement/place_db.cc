@@ -90,237 +90,92 @@ void gigaplace::PlaceDB::init() {
     v_pin_list().push_back(pin);
 
 }
-
 void gigaplace::PlaceDB::fold(gigaplace::DataBase &db) {
-  DataBase db1 = db;
-  index new_idx = 0;
-
-  //find nmos_mode pmos_mode
-  std::unordered_map<float, float> count_map;
-  std::unordered_map<float, float> count_map2;
-  float nmos_mode = 0;
-  float pmos_mode = 0;
-  float max_count = 0;
-  std::vector<float> width;
-  for (auto &nmos : db1.nmos_list()) {
-    if(nmos.getWidth() > 220)
-      continue;
-    width.push_back(nmos.getWidth());
-  }
-  for (auto num : width) {
-    count_map[num]++;
-    if (count_map[num] > max_count) {
-      max_count = count_map[num];
-      nmos_mode = num;
-    }
-  }
-  max_count = 0;
-  std::vector<float>().swap(width);
-  for (auto &pmos : db1.pmos_list()) {
-    if(pmos.getWidth() > 220)
-      continue;
-    width.push_back(pmos.getWidth());
-  }
-  for (auto num : width) {
-    count_map2[num]++;
-    if (count_map2[num] > max_count) {
-      max_count = count_map2[num];
-      pmos_mode = num;
-    }
-  }
-
   int32_t idx = -1;
+  DataBase db1 = db;
   for (auto &nmos : db1.nmos_list()) {
     idx++;
-    if (nmos.getWidth() < 220 || nmos.getWidth() == 120) {
+    if (nmos.getWidth() < 220) {
       continue;
     }
+    index n;
+    n = std::ceil(nmos.getWidth() / 220);
+    nmos.getWidth() = (float) std::round((nmos.getWidth() / (float) n) * 100) / 100;
+    if ((int) nmos.getWidth() == nmos.getWidth())
+      db.nmos_list().at(idx).getWidth() = nmos.getWidth();
+    else {
+      if (idx == 0)
+        db.nmos_list().at(idx).getWidth() = nmos.getWidth() + (float) 0.5;
+      else
+        db.nmos_list().at(idx).getWidth() = nmos.getWidth() - (float) 0.5;
+    }
+    for (index i = 1; i < n; i++) {
+      Mos new_mos;
+      new_mos.getType() = 0;
 
-    index num_of_finger;
-    num_of_finger = std::floor(nmos.getWidth() / nmos_mode);
-    float last_width = nmos.getWidth() - (float) num_of_finger * nmos_mode;
+      std::string name;
+      std::string mos_name = nmos.getMosName();
 
-    //direct assignment
-    if (last_width > 120) {
-      db.nmos_list().at(idx).getWidth() = last_width;
-      for (index i = 1; i < (num_of_finger + 1); i++) {
-        Mos new_mos = createNewMos(nmos);
-        new_mos.getWidth() = nmos_mode;
-        std::string name;
-        std::string mos_name = nmos.getMosName();
-        name.append(mos_name + "_finger_" + std::to_string(i));
-        new_mos.getMosName() = name;
-        new_idx = db.nmos_ids().size();
-        db.nmos_list().push_back(new_mos);
-        db.nmos_ids().push_back(new_idx);
+      name.append(mos_name + "_finger_" + std::to_string(i));
+
+      new_mos.getMosName() = name;
+      new_mos.getLeft() = nmos.getLeft();
+      new_mos.getGate() = nmos.getGate();
+      new_mos.getRight() = nmos.getRight();
+      //width is even num
+      if ((int) nmos.getWidth() == nmos.getWidth())
+        new_mos.getWidth() = nmos.getWidth();
+      else {
+        if (i == 1)
+          new_mos.getWidth() = nmos.getWidth() + (float) 0.5;
+        else
+          new_mos.getWidth() = nmos.getWidth() - (float) 0.5;
       }
+//      new_mos.getWidth() = nmos.getWidth();
+      db.nmos_list().push_back(new_mos);
+
+      index new_index = i + db.nmos_ids().size() - 1;
+      db.nmos_ids().push_back(new_index);
     }
 
-    //assign value after rounding up and down
-    if (last_width < 120) {
-      if (num_of_finger == 1) {
-        db.nmos_list().at(idx).getWidth() = 120;
-        Mos new_mos = createNewMos(nmos);
-        std::string name;
-        std::string mos_name = nmos.getMosName();
-        name.append(mos_name + "_finger_" + std::to_string(1));
-        new_mos.getMosName() = name;
-        new_mos.getWidth() = nmos.getWidth() - 120;
-        new_idx = db.nmos_ids().size();
-        db.nmos_list().push_back(new_mos);
-        db.nmos_ids().push_back(new_idx);
-      }
-
-      if (num_of_finger > 1) {
-        if ((last_width + nmos_mode) < 220) {
-          db.nmos_list().at(idx).getWidth() = nmos_mode;
-          Mos new_mos = createNewMos(nmos);
-          std::string name;
-          std::string mos_name = nmos.getMosName();
-          name.append(mos_name + "_finger_" + std::to_string(1));
-          new_mos.getMosName() = name;
-          new_mos.getWidth() = nmos_mode + last_width;
-          new_idx = db.nmos_ids().size();
-          db.nmos_list().push_back(new_mos);
-          db.nmos_ids().push_back(new_idx);
-/////////////////////
-          for (index i = 2; i < num_of_finger; i++) {
-            new_mos.getWidth() = nmos_mode;
-            std::string name;
-            std::string mos_name = nmos.getMosName();
-            name.append(mos_name + "_finger_" + std::to_string(i));
-            new_mos.getMosName() = name;
-            new_idx = db.nmos_ids().size();
-            db.nmos_list().push_back(new_mos);
-            db.nmos_ids().push_back(new_idx);
-          }
-        }
-
-        if ((last_width + nmos_mode) > 220) {
-          db.nmos_list().at(idx).getWidth() = 120;
-          Mos new_mos = createNewMos(nmos);
-          std::string name;
-          std::string mos_name = nmos.getMosName();
-          name.append(mos_name + "_finger_" + std::to_string(1));
-          new_mos.getMosName() = name;
-          new_mos.getWidth() = nmos_mode + last_width - 120;
-          new_idx = db.nmos_ids().size();
-          db.nmos_list().push_back(new_mos);
-          db.nmos_ids().push_back(new_idx);
-          for (index i = 2; i < (num_of_finger + 1); i++) {
-            new_mos.getWidth() = nmos_mode;
-            std::string name;
-            std::string mos_name = nmos.getMosName();
-            name.append(mos_name + "_finger_" + std::to_string(i));
-            new_mos.getMosName() = name;
-            new_idx = db.nmos_ids().size();
-            db.nmos_list().push_back(new_mos);
-            db.nmos_ids().push_back(new_idx);
-          }
-        }
-      }
-    }
   }
-
   idx = -1;
   for (auto &pmos : db1.pmos_list()) {
     idx++;
-    if (pmos.getWidth() < 220 || pmos.getWidth() == 120) {
+    if (pmos.getWidth() < 220) {
       continue;
     }
-
-    index num_of_finger;
-    num_of_finger = std::floor(pmos.getWidth() / pmos_mode);
-    float last_width = pmos.getWidth() - (float) num_of_finger * pmos_mode;
-
-    //direct assignment
-    if (last_width > 120) {
-      db.pmos_list().at(idx).getWidth() = last_width;
-      for (index i = 1; i < (num_of_finger + 1); i++) {
-        Mos new_mos = createNewMos(pmos);
-        new_mos.getWidth() = pmos_mode;
-        std::string name;
-        std::string mos_name = pmos.getMosName();
-        name.append(mos_name + "_finger_" + std::to_string(i));
-        new_mos.getMosName() = name;
-        new_idx = db.pmos_ids().size();
-        db.pmos_list().push_back(new_mos);
-        db.pmos_ids().push_back(new_idx);
-      }
+    index n;
+    n = std::ceil(pmos.getWidth() / 220);
+    pmos.getWidth() = (float) std::round((pmos.getWidth() / (float) n) * 100) / 100;
+    if ((int) pmos.getWidth() == pmos.getWidth())
+      db.pmos_list().at(idx).getWidth() = pmos.getWidth();
+    else {
+      if (idx == 0)
+        db.pmos_list().at(idx).getWidth() = pmos.getWidth() + (float) 0.5;
+      else
+        db.pmos_list().at(idx).getWidth() = pmos.getWidth() - (float) 0.5;
     }
-
-    //assign value after rounding up and down
-    if (last_width < 120) {
-      if (num_of_finger == 1) {
-        db.pmos_list().at(idx).getWidth() = 120;
-        Mos new_mos = createNewMos(pmos);
-        std::string name;
-        std::string mos_name = pmos.getMosName();
-        name.append(mos_name + "_finger_" + std::to_string(1));
-        new_mos.getMosName() = name;
-        new_mos.getWidth() = pmos.getWidth() - 120;
-        new_idx = db.pmos_ids().size();
-        db.pmos_list().push_back(new_mos);
-        db.pmos_ids().push_back(new_idx);
+    for (index i = 1; i < n; i++) {
+      Mos new_mos;
+      new_mos.getType() = 1;
+      std::string mos_name;
+      mos_name.append(pmos.getMosName() + "_finger_" + std::to_string(i));
+      new_mos.getMosName() = mos_name;
+      new_mos.getLeft() = pmos.getLeft();
+      new_mos.getGate() = pmos.getGate();
+      new_mos.getRight() = pmos.getRight();
+      if ((int) pmos.getWidth() == pmos.getWidth())
+        new_mos.getWidth() = pmos.getWidth();
+      else {
+        if (i == 1)
+          new_mos.getWidth() = pmos.getWidth() + (float) 0.5;
+        else
+          new_mos.getWidth() = pmos.getWidth() - (float) 0.5;
       }
-
-      if (num_of_finger > 1) {
-        if ((last_width + pmos_mode) < 220) {
-          db.pmos_list().at(idx).getWidth() = pmos_mode;
-          Mos new_mos = createNewMos(pmos);
-          std::string name;
-          std::string mos_name = pmos.getMosName();
-          name.append(mos_name + "_finger_" + std::to_string(1));
-          new_mos.getMosName() = name;
-          new_mos.getWidth() = pmos_mode + last_width;
-          new_idx = db.pmos_ids().size();
-          db.pmos_list().push_back(new_mos);
-          db.pmos_ids().push_back(new_idx);
-/////////////////////
-          for (index i = 2; i < num_of_finger; i++) {
-            new_mos.getWidth() = pmos_mode;
-            std::string name;
-            std::string mos_name = pmos.getMosName();
-            name.append(mos_name + "_finger_" + std::to_string(i));
-            new_mos.getMosName() = name;
-            new_idx = db.pmos_ids().size();
-            db.pmos_list().push_back(new_mos);
-            db.pmos_ids().push_back(new_idx);
-          }
-        }
-
-        if ((last_width + pmos_mode) > 220) {
-          db.pmos_list().at(idx).getWidth() = 120;
-          Mos new_mos = createNewMos(pmos);
-          std::string name;
-          std::string mos_name = pmos.getMosName();
-          name.append(mos_name + "_finger_" + std::to_string(1));
-          new_mos.getMosName() = name;
-          new_mos.getWidth() = pmos_mode + last_width - 120;
-          new_idx = db.nmos_ids().size();
-          db.pmos_list().push_back(new_mos);
-          db.pmos_ids().push_back(new_idx);
-          for (index i = 2; i < (num_of_finger + 1); i++) {
-            new_mos.getWidth() = pmos_mode;
-            std::string name;
-            std::string mos_name = pmos.getMosName();
-            name.append(mos_name + "_finger_" + std::to_string(i));
-            new_mos.getMosName() = name;
-            new_idx = db.pmos_ids().size();
-            db.pmos_list().push_back(new_mos);
-            db.pmos_ids().push_back(new_idx);
-          }
-        }
-      }
+      db.pmos_list().push_back(new_mos);
+      index new_index = i + db.pmos_ids().size();
+      db.pmos_ids().push_back(new_index);
     }
   }
-}
-
-Mos gigaplace::PlaceDB::createNewMos(Mos &mos) {
-  Mos new_mos{};
-  new_mos.getType() = mos.getType();
-  new_mos.getLeft() = mos.getLeft();
-  new_mos.getGate() = mos.getGate();
-  new_mos.getRight() = mos.getRight();
-  return new_mos;
 }

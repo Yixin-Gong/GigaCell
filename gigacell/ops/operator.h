@@ -49,7 +49,7 @@ namespace gigaplace {
 
         static void swap(PlaceDB &pl_db, index &pair1, index &pair2);
 
-        static int32_t shouldShare(PlaceDB &pl_db, PlaceDB::Configuration &c1, PlaceDB::Configuration &c2);
+        static int32_t ShareStatus(PlaceDB &pl_db, PlaceDB::Configuration &c1, PlaceDB::Configuration &c2);
 
         static void share(PlaceDB &pl_db, std::vector<PlaceDB::Configuration> &config_list);
 
@@ -71,7 +71,11 @@ namespace gigaplace {
 
         static void splitConfig(PlaceDB &pl_db,index &split_pair);
 
-        static int32_t getShouldDo(PlaceDB &pl_db,PlaceDB::Configuration &c1,PlaceDB::Configuration &c2,std::vector<index> &v_special_mos_ids);
+        static int32_t ShareMode(PlaceDB &pl_db, PlaceDB::Configuration &c1, PlaceDB::Configuration &c2, std::vector<std::pair<std::string, index>> &v_special_mos_pair);
+
+        static void fixConfigNet(PlaceDB &pl_db,PlaceDB::Configuration &c1,PlaceDB::Configuration &c2,std::pair<std::string,index> &special_mos);
     };
+
+
 }
 #endif //GIGACELL_GIGACELL_OPS_OPERATOR_H_
