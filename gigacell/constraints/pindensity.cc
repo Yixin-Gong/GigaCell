@@ -7,12 +7,12 @@
 float gigaplace::PinDensity::getPinAccess() {
   Area area(pl_db_);
   auto width = area.calWidth();
-  std::vector<std::string> v_pin_name{};
+//  std::vector<std::string> v_pin_name{};
   std::vector<float> pin_coords{};
-  for (auto &pin : pl_db_.v_pin_list())
-    v_pin_name.push_back(pin.pinName);
+//  for (auto &pin : pl_db_.v_pin_list())
+//    v_pin_name.push_back(pin.pinName);
   for (auto &kNet : pl_db_.nets()) {
-    if (isPinNet(kNet.first, v_pin_name)) {
+    if (isPinNet(kNet.first, pl_db_.v_pin())) {
       pin_coords.push_back(0);
       std::vector<float> net_pos{};
       float max_distance = -std::numeric_limits<float>::max();
@@ -28,7 +28,7 @@ float gigaplace::PinDensity::getPinAccess() {
       }
       std::vector<float> another_pos{};
       for (auto &kNet1 : pl_db_.nets()) {
-        if (isPinNet(kNet1.first, v_pin_name) && kNet1.first != kNet.first) {
+        if (isPinNet(kNet1.first, pl_db_.v_pin()) && kNet1.first != kNet.first) {
           for (auto &kMos : kNet1.second) {
             if (pl_db_.mos_list().at(kMos.idx).getMosName().find("finger")!=std::string::npos)
               continue;

@@ -57,7 +57,7 @@ void gigaplace::PlaceObj::getWidthScore() {
 void gigaplace::PlaceObj::getNetScore() {
   NetLength netlength(pl_db_);
   auto bbox = netlength.calNetLength();
-  auto pin_len = (float) pl_db_.v_pin_list().size();
+  auto pin_len = (float) pl_db_.v_pin().size();
   bs_ = std::min((float) 20, 20 * (1 - (bbox - cell_ref_width_ * (pin_len - 1)) / 60));
 }
 void gigaplace::PlaceObj::init() {

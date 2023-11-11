@@ -12,7 +12,6 @@ void gigaplace::Parser::parse() {
     return;
   }
   Mos mos;
-  DataBase::Pin pin;;
   std::string subStr;
   int32_t pmos_idx = 0;
   int32_t nmos_idx = 0;
@@ -34,20 +33,17 @@ void gigaplace::Parser::parse() {
         for(int32_t i = 2; i < tokens.size()-1; i++){
           if(tokens[i] == "VDD" || tokens[i] == "VSS" )
             continue;
-          pin.pinName = tokens[i];
-          db_.v_pin_list().push_back(pin);
+          db_.v_pin_list().push_back(tokens[i]);
         }
       }else{
         for(int32_t i =2; i < tokens.size() ; i++){
           if(tokens[i] == "VDD" || tokens[i] == "VSS" || tokens[i] == "VDD\r" || tokens[i] == "VSS\r")
             continue;
           if(i == tokens.size() - 1){
-            pin.pinName = tokens[i].substr(0, tokens[i].size() - 1);
-            db_.v_pin_list().push_back(pin);
+            db_.v_pin_list().push_back(tokens[i].substr(0, tokens[i].size() - 1));
             continue;
           }
-          pin.pinName = tokens[i];
-          db_.v_pin_list().push_back(pin);
+          db_.v_pin_list().push_back(tokens[i]);
         }
       }
       continue;

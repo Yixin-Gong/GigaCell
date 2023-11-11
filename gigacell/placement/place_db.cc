@@ -87,7 +87,7 @@ void gigaplace::PlaceDB::init() {
     idx++;
   }
   for (auto &pin : db_.v_pin_list())
-    v_pin_list().push_back(pin);
+    v_pin().push_back(pin);
 
 }
 void gigaplace::PlaceDB::fold(gigaplace::DataBase &db) {
