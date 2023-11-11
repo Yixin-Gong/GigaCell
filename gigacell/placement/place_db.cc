@@ -100,42 +100,31 @@ void gigaplace::PlaceDB::fold(gigaplace::DataBase &db) {
     }
     index n;
     n = std::ceil(nmos.getWidth() / 220);
-    nmos.getWidth() = (float) std::round((nmos.getWidth() / (float) n) * 100) / 100;
-    if ((int) nmos.getWidth() == nmos.getWidth())
-      db.nmos_list().at(idx).getWidth() = nmos.getWidth();
-    else {
-      if (idx == 0)
-        db.nmos_list().at(idx).getWidth() = nmos.getWidth() + (float) 0.5;
-      else
-        db.nmos_list().at(idx).getWidth() = nmos.getWidth() - (float) 0.5;
+    auto new_width = (float) std::round((nmos.getWidth() / (float) n) * 100) / 100;
+    db.nmos_list().at(idx).getWidth() = nmos.getWidth() - (float) (n - 1) * std::floor(new_width);
+    float diff = 0;
+    if (db.nmos_list().at(idx).getWidth() > 220) {
+      diff = db.nmos_list().at(idx).getWidth() - 220;
+      db.nmos_list().at(idx).getWidth() = 220;
     }
     for (index i = 1; i < n; i++) {
       Mos new_mos;
       new_mos.getType() = 0;
-
       std::string name;
       std::string mos_name = nmos.getMosName();
-
       name.append(mos_name + "_finger_" + std::to_string(i));
-
       new_mos.getMosName() = name;
       new_mos.getLeft() = nmos.getLeft();
       new_mos.getGate() = nmos.getGate();
       new_mos.getRight() = nmos.getRight();
-      //width is even num
-      if ((int) nmos.getWidth() == nmos.getWidth())
-        new_mos.getWidth() = nmos.getWidth();
-      else {
-        if (i == 1)
-          new_mos.getWidth() = nmos.getWidth() + (float) 0.5;
-        else
-          new_mos.getWidth() = nmos.getWidth() - (float) 0.5;
-      }
-//      new_mos.getWidth() = nmos.getWidth();
+      if (diff > 0)
+        new_mos.getWidth() = std::floor(new_width) + 1;
+      else
+        new_mos.getWidth() = std::floor(new_width);
       db.nmos_list().push_back(new_mos);
-
       index new_index = i + db.nmos_ids().size() - 1;
       db.nmos_ids().push_back(new_index);
+      diff--;
     }
 
   }
@@ -147,14 +136,12 @@ void gigaplace::PlaceDB::fold(gigaplace::DataBase &db) {
     }
     index n;
     n = std::ceil(pmos.getWidth() / 220);
-    pmos.getWidth() = (float) std::round((pmos.getWidth() / (float) n) * 100) / 100;
-    if ((int) pmos.getWidth() == pmos.getWidth())
-      db.pmos_list().at(idx).getWidth() = pmos.getWidth();
-    else {
-      if (idx == 0)
-        db.pmos_list().at(idx).getWidth() = pmos.getWidth() + (float) 0.5;
-      else
-        db.pmos_list().at(idx).getWidth() = pmos.getWidth() - (float) 0.5;
+    auto new_width = (float) std::round((pmos.getWidth() / (float) n) * 100) / 100;
+    float diff = 0;
+    db.pmos_list().at(idx).getWidth() = pmos.getWidth() - (float) (n - 1) * std::floor(new_width);
+    if (db.pmos_list().at(idx).getWidth() > 220) {
+      diff = db.pmos_list().at(idx).getWidth() - 220;
+      db.pmos_list().at(idx).getWidth() = 220;
     }
     for (index i = 1; i < n; i++) {
       Mos new_mos;
@@ -165,17 +152,14 @@ void gigaplace::PlaceDB::fold(gigaplace::DataBase &db) {
       new_mos.getLeft() = pmos.getLeft();
       new_mos.getGate() = pmos.getGate();
       new_mos.getRight() = pmos.getRight();
-      if ((int) pmos.getWidth() == pmos.getWidth())
-        new_mos.getWidth() = pmos.getWidth();
-      else {
-        if (i == 1)
-          new_mos.getWidth() = pmos.getWidth() + (float) 0.5;
-        else
-          new_mos.getWidth() = pmos.getWidth() - (float) 0.5;
-      }
+      if (diff > 0)
+        new_mos.getWidth() = std::floor(new_width) + 1;
+      else
+        new_mos.getWidth() = std::floor(new_width);
       db.pmos_list().push_back(new_mos);
       index new_index = i + db.pmos_ids().size();
       db.pmos_ids().push_back(new_index);
+      diff--;
     }
   }
 }
