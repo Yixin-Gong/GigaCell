@@ -65,7 +65,7 @@ class PlaceDB {
   std::vector<index> &config_ids() { return config_ids_; }
   std::vector<Configuration> &v_config() { return v_config_; }
   std::list<Configuration> &l_config() { return l_config_; }
-  std::vector<DataBase::Pin> &v_pin_list(){return v_pin_list_;}
+  std::vector<std::string> &v_pin() {return v_pin_;}
  private:
   DataBase &db_;
   std::unordered_map<std::string, std::vector<Net2Mos>> nets_{};
@@ -81,7 +81,7 @@ class PlaceDB {
   std::vector<index> config_ids_{};
   std::vector<Configuration> v_config_{};
   std::list<Configuration> l_config_{};
-  std::vector<DataBase::Pin> v_pin_list_{};
+  std::vector<std::string> v_pin_{};
 };
 
 }
