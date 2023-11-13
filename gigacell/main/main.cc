@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 
     auto giga_place = new gigaplace::GigaPlace(current_pl_db,ref_width,10000000);
 //    giga_place->SAPlace(index - 1,current_pl_db);
-    giga_place->GPlace(index-1);
+    giga_place->MLASPlace(index-1);
 
     gigaplace::writer::exporter(current_pl_db);
     delete giga_place;
