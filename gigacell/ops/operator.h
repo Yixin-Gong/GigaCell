@@ -63,7 +63,7 @@ namespace gigaplace {
 
         static void pairSingleMos(PlaceDB &pl_db);
 
-        static void v_configTol_config(gigaplace::PlaceDB &pl_db);
+        static void v_configTol_config(std::vector<PlaceDB::Configuration> &v_config,std::list<PlaceDB::Configuration> &l_config);
 
         static void setCoordinates(gigaplace::PlaceDB &pl_db, std::list<PlaceDB::Configuration> &l_config);
 
@@ -74,6 +74,8 @@ namespace gigaplace {
         static int32_t ShareMode(PlaceDB &pl_db, PlaceDB::Configuration &c1, PlaceDB::Configuration &c2, std::vector<std::pair<std::string, index>> &v_special_mos_pair);
 
         static void fixConfigNet(PlaceDB &pl_db,PlaceDB::Configuration &c1,PlaceDB::Configuration &c2,std::pair<std::string,index> &special_mos);
+
+        static bool createNewInitPair(PlaceDB &pl_db,index &pair1,index &pair2);
     };
 
 

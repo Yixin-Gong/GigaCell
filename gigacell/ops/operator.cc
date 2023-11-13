@@ -632,9 +632,9 @@ void gigaplace::Operator::pairSingleMos(gigaplace::PlaceDB &pl_db) {
   }
 }
 
-void gigaplace::Operator::v_configTol_config(gigaplace::PlaceDB &pl_db) {
-  for (auto &config : pl_db.v_config())
-    pl_db.l_config().push_back(config);
+void gigaplace::Operator::v_configTol_config(std::vector<PlaceDB::Configuration> &v_config,std::list<PlaceDB::Configuration> &l_config) {
+  for (auto &config : v_config)
+    l_config.push_back(config);
 }
 
 void gigaplace::Operator::setCoordinates(gigaplace::PlaceDB &pl_db,
@@ -1361,4 +1361,21 @@ void gigaplace::Operator::fixConfigNet(gigaplace::PlaceDB &pl_db,
   else if (special_mos.first == "c2_r0")
     c2.right_net0 = pl_db.mos_list().at(special_mos.second).getRight();
 
+}
+bool gigaplace::Operator::createNewInitPair(gigaplace::PlaceDB &pl_db,
+                                            gigaplace::index &pair1,
+                                            gigaplace::index &pair2) {
+        if(pl_db.mos_list().at(pl_db.v_config().at(pair1).pair_list.at(0).pmos_idx).getGate() == pl_db.mos_list().at(pl_db.v_config().at(pair2).pair_list.at(0).pmos_idx).getGate()){
+          index temp_p=pl_db.v_config().at(pair1).pair_list.at(0).pmos_idx;
+          pl_db.v_config().at(pair1).pair_list.at(0).pmos_idx = pl_db.v_config().at(pair2).pair_list.at(0).pmos_idx;
+          pl_db.v_config().at(pair2).pair_list.at(0).pmos_idx = temp_p;
+          std::string temp_l1 = pl_db.v_config().at(pair1).left_net1;
+          std::string temp_r1 = pl_db.v_config().at(pair1).right_net1;
+          pl_db.v_config().at(pair1).left_net1 = pl_db.v_config().at(pair2).left_net1;
+          pl_db.v_config().at(pair1).right_net1 = pl_db.v_config().at(pair2).right_net1;
+          pl_db.v_config().at(pair2).left_net1 = temp_l1;
+          pl_db.v_config().at(pair2).right_net1 = temp_r1;
+          return true;
+        } else
+          return false;
 }
