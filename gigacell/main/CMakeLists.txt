@@ -20,11 +20,12 @@ set(LINK_LIBS
         writer_cxx
         constraints_cxx
         ops_cxx
-        partition_cxx
-        /usr/local/lib/libkahypar.so
+        -static-libgcc
+        -static-libstdc++
 )
 include_directories(utils)
 add_executable(GigaPlace ${BIN_SOURCES} ${CPP_SOURCES})
 target_include_directories(GigaPlace PUBLIC ${INCLUDE_DIRS})
+set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
 target_link_directories(GigaPlace PUBLIC ${LINK_LIBS})
 target_link_libraries(GigaPlace PUBLIC ${LINK_LIBS})

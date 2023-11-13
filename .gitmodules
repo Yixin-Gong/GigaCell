@@ -1,6 +1,0 @@
-[submodule "thirdparty"]
-	path = thirdparty/kahypar
-	url = https://github.com/kahypar/kahypar.git
-[submodule "thirdparty/kahypar"]
-	path = thirdparty/kahypar
-	url = https://github.com/kahypar/kahypar.git
