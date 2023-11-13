@@ -10,8 +10,9 @@
 namespace gigaplace {
 class GigaPlace {
  public:
-  explicit GigaPlace(PlaceDB &pl_db, float &ref_width, float T) : pl_db_(pl_db), ref_width_(ref_width), T_(10000) {};
-  void SAPlace(uint16_t pair_num);
+  explicit GigaPlace(PlaceDB &pl_db, float &ref_width, float T) : pl_db_(pl_db), ref_width_(ref_width), SA_T_(T) {};
+  float SAPlace(uint16_t pair_num,PlaceDB &temp_pl_db);
+  void GPlace(uint16_t pair_num);
   static float computeDeltaC(float &new_cost, float &old_cost);
   static bool accept(float &delta_c, float T);
   static std::pair<uint16_t, uint16_t> generate2Num(uint16_t pair_num);
@@ -19,8 +20,9 @@ class GigaPlace {
  private:
   PlaceDB &pl_db_;
   float &ref_width_;
-  float T_;
-  float score_;
+  float SA_T_;
+  float score_{};
+  float G_T_ = 100;
 };
 }
 #endif //GIGACELL_GIGACELL_MAIN_GIGAPLACE_H_
