@@ -1365,7 +1365,6 @@ void gigaplace::Operator::fixConfigNet(gigaplace::PlaceDB &pl_db,
 void gigaplace::Operator::createNewInitPair(gigaplace::PlaceDB &pl_db,
                                             gigaplace::index &pair1,
                                             gigaplace::index &pair2) {
-//        if(pl_db.mos_list().at(pl_db.v_config().at(pair1).pair_list.at(0).pmos_idx).getGate() == pl_db.mos_list().at(pl_db.v_config().at(pair2).pair_list.at(0).pmos_idx).getGate()){
           index temp_p=pl_db.v_config().at(pair1).pair_list.at(0).pmos_idx;
           pl_db.v_config().at(pair1).pair_list.at(0).pmos_idx = pl_db.v_config().at(pair2).pair_list.at(0).pmos_idx;
           pl_db.v_config().at(pair2).pair_list.at(0).pmos_idx = temp_p;
@@ -1375,7 +1374,4 @@ void gigaplace::Operator::createNewInitPair(gigaplace::PlaceDB &pl_db,
           pl_db.v_config().at(pair1).right_net1 = pl_db.v_config().at(pair2).right_net1;
           pl_db.v_config().at(pair2).left_net1 = temp_l1;
           pl_db.v_config().at(pair2).right_net1 = temp_r1;
-//          return true;
-//        } else
-//          return false;
 }
