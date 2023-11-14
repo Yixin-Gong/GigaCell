@@ -33,9 +33,9 @@ std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::generate2Num(uint16_t pair_n
   return pair;
 }
 
-float gigaplace::GigaPlace::SAPlace(uint16_t pair_num, PlaceDB &temp_pl_db) {
-  float old_cost = 0;
-  float new_cost = 0;
+float gigaplace::GigaPlace::SAPlace(uint16_t pair_num,PlaceDB &temp_pl_db) {
+   float old_cost =0;
+   float new_cost = 0;
 //  auto iter = 0;
   while (SA_T_ > 0.000001) {
     Operator::setCoordinates(temp_pl_db, temp_pl_db.l_config());
@@ -178,3 +178,52 @@ std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::selectPairMos(gigaplace::Pla
   return get2pair;
 }
 
+void gigaplace::GigaPlace::MLASPlace(uint16_t pair_num) {
+  int Eval = 300000;
+  for (int i = 0; i < Eval; ++i) {
+    Operator::setCoordinates(pl_db_, pl_db_.l_config());
+    auto place_obj = new gigaplace::PlaceObj(pl_db_, ref_width_);
+
+    auto config_list = pl_db_.l_config();
+    auto mos_list = pl_db_.mos_list();
+    auto nets = pl_db_.nets();
+
+    auto old_cost = -place_obj->get_score();
+    score_ = old_cost;
+    std::cout << "old_cost" << old_cost << std::endl;
+    auto pair = generate2Num(pair_num);
+    delete place_obj;
+    Operator::createNewLayout(pl_db_, pair.first, pair.second);
+    Operator::setCoordinates(pl_db_, pl_db_.l_config());
+
+    place_obj = new gigaplace::PlaceObj(pl_db_, ref_width_);
+
+    auto new_cost = -place_obj->get_score();
+    std::cout << "new_cost" << new_cost << std::endl;
+    delete place_obj;
+
+    auto delta_C = computeDeltaC(new_cost, old_cost);
+    if (delta_C < 0)
+      MLASS_accept_rate_ = (float) 0.002 * (499 * MLASS_accept_rate_ + 1);
+    else {
+      if (accept(delta_C, MLASS_T_)) {
+        MLASS_accept_rate_ = (float) 0.002 * (499 * MLASS_accept_rate_ + 1);
+      } else {
+        pl_db_.l_config() = config_list;
+        pl_db_.mos_list() = mos_list;
+        pl_db_.nets() = nets;
+        MLASS_accept_rate_ = (float) 0.002 * (499 * MLASS_accept_rate_);
+      }
+    }
+    if ((float)i/(float )Eval<0.15)
+      MLASS_lam_rate_ = 0.44 + 0.56 * std::pow(560, -((float) i / (float) Eval) / 0.15);
+    else if((float)i/(float )Eval<0.65&&(float)i/(float)Eval>=0.15)
+      MLASS_lam_rate_ = 0.44;
+    else if ((float)i/(float)Eval>=0.65)
+      MLASS_lam_rate_ = 0.44*std::pow(440,-(((float)i/(float)Eval)-0.65)/0.35);
+    if (MLASS_accept_rate_>MLASS_lam_rate_)
+      MLASS_T_ *= 0.999;
+    else
+      MLASS_T_ /= 0.999;
+  }
+}
