@@ -75,7 +75,7 @@ namespace gigaplace {
 
         static void fixConfigNet(PlaceDB &pl_db,PlaceDB::Configuration &c1,PlaceDB::Configuration &c2,std::pair<std::string,index> &special_mos);
 
-        static bool createNewInitPair(PlaceDB &pl_db,index &pair1,index &pair2);
+        static void createNewInitPair(PlaceDB &pl_db,index &pair1,index &pair2);
     };
 
 
