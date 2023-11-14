@@ -15,6 +15,7 @@ class GigaPlace {
   void GPlace(uint16_t pair_num);
   static float computeDeltaC(float &new_cost, float &old_cost);
   static bool accept(float &delta_c, float T);
+  static std::pair<uint16_t ,uint16_t > selectPairMos(PlaceDB &pl_db,std::vector<PlaceDB::Configuration> &v_config);
   static std::pair<uint16_t, uint16_t> generate2Num(uint16_t pair_num);
   float &get_score() { return score_; }
  private:
@@ -22,7 +23,7 @@ class GigaPlace {
   float &ref_width_;
   float SA_T_;
   float score_{};
-  float G_T_ = 100;
+  float G_T_ = 200;
 };
 }
 #endif //GIGACELL_GIGACELL_MAIN_GIGAPLACE_H_
