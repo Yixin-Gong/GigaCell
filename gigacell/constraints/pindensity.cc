@@ -17,8 +17,8 @@ float gigaplace::PinDensity::getPinAccess() {
       std::vector<float> net_pos{};
       float max_distance = -std::numeric_limits<float>::max();
       for (auto &kMos : kNet.second) {
-        if (pl_db_.mos_list().at(kMos.idx).getMosName().find("finger")!=std::string::npos)
-          continue;
+//        if (pl_db_.mos_list().at(kMos.idx).getMosName().find("finger")!=std::string::npos)
+//          continue;
         if (kMos.electrode_name == "left")
           net_pos.push_back(pl_db_.mos_list().at(kMos.idx).getLeftLoc());
         else if (kMos.electrode_name == "gate")
@@ -30,8 +30,8 @@ float gigaplace::PinDensity::getPinAccess() {
       for (auto &kNet1 : pl_db_.nets()) {
         if (isPinNet(kNet1.first, pl_db_.v_pin_list()) && kNet1.first != kNet.first) {
           for (auto &kMos : kNet1.second) {
-            if (pl_db_.mos_list().at(kMos.idx).getMosName().find("finger")!=std::string::npos)
-              continue;
+//            if (pl_db_.mos_list().at(kMos.idx).getMosName().find("finger")!=std::string::npos)
+//              continue;
             if (kMos.electrode_name == "left")
               another_pos.push_back(pl_db_.mos_list().at(kMos.idx).getLeftLoc());
             else if (kMos.electrode_name == "gate")

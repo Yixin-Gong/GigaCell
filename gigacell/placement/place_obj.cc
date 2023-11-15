@@ -64,12 +64,12 @@ void gigaplace::PlaceObj::init() {
   getCellRefWidth();
   getWidthScore();
   getNetScore();
-//  getPinScore();
+  getPinScore();
   getNotchScore();
-  score_ = ws_ + bs_ +ns_;
+  score_ = ws_ + bs_ +ns_ +ps_;
 //  std::cout<<ws_<<std::endl;
 //  std::cout<<bs_<<std::endl;
-//  std::cout<<ps_<<std::endl;
+  std::cout<<ps_<<std::endl;
 //  std::cout<<ns_<<std::endl;
 
 }
@@ -81,39 +81,13 @@ void gigaplace::PlaceObj::getPinScore() {
 }
 void gigaplace::PlaceObj::getSymmetric() {
   symmetric_ = 10;
-  float flag = 0;
-  float num = 0;
-  float i = 1;
-  for(auto &pmos : pl_db_.mos_list()){
-    if(pmos.getType() == 0)
-      continue;
-    for(auto &nmos : pl_db_.mos_list()){
-      if(nmos.getType() == 1)
-        continue;
-      if(pmos.getGateLoc() != nmos.getGateLoc())
-        continue;
-      else
-        i = 0;
-    }
-    num += i;
-    i = 1;
+  float num_dummy = 0;
+  for(auto &mos : pl_db_.mos_list()){
+    if(mos.getDummyFlag())
+      num_dummy++;
   }
-
-  for(auto &nmos : pl_db_.mos_list()){
-    if(nmos.getType() == 1)
-      continue;
-    for(auto &pmos : pl_db_.mos_list()){
-      if(pmos.getType() == 0)
-        continue;
-      if(pmos.getGateLoc() != nmos.getGateLoc())
-        continue;
-      else
-        i = 0;
-    }
-    num +=i;
-    i = 1;
-  }
-  symmetric_ -= num;
+  symmetric_ -= num_dummy;
+  std::cout << symmetric_ << std::endl;
 }
 void gigaplace::PlaceObj::getNotchScore() {
   Notch notch(pl_db_);
