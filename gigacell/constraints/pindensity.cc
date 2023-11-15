@@ -92,11 +92,10 @@ bool gigaplace::PinDensity::isPinNet(const std::string &netName, const std::vect
 float gigaplace::PinDensity::calStandardDeviation(const std::vector<float> &pin_spacing) {
   float sum = 0;
   auto N = (float) pin_spacing.size();
-  float average;
-  float variance;
+  float variance{};
   for (auto &val : pin_spacing)
     sum += val;
-  average = sum / N;
+  auto average = sum / N;
   for (auto &val : pin_spacing)
     variance += (float) std::pow(val - average, 2);
   variance = variance / N;
