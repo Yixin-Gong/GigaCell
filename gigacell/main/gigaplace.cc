@@ -189,14 +189,14 @@ float gigaplace::GigaPlace::MLASPlace(uint16_t pair_num, PlaceDB &temp_pl_db) {
     auto nets = temp_pl_db.nets();
 
     old_cost = -place_obj->get_score();
-    std::cout << "old_cost" << old_cost << std::endl;
+//    std::cout << "old_cost" << old_cost << std::endl;
     auto pair = generate2Num(pair_num);
     delete place_obj;
     Operator::createNewLayout(temp_pl_db, pair.first, pair.second);
     Operator::setCoordinates(temp_pl_db, temp_pl_db.l_config());
     place_obj = new gigaplace::PlaceObj(temp_pl_db, ref_width_);
     new_cost = -place_obj->get_score();
-    std::cout << "new_cost" << new_cost << std::endl;
+//    std::cout << "new_cost" << new_cost << std::endl;
     delete place_obj;
 
     auto delta_C = computeDeltaC(new_cost, old_cost);
@@ -283,7 +283,7 @@ void gigaplace::GigaPlace::GDUTPlace(uint16_t pair_num) {
       pl_db_.mos_list() = tmp_pl_db1.mos_list();
       pl_db_.nets() = tmp_pl_db1.nets();
     }
-//    std::cout << "old_cost" << ' ' << old_cost << std::endl;
+    std::cout << "old_cost" << ' ' << old_cost << std::endl;
     auto config_vector = pl_db_.v_config();
     auto config_list = pl_db_.l_config();
     auto mos_list = pl_db_.mos_list();
@@ -301,7 +301,7 @@ void gigaplace::GigaPlace::GDUTPlace(uint16_t pair_num) {
       pl_db_.mos_list() = tmp_pl_db2.mos_list();
       pl_db_.nets() = tmp_pl_db2.nets();
     }
-//    std::cout << "new_cost" << ' ' << new_cost << std::endl;
+    std::cout << "new_cost" << ' ' << new_cost << std::endl;
     auto delta_C = computeDeltaC(new_cost, old_cost);
     if (delta_C < 0) {
       GDUT_accept_rate_ = (float) 0.002 * (499 * GDUT_accept_rate_ + 1);
