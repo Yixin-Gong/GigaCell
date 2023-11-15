@@ -9,7 +9,7 @@ using json = nlohmann::json;
 void gigaplace::Writer::output(){
   json j;
   json placement;
-  for (auto &kmos : pl_db.mos_list()) {
+  for (auto &kmos : pl_db_.mos_list()) {
     json mos;
     if (kmos.getDummyFlag())
       continue;
@@ -19,7 +19,7 @@ void gigaplace::Writer::output(){
     placement[kmos.getMosName()] = mos;
     j["placement"] = placement;
   }
-  std::ofstream os(cell_name_+".json");
+  std::ofstream os(output_path_+cell_name_+".json");
   os << std::setw(4) << j << std::endl;
   os.close();
 }
