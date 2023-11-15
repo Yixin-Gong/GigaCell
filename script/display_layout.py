@@ -41,7 +41,8 @@ for transistor_name, properties in placement.items():
         ax.add_patch(rect)
 
 ax.set_title(cell_name)
-ax.set_xlabel("X")
-ax.set_ylabel("Y")
+ax.set_xticks([])
+ax.set_yticks([])
+
 
 plt.show()
