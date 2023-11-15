@@ -14,10 +14,11 @@ class GigaPlace {
   float SAPlace(uint16_t pair_num, PlaceDB &temp_pl_db);
   float MLASPlace(uint16_t pair_num, PlaceDB &temp_pl_db);
   void GPlace(uint16_t pair_num);
-  void GDUTPlace(uint16_t pair_num);
+//  void GDUTPlace(uint16_t pair_num);
   static float computeDeltaC(float &new_cost, float &old_cost);
   static bool accept(float &delta_c, float T);
   static std::pair<uint16_t ,uint16_t > selectPairMos(PlaceDB &pl_db,std::vector<PlaceDB::Configuration> &v_config);
+  static bool isPlace(PlaceDB &pl_db,std::vector<PlaceDB::Configuration> &v_config);
   static std::pair<uint16_t, uint16_t> generate2Num(uint16_t pair_num);
   float &get_score() { return score_; }
  private:

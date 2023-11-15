@@ -227,3 +227,44 @@ float gigaplace::GigaPlace::MLASPlace(uint16_t pair_num, PlaceDB &temp_pl_db) {
   MLASS_T_ = 0.5;
   return old_cost;
 }
+bool gigaplace::GigaPlace::isPlace(gigaplace::PlaceDB &pl_db, std::vector<PlaceDB::Configuration> &v_config) {
+  std::unordered_map<std::string, index> name_map{};
+  std::vector<std::string> gate_name{};
+  std::vector<std::vector<index>> same_gate_pair{};
+  std::vector<index> empty{};
+
+  //get gate name
+  index i = 0;
+  for (auto kpair : v_config) {
+    auto &mos = pl_db.mos_list().at(kpair.pair_list.at(0).nmos_idx);
+    auto iter = name_map.find(mos.getGate());
+    if (iter == name_map.end()) {
+      name_map.emplace(mos.getGate(), i);
+      i++;
+      gate_name.push_back(mos.getGate());
+      same_gate_pair.push_back(empty);
+    }
+  }
+
+  for (auto &kpair : v_config) {
+    auto &mos = pl_db.mos_list().at(kpair.pair_list.at(0).nmos_idx);
+    auto iter = name_map.find(mos.getGate());
+    if (iter != name_map.end())
+      same_gate_pair.at(name_map.at(mos.getGate())).push_back(kpair.pair_list.at(0).pair_idx);
+  }
+
+  index j = 0;
+  for(auto &kgate_pair : same_gate_pair){
+    if(kgate_pair.size() != 1)
+      j++;
+  }
+  if(j != 0) {
+//    std::cout << "true" <<std::endl;
+    return true;
+  }
+  else{
+//    std::cout << "false" << std::endl;
+    return false;
+  }
+
+}
