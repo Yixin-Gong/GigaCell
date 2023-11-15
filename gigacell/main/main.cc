@@ -5,7 +5,7 @@ int main(int argc, char *argv[]) {
   cmdline::parser a;
   a.add<std::string>("file_name", 'n', "file name", true, "");
   a.add<std::string>("cell_name", 'c', "cell name", true, "");
-  a.add<std::string>("output_path",'o',"output_path", false,"");
+  a.add<std::string>("output_path", 'o', "output_path", false, "");
   a.parse_check(argc, argv);
   std::string file_name = a.get<std::string>("file_name");
   std::string cell_name = a.get<std::string>("cell_name");
@@ -32,16 +32,18 @@ int main(int argc, char *argv[]) {
     }
   }
   gigaplace::Operator::v_configTol_config((current_pl_db).v_config(), (current_pl_db).l_config());
-  auto giga_place = new gigaplace::GigaPlace(current_pl_db, ref_width, 10000000);
+  auto giga_place = gigaplace::GigaPlace(current_pl_db, ref_width, 10000000);
   if (!gigaplace::GigaPlace::isPlace(current_pl_db, current_pl_db.v_config()))
-    giga_place->MLASPlace(index - 1, current_pl_db);
+    giga_place.MLASPlace(index - 1, current_pl_db);
   else
-    giga_place->GDUTPlace(index - 1);
-  gigaplace::Writer writer(current_pl_db, cell_name,output_path);
+    giga_place.GDUTPlace(index - 1);
+  gigaplace::Writer writer(current_pl_db, cell_name, output_path);
   writer.output();
-  delete giga_place;
   auto end_time = std::chrono::high_resolution_clock::now();
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time_total);
-  std::cout << "Total runtime is " << (double) duration.count() / 1000000.0f << "s" << std::endl;
+  auto time = (double) duration.count() / 1000000.0f;
+  std::cout << "Total runtime is " << time << "s" << std::endl;
+  float rs = 10 * (1 / (1 + std::exp(time / 3600 - 1)));
+  std::cout << "Total score is " << -giga_place.get_score() + rs << std::endl;
   return 0;
 }
