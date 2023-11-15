@@ -31,11 +31,12 @@ int main(int argc, char *argv[]) {
   }
   gigaplace::Operator::v_configTol_config((current_pl_db).v_config(), (current_pl_db).l_config());
   auto giga_place = new gigaplace::GigaPlace(current_pl_db, ref_width, 10000000);
-//  if (!gigaplace::GigaPlace::isPlace(current_pl_db, current_pl_db.v_config()))
+  if (!gigaplace::GigaPlace::isPlace(current_pl_db, current_pl_db.v_config()))
     giga_place->MLASPlace(index - 1, current_pl_db);
-//  else
-//    giga_place->GDUTPlace(index - 1);
-  gigaplace::writer::exporter(current_pl_db);
+  else
+    giga_place->GDUTPlace(index - 1);
+  gigaplace::Writer writer(current_pl_db,cellname);
+  writer.output();
   delete giga_place;
   auto end_time = std::chrono::high_resolution_clock::now();
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time_total);
