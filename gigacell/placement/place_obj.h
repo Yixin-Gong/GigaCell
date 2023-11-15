@@ -9,7 +9,6 @@
 #include "constraints/netlength.h"
 #include "constraints/pindensity.h"
 #include "constraints/notch.h"
-#include <chrono>
 #include <cmath>
 #include <random>
 #include "placement/place_db.h"
@@ -31,7 +30,6 @@ class PlaceObj {
   void getNotchScore();
   void getSymmetric();
   float &get_score() { return score_; };
-  float &get_symmetric() {return symmetric_;};
 
   void init();
 
