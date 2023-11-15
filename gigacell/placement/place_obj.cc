@@ -70,7 +70,7 @@ void gigaplace::PlaceObj::init() {
   score_ = ws_ + bs_ + ns_ + ps_ + symmetric_;
 //  std::cout<<ws_<<std::endl;
 //  std::cout<<bs_<<std::endl;
-  std::cout<<ps_<<std::endl;
+//  std::cout<<ps_<<std::endl;
 //  std::cout<<ns_<<std::endl;
 
 }
