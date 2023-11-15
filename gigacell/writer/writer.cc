@@ -6,7 +6,7 @@
 #include "writer.h"
 using json = nlohmann::json;
 
-void gigaplace::writer::exporter(gigaplace::PlaceDB &pl_db) {
+void gigaplace::Writer::output(){
   json j;
   json placement;
   for (auto &kmos : pl_db.mos_list()) {
@@ -19,7 +19,7 @@ void gigaplace::writer::exporter(gigaplace::PlaceDB &pl_db) {
     placement[kmos.getMosName()] = mos;
     j["placement"] = placement;
   }
-  std::ofstream os("output.json");
+  std::ofstream os(cell_name_+".json");
   os << std::setw(4) << j << std::endl;
   os.close();
 }
