@@ -161,25 +161,32 @@ std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::selectPairMos(gigaplace::Pla
 
   std::random_device rd;
   std::mt19937 gen(rd());
-  uint16_t num_gate = gate_name.size() - 1;
+  uint16_t num_gate = same_gate_pair2.size() - 1;
   std::uniform_int_distribution<> distrib_num_gate(0, num_gate);
 //  std::cout << num_gate << std::endl;
   uint16_t random_num_gate = distrib_num_gate(gen);
 
   uint16_t num_gate_pair = same_gate_pair2.at(random_num_gate).size();
-
-  num_gate_pair = same_gate_pair2.at(random_num_gate).size();
+  while (num_gate_pair == 1) {
+    random_num_gate = distrib_num_gate(gen);
+    num_gate_pair = same_gate_pair2.at(random_num_gate).size();
+  }
 //  std::cout << random_num_gate << " " << num_gate_pair << std::endl;
   std::pair<uint16_t, uint16_t> get2pair{};
   std::pair f_get2pair = generate2Num(num_gate_pair - 1);
+
+//  while (pl_db.mos_list().at(f_get2pair.first).getDummyFlag()
+//      && pl_db.mos_list().at(f_get2pair.second).getDummyFlag()) {
+//    f_get2pair = generate2Num(num_gate_pair - 1);
+//  }
 //  std::cout << f_get2pair.first << ' ' << f_get2pair.second<<std::endl;
-  get2pair.first = same_gate_pair.at(random_num_gate).at(f_get2pair.first);
-  get2pair.second = same_gate_pair.at(random_num_gate).at(f_get2pair.second);
+  get2pair.first = same_gate_pair2.at(random_num_gate).at(f_get2pair.first);
+  get2pair.second = same_gate_pair2.at(random_num_gate).at(f_get2pair.second);
 //  std::cout << get2pair.first << ' ' << get2pair.second << std::endl;
   return get2pair;
 }
 float gigaplace::GigaPlace::MLASPlace(uint16_t pair_num, PlaceDB &temp_pl_db) {
-  int Eval = 30000;
+  int Eval = 2000 * pair_num;
   Operator::setCoordinates(temp_pl_db, temp_pl_db.l_config());
   auto place_obj = new gigaplace::PlaceObj(temp_pl_db, ref_width_);
   auto old_cost = -place_obj->get_score();
@@ -260,27 +267,32 @@ int32_t gigaplace::GigaPlace::numTactics(gigaplace::PlaceDB &pl_db, std::vector<
       same_gate_pair2.push_back(kgate);
   }
 
-  int32_t num_tactics = 0;
+  int32_t num_tactics = 1;
 //  int32_t m = 2;
-  for(auto &kgate : same_gate_pair2){
+  for (auto &kgate : same_gate_pair2) {
     int32_t res = 1;
     int32_t n = kgate.size();
-    for(int32_t j = 1; j <= 2; j++){
-      res = res * (n -j + 1)/j;
+    for (int32_t j = 1; j <= 2; j++) {
+      res = res * (n - j + 1) / j;
     }
-    num_tactics += res;
+    num_tactics *= res;
   }
- // std::cout << num_tactics << std::endl;
+  // std::cout << num_tactics << std::endl;
   return num_tactics;
 }
 
 void gigaplace::GigaPlace::GDUTPlace(uint16_t pair_num) {
-  int Eval = 200;
+  auto tactic_num = numTactics(pl_db_, pl_db_.v_config());
+  std::cout << "tactic num: " << tactic_num << std::endl;
+  if (tactic_num < 10)
+    tactic_num = 10;
+  int Eval = 20 * (int) std::log(tactic_num);
+  std::cout << "Eval Num: " << Eval << std::endl;
   pl_db_.l_config().clear();
   gigaplace::Operator::v_configTol_config(pl_db_.v_config(), pl_db_.l_config());
   auto old_cost = MLASPlace(pair_num, pl_db_);
   for (int i = 0; i < Eval; ++i) {
-    std::cout << "old_cost" << ' ' << old_cost << std::endl;
+//    std::cout << "old_cost" << ' ' << old_cost << std::endl;
     auto config_vector = pl_db_.v_config();
     auto config_list = pl_db_.l_config();
     auto mos_list = pl_db_.mos_list();
@@ -291,7 +303,7 @@ void gigaplace::GigaPlace::GDUTPlace(uint16_t pair_num) {
     pl_db_.l_config().clear();
     gigaplace::Operator::v_configTol_config(pl_db_.v_config(), pl_db_.l_config());
     auto new_cost = MLASPlace(pair_num, pl_db_);
-    std::cout << "new_cost" << ' ' << new_cost << std::endl;
+//    std::cout << "new_cost" << ' ' << new_cost << std::endl;
     auto delta_C = computeDeltaC(new_cost, old_cost);
     if (delta_C < 0) {
       GDUT_accept_rate_ = (float) 0.002 * (499 * GDUT_accept_rate_ + 1);
