@@ -6,10 +6,10 @@
 #include "writer.h"
 using json = nlohmann::json;
 
-void gigaplace::writer::exporter(gigaplace::PlaceDB &pl_db) {
+void gigaplace::Writer::output() {
   json j;
   json placement;
-  for (auto &kmos : pl_db.mos_list()) {
+  for (auto &kmos : pl_db_.mos_list()) {
     json mos;
     if (kmos.getDummyFlag())
       continue;
@@ -19,7 +19,13 @@ void gigaplace::writer::exporter(gigaplace::PlaceDB &pl_db) {
     placement[kmos.getMosName()] = mos;
     j["placement"] = placement;
   }
-  std::ofstream os("output.json");
-  os << std::setw(4) << j << std::endl;
-  os.close();
+  if (*output_path_.rbegin() != '/' && !output_path_.empty()) {
+    std::ofstream os(output_path_ + "/" + cell_name_ + ".json");
+    os << std::setw(4) << j << std::endl;
+    os.close();
+  } else if (*output_path_.rbegin() == '/' || output_path_.empty()) {
+    std::ofstream os(output_path_ + cell_name_ + ".json");
+    os << std::setw(4) << j << std::endl;
+    os.close();
+  }
 }

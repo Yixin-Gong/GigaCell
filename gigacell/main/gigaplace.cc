@@ -135,8 +135,8 @@ std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::selectPairMos(gigaplace::Pla
 
   //get gate name
   index i = 0;
-  for (auto kpair : v_config) {
-    auto &mos = pl_db.mos_list().at(kpair.pair_list.at(0).nmos_idx);
+  for (auto kPair : v_config) {
+    auto &mos = pl_db.mos_list().at(kPair.pair_list.at(0).nmos_idx);
     auto iter = name_map.find(mos.getGate());
     if (iter == name_map.end()) {
       name_map.emplace(mos.getGate(), i);
@@ -146,11 +146,11 @@ std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::selectPairMos(gigaplace::Pla
     }
   }
 
-  for (auto &kpair : v_config) {
-    auto &mos = pl_db.mos_list().at(kpair.pair_list.at(0).nmos_idx);
+  for (auto &kPair : v_config) {
+    auto &mos = pl_db.mos_list().at(kPair.pair_list.at(0).nmos_idx);
     auto iter = name_map.find(mos.getGate());
     if (iter != name_map.end())
-      same_gate_pair.at(name_map.at(mos.getGate())).push_back(kpair.pair_list.at(0).pair_idx);
+      same_gate_pair.at(name_map.at(mos.getGate())).push_back(kPair.pair_list.at(0).pair_idx);
   }
 
   std::random_device rd;
@@ -166,45 +166,42 @@ std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::selectPairMos(gigaplace::Pla
     num_gate_pair = same_gate_pair.at(random_num_gate).size();
   }
 //  std::cout << random_num_gate << " " << num_gate_pair << std::endl;
-
   std::pair<uint16_t, uint16_t> get2pair{};
   std::pair f_get2pair = generate2Num(num_gate_pair - 1);
 //  std::cout << f_get2pair.first << ' ' << f_get2pair.second<<std::endl;
   get2pair.first = same_gate_pair.at(random_num_gate).at(f_get2pair.first);
   get2pair.second = same_gate_pair.at(random_num_gate).at(f_get2pair.second);
 //  std::cout << get2pair.first << ' ' << get2pair.second << std::endl;
-
   return get2pair;
 }
 float gigaplace::GigaPlace::MLASPlace(uint16_t pair_num, PlaceDB &temp_pl_db) {
-  float old_cost = 0;
-  float new_cost = 0;
-  int Eval = 40000;
+  int Eval = 30000;
+  Operator::setCoordinates(temp_pl_db, temp_pl_db.l_config());
+  auto place_obj = new gigaplace::PlaceObj(temp_pl_db, ref_width_);
+  auto old_cost = -place_obj->get_score();
+  delete place_obj;
   for (int i = 0; i < Eval; ++i) {
-    Operator::setCoordinates(temp_pl_db, temp_pl_db.l_config());
-    auto place_obj = new gigaplace::PlaceObj(temp_pl_db, ref_width_);
-
     auto config_list = temp_pl_db.l_config();
     auto mos_list = temp_pl_db.mos_list();
     auto nets = temp_pl_db.nets();
-
-    old_cost = -place_obj->get_score();
-    std::cout << "old_cost" << old_cost << std::endl;
+//    std::cout << "old_cost" << old_cost << std::endl;
     auto pair = generate2Num(pair_num);
-    delete place_obj;
+
     Operator::createNewLayout(temp_pl_db, pair.first, pair.second);
     Operator::setCoordinates(temp_pl_db, temp_pl_db.l_config());
     place_obj = new gigaplace::PlaceObj(temp_pl_db, ref_width_);
-    new_cost = -place_obj->get_score();
-    std::cout << "new_cost" << new_cost << std::endl;
+    auto new_cost = -place_obj->get_score();
+//    std::cout << "new_cost" << new_cost << std::endl;
     delete place_obj;
 
     auto delta_C = computeDeltaC(new_cost, old_cost);
-    if (delta_C < 0)
+    if (delta_C < 0) {
       MLASS_accept_rate_ = (float) 0.002 * (499 * MLASS_accept_rate_ + 1);
-    else {
+      old_cost = new_cost;
+    } else {
       if (accept(delta_C, MLASS_T_)) {
         MLASS_accept_rate_ = (float) 0.002 * (499 * MLASS_accept_rate_ + 1);
+        old_cost = new_cost;
       } else {
         temp_pl_db.l_config() = config_list;
         temp_pl_db.mos_list() = mos_list;
@@ -224,6 +221,7 @@ float gigaplace::GigaPlace::MLASPlace(uint16_t pair_num, PlaceDB &temp_pl_db) {
       MLASS_T_ /= 0.999;
   }
   MLASS_T_ = 0.5;
+  score_ = old_cost;
   return old_cost;
 }
 bool gigaplace::GigaPlace::isPlace(gigaplace::PlaceDB &pl_db, std::vector<PlaceDB::Configuration> &v_config) {
@@ -264,26 +262,15 @@ bool gigaplace::GigaPlace::isPlace(gigaplace::PlaceDB &pl_db, std::vector<PlaceD
 //    std::cout << "false" << std::endl;
     return false;
   }
-
 }
 
 void gigaplace::GigaPlace::GDUTPlace(uint16_t pair_num) {
-  float old_cost = 0;
-  PlaceDB init_pl_db = pl_db_;
-  int Eval = 60;
+  int Eval = 200;
+  pl_db_.l_config().clear();
+  gigaplace::Operator::v_configTol_config(pl_db_.v_config(), pl_db_.l_config());
+  auto old_cost = MLASPlace(pair_num, pl_db_);
   for (int i = 0; i < Eval; ++i) {
-    float new_cost = 0;
-    PlaceDB tmp_pl_db1 = init_pl_db;
-    tmp_pl_db1.l_config().clear();
-    gigaplace::Operator::v_configTol_config(pl_db_.v_config(), tmp_pl_db1.l_config());
-    auto cost1 = MLASPlace(pair_num, tmp_pl_db1);
-    if (old_cost > cost1) {
-      old_cost = cost1;
-      pl_db_.l_config() = tmp_pl_db1.l_config();
-      pl_db_.mos_list() = tmp_pl_db1.mos_list();
-      pl_db_.nets() = tmp_pl_db1.nets();
-    }
-//    std::cout << "old_cost" << ' ' << old_cost << std::endl;
+    std::cout << "old_cost" << ' ' << old_cost << std::endl;
     auto config_vector = pl_db_.v_config();
     auto config_list = pl_db_.l_config();
     auto mos_list = pl_db_.mos_list();
@@ -291,24 +278,23 @@ void gigaplace::GigaPlace::GDUTPlace(uint16_t pair_num) {
 
     auto pair = selectPairMos(pl_db_, pl_db_.v_config());
     gigaplace::Operator::createNewInitPair(pl_db_, pair.first, pair.second);
-    PlaceDB tmp_pl_db2 = init_pl_db;
-    tmp_pl_db2.l_config().clear();
-    gigaplace::Operator::v_configTol_config(pl_db_.v_config(), tmp_pl_db2.l_config());
-    auto cost2 = MLASPlace(pair_num, tmp_pl_db2);
-    if (new_cost > cost2) {
-      new_cost = cost2;
-      pl_db_.l_config() = tmp_pl_db2.l_config();
-      pl_db_.mos_list() = tmp_pl_db2.mos_list();
-      pl_db_.nets() = tmp_pl_db2.nets();
-    }
-//    std::cout << "new_cost" << ' ' << new_cost << std::endl;
+    pl_db_.l_config().clear();
+    gigaplace::Operator::v_configTol_config(pl_db_.v_config(), pl_db_.l_config());
+    auto new_cost = MLASPlace(pair_num, pl_db_);
+    std::cout << "new_cost" << ' ' << new_cost << std::endl;
     auto delta_C = computeDeltaC(new_cost, old_cost);
     if (delta_C < 0) {
       GDUT_accept_rate_ = (float) 0.002 * (499 * GDUT_accept_rate_ + 1);
+      pl_db_.l_config() = pl_db_.l_config();
+      pl_db_.mos_list() = pl_db_.mos_list();
+      pl_db_.nets() = pl_db_.nets();
       old_cost = new_cost;
     } else {
       if (accept(delta_C, GDUT_T_)) {
         GDUT_accept_rate_ = (float) 0.002 * (499 * GDUT_accept_rate_ + 1);
+        pl_db_.l_config() = pl_db_.l_config();
+        pl_db_.mos_list() = pl_db_.mos_list();
+        pl_db_.nets() = pl_db_.nets();
         old_cost = new_cost;
       } else {
         pl_db_.v_config() = config_vector;
@@ -330,4 +316,5 @@ void gigaplace::GigaPlace::GDUTPlace(uint16_t pair_num) {
       GDUT_T_ /= 0.999;
   }
   GDUT_T_ = 0.5;
+  score_ = old_cost;
 }
