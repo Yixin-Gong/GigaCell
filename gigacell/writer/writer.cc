@@ -23,7 +23,7 @@ void gigaplace::Writer::output() {
     std::ofstream os(output_path_ + "/" + cell_name_ + ".json");
     os << std::setw(4) << j << std::endl;
     os.close();
-  } else if (*output_path_.rbegin() == '/') {
+  } else if (*output_path_.rbegin() == '/' || output_path_.empty()) {
     std::ofstream os(output_path_ + cell_name_ + ".json");
     os << std::setw(4) << j << std::endl;
     os.close();
