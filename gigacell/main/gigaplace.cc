@@ -153,6 +153,12 @@ std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::selectPairMos(gigaplace::Pla
       same_gate_pair.at(name_map.at(mos.getGate())).push_back(kPair.pair_list.at(0).pair_idx);
   }
 
+  std::vector<std::vector<index>> same_gate_pair2{};
+  for (auto &kgate : same_gate_pair) {
+    if (kgate.size() > 1)
+      same_gate_pair2.push_back(kgate);
+  }
+
   std::random_device rd;
   std::mt19937 gen(rd());
   uint16_t num_gate = gate_name.size() - 1;
@@ -160,11 +166,9 @@ std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::selectPairMos(gigaplace::Pla
 //  std::cout << num_gate << std::endl;
   uint16_t random_num_gate = distrib_num_gate(gen);
 
-  uint16_t num_gate_pair = same_gate_pair.at(random_num_gate).size();
-  while (num_gate_pair == 1) {
-    random_num_gate = distrib_num_gate(gen);
-    num_gate_pair = same_gate_pair.at(random_num_gate).size();
-  }
+  uint16_t num_gate_pair = same_gate_pair2.at(random_num_gate).size();
+
+  num_gate_pair = same_gate_pair2.at(random_num_gate).size();
 //  std::cout << random_num_gate << " " << num_gate_pair << std::endl;
   std::pair<uint16_t, uint16_t> get2pair{};
   std::pair f_get2pair = generate2Num(num_gate_pair - 1);
@@ -224,7 +228,7 @@ float gigaplace::GigaPlace::MLASPlace(uint16_t pair_num, PlaceDB &temp_pl_db) {
   score_ = old_cost;
   return old_cost;
 }
-bool gigaplace::GigaPlace::isPlace(gigaplace::PlaceDB &pl_db, std::vector<PlaceDB::Configuration> &v_config) {
+int32_t gigaplace::GigaPlace::numTactics(gigaplace::PlaceDB &pl_db, std::vector<PlaceDB::Configuration> &v_config) {
   std::unordered_map<std::string, index> name_map{};
   std::vector<std::string> gate_name{};
   std::vector<std::vector<index>> same_gate_pair{};
@@ -250,19 +254,24 @@ bool gigaplace::GigaPlace::isPlace(gigaplace::PlaceDB &pl_db, std::vector<PlaceD
       same_gate_pair.at(name_map.at(mos.getGate())).push_back(kPair.pair_list.at(0).pair_idx);
   }
 
-  index j = 0;
-  for (auto &kGatePair : same_gate_pair) {
-    if (kGatePair.size() != 1)
-      j++;
-  }
-  if (j != 0) {
-//    std::cout << "true" <<std::endl;
-    return true;
-  } else {
-//    std::cout << "false" << std::endl;
-    return false;
+  std::vector<std::vector<index>> same_gate_pair2{};
+  for (auto &kgate : same_gate_pair) {
+    if (kgate.size() > 1)
+      same_gate_pair2.push_back(kgate);
   }
 
+  int32_t num_tactics = 0;
+//  int32_t m = 2;
+  for(auto &kgate : same_gate_pair2){
+    int32_t res = 1;
+    int32_t n = kgate.size();
+    for(int32_t j = 1; j <= 2; j++){
+      res = res * (n -j + 1)/j;
+    }
+    num_tactics += res;
+  }
+  std::cout << num_tactics << std::endl;
+  return num_tactics;
 }
 
 void gigaplace::GigaPlace::GDUTPlace(uint16_t pair_num) {
