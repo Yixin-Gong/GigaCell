@@ -135,8 +135,8 @@ std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::selectPairMos(gigaplace::Pla
 
   //get gate name
   index i = 0;
-  for (auto kpair : v_config) {
-    auto &mos = pl_db.mos_list().at(kpair.pair_list.at(0).nmos_idx);
+  for (auto kPair : v_config) {
+    auto &mos = pl_db.mos_list().at(kPair.pair_list.at(0).nmos_idx);
     auto iter = name_map.find(mos.getGate());
     if (iter == name_map.end()) {
       name_map.emplace(mos.getGate(), i);
@@ -146,11 +146,11 @@ std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::selectPairMos(gigaplace::Pla
     }
   }
 
-  for (auto &kpair : v_config) {
-    auto &mos = pl_db.mos_list().at(kpair.pair_list.at(0).nmos_idx);
+  for (auto &kPair : v_config) {
+    auto &mos = pl_db.mos_list().at(kPair.pair_list.at(0).nmos_idx);
     auto iter = name_map.find(mos.getGate());
     if (iter != name_map.end())
-      same_gate_pair.at(name_map.at(mos.getGate())).push_back(kpair.pair_list.at(0).pair_idx);
+      same_gate_pair.at(name_map.at(mos.getGate())).push_back(kPair.pair_list.at(0).pair_idx);
   }
 
   std::random_device rd;
@@ -166,36 +166,31 @@ std::pair<uint16_t, uint16_t> gigaplace::GigaPlace::selectPairMos(gigaplace::Pla
     num_gate_pair = same_gate_pair.at(random_num_gate).size();
   }
 //  std::cout << random_num_gate << " " << num_gate_pair << std::endl;
-
   std::pair<uint16_t, uint16_t> get2pair{};
   std::pair f_get2pair = generate2Num(num_gate_pair - 1);
 //  std::cout << f_get2pair.first << ' ' << f_get2pair.second<<std::endl;
   get2pair.first = same_gate_pair.at(random_num_gate).at(f_get2pair.first);
   get2pair.second = same_gate_pair.at(random_num_gate).at(f_get2pair.second);
 //  std::cout << get2pair.first << ' ' << get2pair.second << std::endl;
-
   return get2pair;
 }
 float gigaplace::GigaPlace::MLASPlace(uint16_t pair_num, PlaceDB &temp_pl_db) {
-  float old_cost = 0;
-  float new_cost = 0;
   int Eval = 50000;
+  Operator::setCoordinates(temp_pl_db, temp_pl_db.l_config());
+  auto place_obj = new gigaplace::PlaceObj(temp_pl_db, ref_width_);
+  auto old_cost = -place_obj->get_score();
+  delete place_obj;
   for (int i = 0; i < Eval; ++i) {
-    Operator::setCoordinates(temp_pl_db, temp_pl_db.l_config());
-    auto place_obj = new gigaplace::PlaceObj(temp_pl_db, ref_width_);
-
     auto config_list = temp_pl_db.l_config();
     auto mos_list = temp_pl_db.mos_list();
     auto nets = temp_pl_db.nets();
-
-    old_cost = -place_obj->get_score();
 //    std::cout << "old_cost" << old_cost << std::endl;
     auto pair = generate2Num(pair_num);
-    delete place_obj;
+
     Operator::createNewLayout(temp_pl_db, pair.first, pair.second);
     Operator::setCoordinates(temp_pl_db, temp_pl_db.l_config());
     place_obj = new gigaplace::PlaceObj(temp_pl_db, ref_width_);
-    new_cost = -place_obj->get_score();
+    auto new_cost = -place_obj->get_score();
 //    std::cout << "new_cost" << new_cost << std::endl;
     delete place_obj;
 
