@@ -200,11 +200,13 @@ float gigaplace::GigaPlace::MLASPlace(uint16_t pair_num, PlaceDB &temp_pl_db) {
     delete place_obj;
 
     auto delta_C = computeDeltaC(new_cost, old_cost);
-    if (delta_C < 0)
+    if (delta_C < 0) {
       MLASS_accept_rate_ = (float) 0.002 * (499 * MLASS_accept_rate_ + 1);
-    else {
+      old_cost = new_cost;
+    } else {
       if (accept(delta_C, MLASS_T_)) {
         MLASS_accept_rate_ = (float) 0.002 * (499 * MLASS_accept_rate_ + 1);
+        old_cost = new_cost;
       } else {
         temp_pl_db.l_config() = config_list;
         temp_pl_db.mos_list() = mos_list;
@@ -224,6 +226,7 @@ float gigaplace::GigaPlace::MLASPlace(uint16_t pair_num, PlaceDB &temp_pl_db) {
       MLASS_T_ /= 0.999;
   }
   MLASS_T_ = 0.5;
+  score_ = old_cost;
   return old_cost;
 }
 bool gigaplace::GigaPlace::isPlace(gigaplace::PlaceDB &pl_db, std::vector<PlaceDB::Configuration> &v_config) {
