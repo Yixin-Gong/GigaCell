@@ -1,6 +1,5 @@
-import sys
-import json
 import subprocess
+import sys
 
 if len(sys.argv) < 6:
     print(
@@ -33,6 +32,6 @@ for cell in cells_name:
     for output_line in output_eva:
         word = output_line.split(' ')
         if word[0] == 'Cell':
-            file.write(word[0]+' '+word[1]+' '+word[2]+'\n')
+            file.write(word[0] + ' ' + word[1] + ' ' + word[2] + '\n')
 
 file.close()

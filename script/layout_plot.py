@@ -1,5 +1,6 @@
-import sys
 import json
+import sys
+
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 
@@ -43,6 +44,5 @@ for transistor_name, properties in placement.items():
 ax.set_title(cell_name)
 ax.set_xticks([])
 ax.set_yticks([])
-
 
 plt.show()
