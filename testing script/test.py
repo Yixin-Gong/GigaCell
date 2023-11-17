@@ -32,6 +32,8 @@ for cell in cells_name:
     output_eva = result_eva.stdout.split('\n')
     for output_line in output_eva:
         word = output_line.split(' ')
+        if word[0]=='ps':
+            file.write(output_line+'\n')
         if word[0] == 'Cell':
             file.write(word[0]+' '+word[1]+' '+word[2]+'\n')
 
