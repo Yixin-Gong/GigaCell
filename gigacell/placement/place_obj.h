@@ -31,6 +31,11 @@ class PlaceObj {
   void getSymmetric();
   float &get_score() { return score_; };
 
+  float &get_ss() { return ss_; }
+  float &get_bs() { return bs_; }
+  float &get_ws() { return ws_; }
+  float &get_ps() { return ps_; }
+
   void init();
 
  private:
@@ -42,7 +47,7 @@ class PlaceObj {
   float ws_{};
   float bs_{};
   float ps_{};
-  float symmetric_{};
+  float ss_{};
   float ns_{};
 
   float score_{};

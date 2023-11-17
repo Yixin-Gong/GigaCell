@@ -8,7 +8,6 @@ float gigaplace::PlaceObj::getMinGap() {
   float u_odd_num = 0;
   float l_odd_num = 0;
 
-  //make map
   std::unordered_map<std::string, int32_t> upper_Graph;
   std::unordered_map<std::string, int32_t> lower_Graph;
   int32_t unit_degree = 1;
@@ -67,32 +66,24 @@ void gigaplace::PlaceObj::init() {
   getPinScore();
   getNotchScore();
   getSymmetric();
-  score_ = ws_ + bs_ + ns_ + ps_ + symmetric_;
-//  std::cout<<ws_<<std::endl;
-//  std::cout<<bs_<<std::endl;
-//  std::cout<<ps_<<std::endl;
-//  std::cout<<ns_<<std::endl;
-
+  score_ = ws_ + bs_ + ns_ + ps_ + ss_;
 }
 void gigaplace::PlaceObj::getPinScore() {
   PinDensity pindensity(pl_db_);
   auto pin_access = pindensity.getPinAccess();
-//  std::cout<<pin_access<<std::endl;
   ps_ = 10 * (1 - pin_access);
 }
 void gigaplace::PlaceObj::getSymmetric() {
-  symmetric_ = 10;
+  ss_ = 10;
   float num_dummy = 0;
   for (auto &mos : pl_db_.mos_list()) {
     if (mos.getDummyFlag())
       num_dummy++;
   }
-  symmetric_ -= num_dummy;
-//  std::cout << symmetric_ << std::endl;
+  ss_ -= num_dummy;
 }
 void gigaplace::PlaceObj::getNotchScore() {
   Notch notch(pl_db_);
   auto notch_num = notch.notchNum();
-//  std::cout<<notch_num<<std::endl;
   ns_ = float(10 - 10 * notch_num);
 }
