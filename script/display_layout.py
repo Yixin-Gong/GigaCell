@@ -23,7 +23,7 @@ ax.set_xlim(0, (width + 1) * 3 + 3)
 ax.set_ylim(0, 540)
 
 for transistor_name, properties in placement.items():
-    if int(properties["y"]):
+    if int(properties["y"]) == 0:
         rect = Rectangle((int(properties["x"]) * 3, 50.0), 3, int(properties["width"]), facecolor='orange',
                          edgecolor='black')
         ax.add_patch(rect)
@@ -33,7 +33,7 @@ for transistor_name, properties in placement.items():
         ax.add_patch(rect)
 
 for transistor_name, properties in placement.items():
-    if int(properties["y"]):
+    if int(properties["y"]) == 0:
         rect = Rectangle((int(properties["x"]) * 3 + 1, 0.0), 1, 540, facecolor='green', edgecolor='black')
         ax.add_patch(rect)
     else:
