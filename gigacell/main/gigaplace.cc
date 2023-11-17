@@ -269,9 +269,9 @@ int32_t gigaplace::GigaPlace::numTactics(gigaplace::PlaceDB &pl_db, std::vector<
 
   int32_t num_tactics = 1;
 //  int32_t m = 2;
-  for (auto &kgate : same_gate_pair2) {
+  for (auto &kGate : same_gate_pair2) {
     int32_t res = 1;
-    int32_t n = kgate.size();
+    auto n = (int32_t) kGate.size();
     for (int32_t j = 1; j <= 2; j++) {
       res = res * (n - j + 1) / j;
     }
@@ -307,16 +307,10 @@ void gigaplace::GigaPlace::GDUTPlace(uint16_t pair_num) {
     auto delta_C = computeDeltaC(new_cost, old_cost);
     if (delta_C < 0) {
       GDUT_accept_rate_ = (float) 0.002 * (499 * GDUT_accept_rate_ + 1);
-      pl_db_.l_config() = pl_db_.l_config();
-      pl_db_.mos_list() = pl_db_.mos_list();
-      pl_db_.nets() = pl_db_.nets();
       old_cost = new_cost;
     } else {
       if (accept(delta_C, GDUT_T_)) {
         GDUT_accept_rate_ = (float) 0.002 * (499 * GDUT_accept_rate_ + 1);
-        pl_db_.l_config() = pl_db_.l_config();
-        pl_db_.mos_list() = pl_db_.mos_list();
-        pl_db_.nets() = pl_db_.nets();
         old_cost = new_cost;
       } else {
         pl_db_.v_config() = config_vector;
