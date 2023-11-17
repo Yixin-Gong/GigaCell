@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
   }
   gigaplace::Operator::v_configTol_config((current_pl_db).v_config(), (current_pl_db).l_config());
   auto giga_place = gigaplace::GigaPlace(current_pl_db, ref_width, 10000000);
-  if (!gigaplace::GigaPlace::isPlace(current_pl_db, current_pl_db.v_config()))
+  if (gigaplace::GigaPlace::numTactics(current_pl_db, current_pl_db.v_config()) == 0)
     giga_place.MLASPlace(index - 1, current_pl_db);
   else
     giga_place.GDUTPlace(index - 1);
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time_total);
   auto time = (double) duration.count() / 1000000.0f;
   std::cout << "Total runtime is " << time << "s" << std::endl;
-  float rs = 10 * (1 / (1 + std::exp(time / 3600 - 1)));
+  float rs = (float) 10 * (float) (1 / (1 + std::exp(time / 3600 - 1)));
   std::cout << "Total score is " << -giga_place.get_score() + rs << std::endl;
   return 0;
 }

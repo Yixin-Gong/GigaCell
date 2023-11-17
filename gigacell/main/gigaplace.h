@@ -18,7 +18,7 @@ class GigaPlace {
   static float computeDeltaC(float &new_cost, float &old_cost);
   static bool accept(float &delta_c, float T);
   static std::pair<uint16_t ,uint16_t > selectPairMos(PlaceDB &pl_db,std::vector<PlaceDB::Configuration> &v_config);
-  static bool isPlace(PlaceDB &pl_db,std::vector<PlaceDB::Configuration> &v_config);
+  static int32_t numTactics(PlaceDB &pl_db,std::vector<PlaceDB::Configuration> &v_config);
   static std::pair<uint16_t, uint16_t> generate2Num(uint16_t pair_num);
   float &get_score() { return score_; }
  private:
