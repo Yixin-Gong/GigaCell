@@ -13,9 +13,9 @@ float gigaplace::PinDensity::getPinAccess() {
 //    v_pin_name.push_back(pin.pinName);
   for (auto &kNet : pl_db_.nets()) {
     if (isPinNet(kNet.first, pl_db_.v_pin_list())) {
-      pin_coords.push_back(0);
+      pin_coords.push_back(0.0);
       std::vector<float> net_pos{};
-      float max_distance = -std::numeric_limits<float>::max();
+      float max_distance = 0;
       for (auto &kMos : kNet.second) {
 //        if (pl_db_.mos_list().at(kMos.idx).getMosName().find("finger")!=std::string::npos)
 //          continue;
@@ -26,6 +26,10 @@ float gigaplace::PinDensity::getPinAccess() {
         else
           net_pos.push_back(pl_db_.mos_list().at(kMos.idx).getRightLoc());
       }
+//      for(auto &pos : net_pos)
+//        std::cout<<pos<<' ';
+//      std::cout<<'\n';
+      std::sort(net_pos.begin(), net_pos.end());
       std::vector<float> another_pos{};
       for (auto &kNet1 : pl_db_.nets()) {
         if (isPinNet(kNet1.first, pl_db_.v_pin_list()) && kNet1.first != kNet.first) {
@@ -41,7 +45,11 @@ float gigaplace::PinDensity::getPinAccess() {
           }
         }
       }
+
       std::sort(another_pos.begin(), another_pos.end());
+//      for(auto &pos : another_pos)
+//        std::cout<<pos<<' ';
+//      std::cout<<'\n';
       for (auto &pos : net_pos) {
         float distance = 0;
         if (another_pos.at(0) > pos)
@@ -67,18 +75,21 @@ float gigaplace::PinDensity::getPinAccess() {
   }
   float half_unit = 0.5;
   std::sort(pin_coords.begin(), pin_coords.end());
-  if(pin_coords.size() <= 1)
+  for (auto &pos : pin_coords)
+    std::cout << pos << ' ';
+  std::cout << '\n';
+  if (pin_coords.size() <= 1)
     return 1;
   std::vector<float> pin_spacing{};
   float left_spacing = pin_coords.at(0) + half_unit;
   float right_spacing = width - half_unit - pin_coords.at(pin_coords.size() - 1);
   if (left_spacing > 1)
-    pin_spacing.push_back(left_spacing / width);
+    pin_spacing.push_back((float) left_spacing / width);
   if (right_spacing > 1)
-    pin_spacing.push_back(right_spacing / width);
+    pin_spacing.push_back((float) right_spacing / width);
 
   for (int32_t i = 0; i < pin_coords.size() - 1; i++)
-    pin_spacing.push_back((pin_coords.at(i + 1) - pin_coords.at(i)) / width);
+    pin_spacing.push_back((float) (pin_coords.at(i + 1) - pin_coords.at(i)) / width);
 
   return calStandardDeviation(pin_spacing);
 }
@@ -94,17 +105,17 @@ bool gigaplace::PinDensity::isPinNet(const std::string &netName, const std::vect
 float gigaplace::PinDensity::calStandardDeviation(const std::vector<float> &pin_spacing) {
   float sum = 0;
   auto N = (float) pin_spacing.size();
-  if(N<=1)
-    return 1;
+//  if (N <= 1)
+//    return 1;
 
-  float variance{};
+  float variance = 0;
   for (auto &val : pin_spacing)
     sum += val;
 
-  auto average = sum / N;
+  auto average = (float) (sum / N);
   for (auto &val : pin_spacing)
     variance += (float) std::pow(val - average, 2);
-  variance = variance / N;
+  variance = (variance / N);
 
   return std::sqrt(variance);
 }
