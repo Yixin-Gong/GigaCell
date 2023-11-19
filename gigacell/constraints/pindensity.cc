@@ -2,6 +2,7 @@
 // Created by zy on 23-10-28.
 //
 
+#include <numeric>
 #include "pindensity.h"
 
 float gigaplace::PinDensity::getPinAccess() {
@@ -75,9 +76,6 @@ float gigaplace::PinDensity::getPinAccess() {
   }
   float half_unit = 0.5;
   std::sort(pin_coords.begin(), pin_coords.end());
-  for (auto &pos : pin_coords)
-    std::cout << pos << ' ';
-  std::cout << '\n';
   if (pin_coords.size() <= 1)
     return 1;
   std::vector<float> pin_spacing{};
@@ -91,7 +89,14 @@ float gigaplace::PinDensity::getPinAccess() {
   for (int32_t i = 0; i < pin_coords.size() - 1; i++)
     pin_spacing.push_back((float) (pin_coords.at(i + 1) - pin_coords.at(i)) / width);
 
-  return calStandardDeviation(pin_spacing);
+  auto sum = (float) std::accumulate(std::begin(pin_spacing), std::end(pin_spacing), 0.0);
+  float mean = sum / (float) pin_spacing.size();
+  float variance = 0;
+  std::for_each(std::begin(pin_spacing), std::end(pin_spacing), [&](const float d) {
+    variance += (float) pow(d - mean, 2);
+  });
+  variance /= (float) pin_spacing.size();
+  return std::sqrt(variance);
 }
 
 bool gigaplace::PinDensity::isPinNet(const std::string &netName, const std::vector<std::string> &v_pin_name) {
