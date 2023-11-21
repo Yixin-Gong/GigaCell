@@ -89,14 +89,7 @@ float gigaplace::PinDensity::getPinAccess() {
   for (int32_t i = 0; i < pin_coords.size() - 1; i++)
     pin_spacing.push_back((float) (pin_coords.at(i + 1) - pin_coords.at(i)) / width);
 
-  auto sum = (float) std::accumulate(std::begin(pin_spacing), std::end(pin_spacing), 0.0);
-  float mean = sum / (float) pin_spacing.size();
-  float variance = 0;
-  std::for_each(std::begin(pin_spacing), std::end(pin_spacing), [&](const float d) {
-    variance += (float) pow(d - mean, 2);
-  });
-  variance /= (float) pin_spacing.size();
-  return std::sqrt(variance);
+  return calStandardDeviation(pin_spacing);
 }
 
 bool gigaplace::PinDensity::isPinNet(const std::string &netName, const std::vector<std::string> &v_pin_name) {
@@ -110,9 +103,6 @@ bool gigaplace::PinDensity::isPinNet(const std::string &netName, const std::vect
 float gigaplace::PinDensity::calStandardDeviation(const std::vector<float> &pin_spacing) {
   float sum = 0;
   auto N = (float) pin_spacing.size();
-//  if (N <= 1)
-//    return 1;
-
   float variance = 0;
   for (auto &val : pin_spacing)
     sum += val;
