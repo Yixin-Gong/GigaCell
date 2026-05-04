@@ -1,62 +1,67 @@
 # GigaCell
-## Transistor level automatic layout generator
-### This repository aims to implement a transistor-level layout generator for unit circuits based on IC EDA Elite Challenge.
 
+**GigaCell** is a transistor-level automatic standard-cell layout generator.
 
-## Reference:
-- Transistor level automatic layout generator for non-complementary CMOS cells[[1]](https://doi.org/10.1109/VLSISOC.2007.4402483)
-- Transistor-Level Layout of Integated Circuits[[2]](https://www.pearsonhighered.com/assets/samplechapter/0/1/3/9/0139896902.pdf)
+This repository currently implements **1D transistor placement** for standard-cell layout generation. Routing is not included at this stage.
 
-## TODO：
-- File parser and writer implementation : Finished
-- Database construction : Add pair, configuration, ...
-- Problem modeling
-- Basic algorithm implementation
-- Add constraints: NetLength, Area, Pin Density, ...
-- Algorithm Optimization
+## Features
 
-## Preliminaries
-- Graph theory : Bipartite Matching
-- Simulated Annealing
-- Other optimization algorithms with multi-constraints
-- Min-cut partitioning
-## Operators
-- Diffusion Sharing
-- Flip
-- Swap
-- Folding
-- Move
-- Flip Flag
-- Set gate nets' weights
+- Transistor-level standard-cell layout generation
+- 1D transistor placement
+- Netlist-based cell selection
+- Command-line flow through `GigaPlace`
 
-## Framework
-### Partition
-1. Calculate #Mos and set #block
-2. Partition by min-cut
-3. Get blocks and indices in it
+## Requirements
 
-### Pairing
-1. Find the mos connected by same gate net
-2. Pairing
-3. If exist single mos,create dummy and pairing them.
+- CMake
+- Make
+- C/C++ compiler
 
+## Build
 
-### Sharing
-1. Sharing(shouldFlip? canSharing?).
-2. Sharing if they can,Change Mos to pairing if they can't.
-3. Sharing and reserve the configuration.
+Initialize and update submodules:
 
+```bash
+git submodule update --init --recursive
+```
 
+Build the project:
 
+```bash
+mkdir build
+cd build
+cmake ..
+make
+```
 
+## Usage
 
-### SA
-Partitioning --> Pairing -->
+Run `GigaPlace` with an input netlist and a target cell name:
 
-Random Swap --> Check Flip Flag -->
+```bash
+./GigaPlace -n <path/to/netlist> -c <cell_name>
+```
 
-Diffusion Sharing --> Move --> Calculate Cost -->
+## Arguments
 
-Next Step --> ... -->
+| Argument | Description |
+|---|---|
+| `-n <path/to/netlist>` | Path to the input transistor-level netlist |
+| `-c <cell_name>` | Name of the target standard cell |
 
-Converge --> Stop
+## Example
+
+```bash
+./GigaPlace -n ../examples/cells.spi -c AN2D2
+```
+
+## Current Status
+
+GigaCell currently supports **1D transistor placement only**.
+
+The following features are not included yet:
+
+- In-cell routing
+- DRC/LVS verification
+- GDS generation
+- Complete standard-cell layout generation flow
